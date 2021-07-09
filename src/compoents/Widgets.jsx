@@ -18,9 +18,9 @@ function Widgets() {
       <div className="widgets__widgetContainer">
         <h2>What's happening</h2>
 
-        <TwitterTweetEmbed tweetId={"858551177860055040"} />
-
-        <TwitterTimelineEmbed
+        <TwitterTweetEmbed tweetId={"1394087958169341954"} />
+        <TwitterTweetEmbed tweetId={"1390188659832287232"} />
+        {/* <TwitterTimelineEmbed
           sourceType="profile"
           screenName="cleverqazi"
           options={{ height: 400 }}
@@ -29,7 +29,7 @@ function Widgets() {
         <TwitterShareButton
           url={"https://facebook.com/cleverprogrammer"}
           options={{ text: "#reactjs is awesome", via: "cleverqazi" }}
-        />
+        /> */}
       </div>
     </div>
   );

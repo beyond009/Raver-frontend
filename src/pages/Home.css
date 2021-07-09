@@ -1,4 +1,4 @@
-.feed {
+.home {
   flex: 0.52;
   border-right: 1px solid var(--twitter-background);
   min-width: fit-content;
@@ -6,17 +6,17 @@
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.feed::-webkit-scrollbar {
+.home::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.feed {
+.home {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
-.feed__header {
+.home__header {
   position: sticky;
   top: 0;
   background-color: white;
@@ -25,7 +25,7 @@
   padding: 15px 20px;
 }
 
-.feed__header > h2 {
+.home__header > h2 {
   font-size: 20px;
   font-weight: 800;
 }
