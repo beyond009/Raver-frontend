@@ -11,26 +11,11 @@ export default class Login extends Component {
       islogin: false,
     };
   }
-  async handleAuthenticated(authClient) {
-    console.log("login in success!");
-    const identity = await authClient.getIdentity();
-    this.props.onloginChange(true);
-    history.push({ pathname: "/home" });
-  }
-  async handleLogin() {
-    const authClient = await AuthClient.create();
-    await authClient.login({
-      onSuccess: async () => {
-        handleAuthenticated(authClient);
-      },
-      identityProvider:
-        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
-    });
-  }
+
   render() {
     return (
       <div>
-        <button onClick={this.handleLogin}></button>
+        <button onClick={this.props.handleLogin}></button>
       </div>
     );
   }

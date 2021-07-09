@@ -6,6 +6,8 @@ import Profile from "./pages/Profile";
 import Sidebar from "./compoents/Sidebar";
 import Widgets from "./compoents/Widgets";
 import history from "./History";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { AuthClient } from "@dfinity/auth-client";
 import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
 import "./App.css";
 
@@ -24,10 +26,35 @@ class App extends Component {
     history.push({
       pathname: "/login",
     });
+  async handleAuthenticated(authClient) {
+    this.setState({ islogin: true });
+    history.push({
+      pathname: "/home",
+    });
+    console.log("login in success!");
+    const identity = await authClient.getIdentity();
+  }
+  async handleLogin() {
+    const authClient = await AuthClient.create();
+    await authClient.login({
+      onSuccess: async () => {
+        handleAuthenticated(authClient);
+      },
+      identityProvider:
+        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
+    });
+  }
   componentWillMount() {
-    if (this.state.islogin === false) {
-      this.goToLoginPage();
-    }
+    (async () => {
+      const authClient = await AuthClient.create();
+      if (await authClient.isAuthenticated()) {
+        handleAuthenticated(authClient);
+        this.setState({ islogin: true });
+      }
+      if (!this.state.islogin) {
+        this.goToLoginPage();
+      }
+    })();
   }
 
   render() {
@@ -42,7 +69,7 @@ class App extends Component {
               component={(props) => {
                 let obj = Object.assign(
                   {},
-                  { onloginChange: this.onloginChange },
+                  { handleLogin: this.handleLogin },
                   props
                 );
                 return <Login {...obj} />;
