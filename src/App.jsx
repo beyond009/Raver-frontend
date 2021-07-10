@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Signup from "./pages/Signup";
 // import Signup from "./pages/Signup";
 import Sidebar from "./compoents/Sidebar";
 import Widgets from "./compoents/Widgets";
@@ -43,12 +44,12 @@ const App = () => {
   //   this.setState({ identity: identity });
   // }
   async function handleAuthenticated(authClient) {
-    setIsLogin(true);
     console.log("login success");
-    history.push({ pathname: "/home" });
+
     identity = await authClient.getIdentity();
     // authActor = await Actor.create;
-    const principal = identity.getPrincipal.toText();
+    const principal = identity.getPrincipal();
+
     console.log(principal);
     const agent = new HttpAgent({
       // identity: identity,
@@ -61,10 +62,15 @@ const App = () => {
       agent,
       canisterId: canisterId,
     });
-    console.log(authActor);
-    console.log(identity);
-    let tmp = await authActor.getValue();
+    var tmp = await authActor.getValue();
     console.log(tmp);
+    var isSigned = false;
+    if (isSigned) {
+      history.push({ pathname: "/home" });
+      setIsLogin(true);
+    } else {
+      history.push({ pathname: "/signup" });
+    }
   }
   useEffect(async () => {
     console.log("Check login!");

@@ -14,9 +14,9 @@ export default class Login extends Component {
       islogin: false,
     };
   }
-  toSignup() {
-    history.push({ pathname: "/signup" });
-  }
+  // toSignup() {
+  //   history.push({ pathname: "/signup" });
+  // }
   render() {
     return (
       <div>
@@ -28,14 +28,14 @@ export default class Login extends Component {
           Login With &nbsp;&nbsp;{" "}
           <img src={dfinityicon} style={{ height: "16px" }} />
         </Button>
-        <Button
+        {/* <Button
           variant="contained"
           onClick={this.toSignup}
           className="Login_LoginButton"
         >
           Signup With &nbsp;&nbsp;{" "}
           <img src={dfinityicon} style={{ height: "16px" }} />
-        </Button>
+        </Button> */}
       </div>
     );
   }
