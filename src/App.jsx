@@ -16,7 +16,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      islogin: true,
+      islogin: false,
+      identity: null,
     };
   }
 
@@ -34,6 +35,7 @@ class App extends Component {
     });
     console.log("login in success!");
     const identity = await authClient.getIdentity();
+    this.setState({ identity: identity });
   }
   async handleLogin() {
     console.log("handle login");
@@ -59,7 +61,7 @@ class App extends Component {
     //     this.goToLoginPage();
     //   }
     // })();
-    history.push({ pathname: "/home" });
+    // history.push({ pathname: "/home" });
   }
 
   render() {
@@ -80,8 +82,30 @@ class App extends Component {
               return <Login {...obj} />;
             }}
           />
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/profile" component={Profile} />
+          <Route
+            exact
+            path="/home"
+            component={(props) => {
+              let obj = Object.assign(
+                {},
+                { identity: this.state.identity },
+                props
+              );
+              return <Home {...obj} />;
+            }}
+          />
+          <Route
+            exact
+            path="/profile"
+            component={(props) => {
+              let obj = Object.assign(
+                {},
+                { identity: this.state.identity },
+                props
+              );
+              return <Login {...obj} />;
+            }}
+          />
           <Route exact path="/signup" compoent={Profile} />
           {/* <Route exact path="/" compoent={} /> */}
         </Router>
