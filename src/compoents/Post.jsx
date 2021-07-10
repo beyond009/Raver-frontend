@@ -32,9 +32,9 @@ const Post = forwardRef(
           <img src={image} className="post_img" alt="" />
           <div className="post__footer">
             <ChatBubbleOutlineIcon fontSize="small" />
-            <RepeatIcon fontSize="small" />
+            {/* <RepeatIcon fontSize="small" /> */}
             <FavoriteBorderIcon fontSize="small" />
-            <PublishIcon fontSize="small" />
+            {/* <PublishIcon fontSize="small" /> */}
           </div>
         </div>
       </div>

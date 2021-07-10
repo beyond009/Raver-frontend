@@ -48,8 +48,10 @@ const App = () => {
     history.push({ pathname: "/home" });
     identity = await authClient.getIdentity();
     // authActor = await Actor.create;
+    const principal = identity.getPrincipal.toText();
+    console.log(principal);
     const agent = new HttpAgent({
-      identity: identity,
+      // identity: identity,
       host: "http://localhost:8000",
     });
     console.log(agent);
@@ -74,7 +76,7 @@ const App = () => {
       goToLoginPage();
     }
   }, []);
-  const handleLogin = async () => {
+  const handleLogin = async (lors) => {
     console.log("handle login");
     const authClient = await AuthClient.create();
     await authClient.login({
@@ -109,14 +111,20 @@ const App = () => {
         />
         <Route
           exact
+          path="/signup"
+          component={(props) => {
+            let obj = Object.assign({}, { authActor: authActor }, props);
+            return <Signup {...obj} />;
+          }}
+        />
+        <Route
+          exact
           path="/profile"
           component={(props) => {
             let obj = Object.assign({}, { authActor: authActor }, props);
             return <Login {...obj} />;
           }}
         />
-        <Route exact path="/signup" compoent={Profile} />
-        {/* <Route exact path="/" compoent={} /> */}
       </Router>
       {isLogin ? <Widgets /> : null}
       {/* <Widgets /> */}
