@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
+import httpAgent from "../httpAgent";
 import "./Feed.css";
 import FlipMove from "react-flip-move";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    // db.collection("posts").onSnapshot((snapshot) =>
-    //   setPosts(snapshot.docs.map((doc) => doc.data()))
-    // );
-    // setPosts(post);
+  useEffect(async () => {
+    // console.log("I'm here");
+    // const authActor = await httpAgent();
+    // console.log(authActor);
+    // var tmp = await authActor.getValue();
+    // console.log(tmp);
   }, []);
 
   return (

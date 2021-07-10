@@ -9,6 +9,7 @@ import history from "./History";
 import Feed from "./compoents/Feed";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
+import { idlFactory, canisterId } from "dfx-generated/counter";
 import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
 import "./App.css";
 
@@ -26,6 +27,7 @@ const App = () => {
   //   this.setState({ islogin: isl });
   // };
   var authClient = null;
+  var authActor = null;
   var identity = null;
   const goToLoginPage = () =>
     history.push({
@@ -45,7 +47,22 @@ const App = () => {
     console.log("login success");
     history.push({ pathname: "/home" });
     identity = await authClient.getIdentity();
+    // authActor = await Actor.create;
+    const agent = new HttpAgent({
+      identity: identity,
+      host: "http://localhost:8000",
+    });
+    console.log(agent);
+    await agent.fetchRootKey();
+    console.log("fetchRootKey");
+    authActor = Actor.createActor(idlFactory, {
+      agent,
+      canisterId: canisterId,
+    });
+    console.log(authActor);
     console.log(identity);
+    let tmp = await authActor.getValue();
+    console.log(tmp);
   }
   useEffect(async () => {
     console.log("Check login!");
@@ -56,7 +73,7 @@ const App = () => {
       console.log("go to login page!");
       goToLoginPage();
     }
-  });
+  }, []);
   const handleLogin = async () => {
     console.log("handle login");
     const authClient = await AuthClient.create();
@@ -86,7 +103,7 @@ const App = () => {
           exact
           path="/home"
           component={(props) => {
-            let obj = Object.assign({}, { identity: identity }, props);
+            let obj = Object.assign({}, { authActor: authActor }, props);
             return <Home {...obj} />;
           }}
         />
@@ -94,7 +111,7 @@ const App = () => {
           exact
           path="/profile"
           component={(props) => {
-            let obj = Object.assign({}, { identity: identity }, props);
+            let obj = Object.assign({}, { authActor: authActor }, props);
             return <Login {...obj} />;
           }}
         />
