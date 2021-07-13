@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./TweetBox.css";
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar, Button, Input, TextField } from "@material-ui/core";
 // import db from "../firebase"
 
-function TweetBox() {
+function TweetBox(props) {
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
 
@@ -19,7 +19,12 @@ function TweetBox() {
     //   avatar:
     //     "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png",
     // })
-
+    console.log("sending Tweet");
+    console.log(tweetMessage);
+    props.authActor
+      .addTweet("", tweetMessage, "", tweetImage)
+      .then((tmp) => console.log(tmp));
+    props.setUpdate();
     setTweetMessage("");
     setTweetImage("");
   };
@@ -29,13 +34,20 @@ function TweetBox() {
       <form>
         <div className="tweetBox__input">
           <Avatar src="https://pbs.twimg.com/profile_images/1398625159016292358/uxVxE5Oc_400x400.jpg" />
-
           <input
             onChange={(e) => setTweetMessage(e.target.value)}
             value={tweetMessage}
             placeholder="What's happening?"
             type="text"
           />
+          {/* <TextField
+            id="outlined-textarea"
+            onChange={(e) => setTweetMessage(e.target.value)}
+            label="What's happening?"
+            placeholder="Placeholder"
+            multiline
+            variant="outlined"
+          /> */}
         </div>
         <input
           value={tweetImage}

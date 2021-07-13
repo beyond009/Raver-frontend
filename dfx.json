@@ -1,12 +1,12 @@
 {
   "canisters": {
-    "counter": {
-      "main": "backend/counter/main.mo",
+    "backend": {
+      "main": "backend/DTwitter/main.mo",
       "type": "motoko"
     },
     "assets": {
       "dependencies": [
-        "counter"
+        "backend"
       ],
       "frontend": {
         "entrypoint": "dist/index.html"

@@ -4,7 +4,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { Button } from "@material-ui/core";
 import dfinityicon from "../assets/dfinity.png";
 
-import { idlFactory, canisterId } from "dfx-generated/counter";
+import { idlFactory, canisterId } from "dfx-generated/backend";
 import history from "../History";
 import "./Login.css";
 export default class Login extends Component {

@@ -20,7 +20,7 @@ const Post = forwardRef(
               <h3>
                 {displayName}{" "}
                 <span className="post__headerSpecial">
-                  {verified && <VerifiedUserIcon className="post__badge" />} @
+                  {verified && <VerifiedUserIcon className="post__badge" />}
                   {username}
                 </span>
               </h3>
@@ -29,7 +29,9 @@ const Post = forwardRef(
               <p>{text}</p>
             </div>
           </div>
-          <img src={image} className="post_img" alt="" />
+          <div>
+            {image ? <img className="post_img" src={image} alt="" /> : null}
+          </div>
           <div className="post__footer">
             <ChatBubbleOutlineIcon fontSize="small" />
             {/* <RepeatIcon fontSize="small" /> */}

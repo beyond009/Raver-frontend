@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Waiting from "./pages/Waiting";
 import Signup from "./pages/Signup";
 // import Signup from "./pages/Signup";
 import Sidebar from "./compoents/Sidebar";
@@ -10,7 +11,7 @@ import history from "./History";
 import Feed from "./compoents/Feed";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
-import { idlFactory, canisterId } from "dfx-generated/counter";
+import { idlFactory, canisterId } from "dfx-generated/backend";
 import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
 import "./App.css";
 
@@ -24,11 +25,14 @@ const App = () => {
   // }
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [authActor, setAuthActor] = useState(null);
+  const [upDate, setUpDate] = useState(true);
   // onloginChange = (isl = false) => {
   //   this.setState({ islogin: isl });
   // };
+  var flag = false;
   var authClient = null;
-  var authActor = null;
+  // var authActor = null;
   var identity = null;
   const goToLoginPage = () =>
     history.push({
@@ -43,33 +47,39 @@ const App = () => {
   //   const identity = await authClient.getIdentity();
   //   this.setState({ identity: identity });
   // }
+  function setIsLoginTrue() {
+    setIsLogin(true);
+  }
+  async function getActor(authClient) {
+    return authActor;
+  }
   async function handleAuthenticated(authClient) {
-    console.log("login success");
-
-    identity = await authClient.getIdentity();
-    // authActor = await Actor.create;
-    const principal = identity.getPrincipal();
-
-    console.log(principal);
-    const agent = new HttpAgent({
-      // identity: identity,
-      host: "http://localhost:8000",
-    });
-    console.log(agent);
-    await agent.fetchRootKey();
-    console.log("fetchRootKey");
-    authActor = Actor.createActor(idlFactory, {
-      agent,
-      canisterId: canisterId,
-    });
-    var tmp = await authActor.getValue();
-    console.log(tmp);
-    var isSigned = false;
-    if (isSigned) {
-      history.push({ pathname: "/home" });
-      setIsLogin(true);
-    } else {
-      history.push({ pathname: "/signup" });
+    if (authActor === null) {
+      identity = await authClient.getIdentity();
+      const principal = identity.getPrincipal();
+      console.log(principal);
+      const agent = new HttpAgent({
+        // identity: identity,
+        host: "http://localhost:8000",
+      });
+      console.log(agent);
+      await agent.fetchRootKey();
+      console.log("fetchRootKey");
+      let tauthActor = Actor.createActor(idlFactory, {
+        agent,
+        canisterId: canisterId,
+      });
+      setAuthActor(tauthActor);
+      var isSigned = await tauthActor.ifUserExisted();
+      console.log("has user", isSigned);
+      if (isSigned) {
+        setUpDate(flag);
+        flag = !flag;
+        setIsLogin(true);
+        history.push({ pathname: "/home" });
+      } else {
+        history.push({ pathname: "/signup" });
+      }
     }
   }
   useEffect(async () => {
@@ -78,15 +88,16 @@ const App = () => {
     if (await authClient.isAuthenticated()) {
       handleAuthenticated(authClient);
     } else {
+      setIsLogin(false);
       console.log("go to login page!");
       goToLoginPage();
     }
   }, []);
   const handleLogin = async (lors) => {
-    console.log("handle login");
     const authClient = await AuthClient.create();
     await authClient.login({
       onSuccess: async () => {
+        history.push({ pathname: "waiting" });
         handleAuthenticated(authClient);
       },
       identityProvider:
@@ -119,7 +130,11 @@ const App = () => {
           exact
           path="/signup"
           component={(props) => {
-            let obj = Object.assign({}, { authActor: authActor }, props);
+            let obj = Object.assign(
+              {},
+              { authActor: authActor, setIsLoginTrue: setIsLoginTrue },
+              props
+            );
             return <Signup {...obj} />;
           }}
         />
@@ -131,6 +146,7 @@ const App = () => {
             return <Login {...obj} />;
           }}
         />
+        <Route exact path="/waiting" component={Waiting} />
       </Router>
       {isLogin ? <Widgets /> : null}
       {/* <Widgets /> */}
