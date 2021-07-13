@@ -74,8 +74,6 @@ actor DTwitter{
         tweetDB.createTweet(topic, content, time, msg.caller, url)
     };
 
-    //is Existed
-
     /**
     * get user's all tweet id
     * @param msg : msg
@@ -88,6 +86,10 @@ actor DTwitter{
         }
     };
 
+    
+    /*
+    * get user newest 10 tweets (<= 10)
+    */
     public shared(msg) func getUserLastestTenTweets() : async [Tweet]{
         var array = switch(userDB.getUserAllTweets(msg.caller)){
             case ( null ){ [] };
@@ -97,7 +99,7 @@ actor DTwitter{
         var i : Nat = 0;
         if(array.size() >= 10){
             while(i < 10){
-                switch(tweetDB.getTweetById(array[array.size() - i])){
+                switch(tweetDB.getTweetById(array[array.size() - i -1])){
                     case(null) {
                         i += 1;
                     };
@@ -110,7 +112,7 @@ actor DTwitter{
             tweets
         }else{
             while(i < array.size()){
-                switch(tweetDB.getTweetById(array[array.size() - i])){
+                switch(tweetDB.getTweetById(array[array.size() - i -1])){
                     case(null) {
                         i += 1;
                     };
@@ -122,6 +124,33 @@ actor DTwitter{
             };
             tweets
         }
+    };
+
+
+    /**
+    * @param number : Nat32 -> [Tweet] size <= 5
+    */
+    public shared(msg) func getUserOlderFiveTweets(number : Nat32) : async [Tweet]{
+        switch(userDB.getUserAllTweets()){
+            case(null) { [] };
+            case(?tids){
+                if(number >= tids.size()){
+                    return [];
+                }else{
+                    var i = 0;
+                    var tempArray : [Tweet] = [];
+                    while((number + i < tids.size() -1) & i <= 5){
+                        var tempTweet = switch(tweetDB.get(number  + i)){
+                            case(?tweet){ tweet };
+                            case(_) { throw Error.reject("no tweet") };
+                        };
+                        tempArray := Array.append(tempArray, [tempTweet]);
+                        i += 1;
+                    };
+                    tempArray
+                }
+            };
+        };
     };
 
     /**
@@ -165,7 +194,7 @@ actor DTwitter{
         switch(tweetDB.getTweetById(tid)){
             case(null) { return false; };
             case(?t) {
-                assert(t.owner == msg.caller);
+                assert(t.user.uid == msg.caller);
             };
         };
         tweetDB.changeTweet(tid, {
@@ -173,7 +202,10 @@ actor DTwitter{
             topic = topic;
             content = content;
             time = time;
-            owner = msg.caller;
+            user = switch(userDB.get(owner)){
+                case(null) { return false; };
+                case(?user){ user };
+            };
             url = url;
         })
     };

@@ -4,7 +4,6 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Waiting from "./pages/Waiting";
 import Signup from "./pages/Signup";
-// import Signup from "./pages/Signup";
 import Sidebar from "./compoents/Sidebar";
 import Widgets from "./compoents/Widgets";
 import history from "./History";
@@ -16,37 +15,19 @@ import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     islogin: false,
-  //     identity: null,
-  //   };
-  // }
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [authActor, setAuthActor] = useState(null);
   const [upDate, setUpDate] = useState(true);
-  // onloginChange = (isl = false) => {
-  //   this.setState({ islogin: isl });
-  // };
+
   var flag = false;
-  var authClient = null;
-  // var authActor = null;
   var identity = null;
+
   const goToLoginPage = () =>
     history.push({
       pathname: "/login",
     });
-  // async handleAuthenticated(authClient) {
-  //   this.setState({ islogin: true });
-  //   history.push({
-  //     pathname: "/home",
-  //   });
-  //   console.log("login in success!");
-  //   const identity = await authClient.getIdentity();
-  //   this.setState({ identity: identity });
-  // }
+
   function setIsLoginTrue() {
     setIsLogin(true);
   }
@@ -64,7 +45,6 @@ const App = () => {
       });
       console.log(agent);
       await agent.fetchRootKey();
-      console.log("fetchRootKey");
       let tauthActor = Actor.createActor(idlFactory, {
         agent,
         canisterId: canisterId,
@@ -82,7 +62,7 @@ const App = () => {
       }
     }
   }
-  useEffect(async () => {
+  async function checkLogin() {
     console.log("Check login!");
     const authClient = await AuthClient.create();
     if (await authClient.isAuthenticated()) {
@@ -92,7 +72,12 @@ const App = () => {
       console.log("go to login page!");
       goToLoginPage();
     }
+  }
+  useEffect(() => {
+    checkLogin();
   }, []);
+
+  // onClick login button
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({

@@ -24,7 +24,7 @@ function TweetBox(props) {
     props.authActor
       .addTweet("", tweetMessage, "", tweetImage)
       .then((tmp) => console.log(tmp));
-    props.setUpdate();
+    // props.setUpdate();
     setTweetMessage("");
     setTweetImage("");
   };
@@ -33,7 +33,7 @@ function TweetBox(props) {
     <div className="tweetBox">
       <form>
         <div className="tweetBox__input">
-          <Avatar src="https://pbs.twimg.com/profile_images/1398625159016292358/uxVxE5Oc_400x400.jpg" />
+          <Avatar src={props.user.avatarimg} />
           <input
             onChange={(e) => setTweetMessage(e.target.value)}
             value={tweetMessage}

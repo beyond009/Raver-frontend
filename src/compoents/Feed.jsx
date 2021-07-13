@@ -19,16 +19,16 @@ function Feed(props) {
     if (props.authActor !== null && !changing) {
       console.log("fetching data");
       changing = true;
-      let a = await props.authActor.getUserAllTweets();
-      // if(cnt > a.length) 存在tweet被删除的情况;
-      for (let i = cnt; i < a.length; i++) {
-        let tmp = await props.authActor.getTweetById(a[i]);
-        tposts[cnt] = tmp;
-        cnt++;
-        // console.log(cnt, tmp, tposts);
-      }
-      tposts.reverse();
-      setPosts(tposts);
+      let a = await props.authActor.getUserLastestTenTweets();
+      // // if(cnt > a.length) 存在tweet被删除的情况;
+      // for (let i = cnt; i < a.length; i++) {
+      //   let tmp = await props.authActor.getTweetById(a[i]);
+      //   tposts[cnt] = tmp;
+      //   cnt++;
+      //   // console.log(cnt, tmp, tposts);
+      // }
+      // tposts.reverse();
+      setPosts(a);
     }
     changing = false;
   }
@@ -39,7 +39,7 @@ function Feed(props) {
     <div className="feed">
       <Button onClick={fetchData}> refresh </Button>
       <FlipMove>
-        {/* {console.log(cnt)} */}
+        {console.log(posts)}
         {/* {posts.map((post) => console.log(post))} */}
         {posts.map((post) => (
           <Post
