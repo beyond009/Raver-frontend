@@ -9,3 +9,5 @@
 - 评论功能 、 评论保存到 state 并实时显示
 - 上拉加载的功能 （已实现）
 - 下拉加载（需跟后端沟通实现）
+- webpack 环境搭建、支持 dev server
+- 加入 Redux !important
