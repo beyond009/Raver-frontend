@@ -40,14 +40,15 @@ function TweetBox(props) {
             placeholder="What's happening?"
             type="text"
           />
-          {/* <TextField
+          <TextField
             id="outlined-textarea"
             onChange={(e) => setTweetMessage(e.target.value)}
+            value={tweetMessage}
             label="What's happening?"
             placeholder="Placeholder"
             multiline
             variant="outlined"
-          /> */}
+          />
         </div>
         <input
           value={tweetImage}
