@@ -18,12 +18,6 @@ export default class Signup extends Component {
     var avatar_img = document.getElementById("avatar_img").value;
     history.push({ pathname: "waiting" });
     var flag = await this.props.authActor.addUser(username, avatar_img);
-    if (flag) {
-      this.props.setIsLoginTrue();
-      history.push({ pathname: "/home" });
-    } else {
-      console.log("Sign up failed");
-    }
   }
   render() {
     return (

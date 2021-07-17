@@ -1,15 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const dfxJson = require("./dfx.json");
-require("dotenv").config();
-let localCanister;
-
-try {
-  localCanister = require("./.dfx/local/canister_ids.json").idp_service.local;
-} catch {}
 
 // List of all aliases for canisters. This creates the module alias for
 // the `import ... from "@dfinity/ic/canisters/xyz"` where xyz is the name of a
@@ -42,21 +35,19 @@ function generateWebpackConfigForCanister(name, info) {
     return;
   }
 
-  const isProduction = process.env.NODE_ENV === "production";
-  const devtool = isProduction ? undefined : "source-map";
-
   return {
-    mode: isProduction ? "production" : "development",
+    mode: "production",
     entry: {
       // The frontend.entrypoint points to the HTML file for this build, so we need
       // to replace the extension to `.js`.
       index: path
         .join(__dirname, info.frontend.entrypoint)
-        .replace(/\.html$/, ".tsx"),
+        .replace(/\.html$/, ".js"),
     },
-    devtool,
+    devtool: "source-map",
     optimization: {
-      minimize: isProduction,
+      minimize: true,
+      minimizer: [new TerserPlugin()],
     },
     resolve: {
       alias: aliases,
@@ -67,12 +58,11 @@ function generateWebpackConfigForCanister(name, info) {
         events: require.resolve("events/"),
         stream: require.resolve("stream-browserify/"),
         util: require.resolve("util/"),
-        crypto: false,
       },
     },
     output: {
       filename: "[name].js",
-      path: path.join(__dirname, "dist"),
+      path: path.join(__dirname, "dist", name),
     },
     devServer: {
       port: 7080,
@@ -81,20 +71,18 @@ function generateWebpackConfigForCanister(name, info) {
       },
       allowedHosts: [".localhost", ".local", ".ngrok.io"],
     },
-
     // Depending in the language or framework you are using for
     // front-end development, add module loaders to the default
     // webpack configuration. For example, if you are using React
     // modules and CSS as described in the "Adding a stylesheet"
     // tutorial, uncomment the following lines:
-    module: {
-      rules: [
-        { test: /\.(ts|tsx|jsx)$/, loader: "ts-loader" },
-        { test: /\.css$/, use: ["style-loader", "css-loader"] },
-        { test: /\.svg$/, loader: "file-loader" },
-        { test: /\.ttf$/, loader: "file-loader" },
-      ],
-    },
+    // module: {
+    //  rules: [
+    //    { test: /\.(ts|tsx|jsx)$/, loader: "ts-loader" },
+    //    { test: /\.css$/, use: ['style-loader','css-loader'] }
+    //  ]
+    // },
+
     plugins: [
       new HtmlWebpackPlugin({
         template: path.join(__dirname, info.frontend.entrypoint),
@@ -104,25 +92,6 @@ function generateWebpackConfigForCanister(name, info) {
       new webpack.ProvidePlugin({
         Buffer: [require.resolve("buffer/"), "Buffer"],
         process: require.resolve("process/browser"),
-        path: require.resolve("path"),
-      }),
-      new webpack.EnvironmentPlugin([
-        "HOST",
-        "DTOKEN_CANISTER_ID",
-        "FRONTEND_CANISTER_ID",
-        "DSWAP_CANISTER_ID",
-        "INTERNET_IDENTITY_CANISTER_URL",
-        "ROSETTA_BASE_URL",
-        "LEDGER_CANISTER_ID",
-        "CMINTING_CANISTER_ID",
-      ]),
-      new CopyPlugin({
-        patterns: [
-          {
-            from: path.join(__dirname, "src", "frontend", "assets"),
-            to: path.join(__dirname, "dist"),
-          },
-        ],
       }),
     ],
   };

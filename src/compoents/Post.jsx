@@ -6,9 +6,14 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import PublishIcon from "@material-ui/icons/Publish";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import Zmage from "react-zmage";
 
 const Post = forwardRef(
-  ({ displayName, username, verified, text, image, avatar }, ref) => {
+  (
+    { tid, deletPost, displayName, username, verified, text, image, avatar },
+    ref
+  ) => {
     return (
       <div className="post" ref={ref}>
         <div className="post__avatar">
@@ -25,8 +30,9 @@ const Post = forwardRef(
                 </span>
               </h3>
             </div>
+
             <div className="post__headerDescription">
-              <p>{text}</p>
+              <pre>{text}</pre>
             </div>
           </div>
           <div>
@@ -38,6 +44,11 @@ const Post = forwardRef(
             <FavoriteBorderIcon fontSize="small" />
             {/* <PublishIcon fontSize="small" /> */}
           </div>
+        </div>
+        <div>
+          <button className="post_delet_button">
+            <DeleteForeverIcon />
+          </button>
         </div>
       </div>
     );

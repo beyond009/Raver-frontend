@@ -14,10 +14,11 @@ export default class Home extends Component {
     this.setState({ update: tmp });
   }
   async getUserOnMount() {
-    let tmp = this.props.authActor.getUserProfile();
+    let tmp = await this.props.authActor.getUserProfile();
     this.setState({ user: tmp });
   }
   componentDidMount() {
+    this.getUserOnMount();
     console.log("home");
   }
   render() {
@@ -26,11 +27,11 @@ export default class Home extends Component {
         <div className="home__header">
           <h2>Home</h2>
         </div>
-        <TweetBox
+        {/* <TweetBox
           authActor={this.props.authActor}
           setUpdate={this.setUpdate}
           user={this.state.user}
-        />
+        /> */}
         <Feed
           authActor={this.props.authActor}
           update={this.state.update}

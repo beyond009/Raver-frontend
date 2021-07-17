@@ -33,19 +33,22 @@ function TweetBox(props) {
     <div className="tweetBox">
       <form>
         <div className="tweetBox__input">
-          <Avatar src={props.user.avatarimg} />
-          <input
+          <Avatar
+            className="tweetBox__Avatar"
+            src={props.user ? props.user.avatarimg : ""}
+          />
+          {/* <input
             onChange={(e) => setTweetMessage(e.target.value)}
             value={tweetMessage}
             placeholder="What's happening?"
             type="text"
-          />
+          /> */}
           <TextField
+            className="TextField"
             id="outlined-textarea"
             onChange={(e) => setTweetMessage(e.target.value)}
             value={tweetMessage}
             label="What's happening?"
-            placeholder="Placeholder"
             multiline
             variant="outlined"
           />

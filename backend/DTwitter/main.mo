@@ -97,20 +97,20 @@ actor DTwitter{
         };
         var tweets : [Tweet] = [];
         var i : Nat = 0;
-        if(array.size() >= 10){
-            while(i < 10){
-                switch(tweetDB.getTweetById(array[array.size() - i - 1])){
-                    case(null) {
-                        i += 1;
-                    };
-                    case(?tweet) { 
-                        i += 1;
-                        tweets := Array.append(tweets, [tweet]);
-                    };
-                };
-            };
-            tweets
-        }else{
+        // if(array.size() >= 10){
+        //     while(i < 10){
+        //         switch(tweetDB.getTweetById(array[array.size() - i - 1])){
+        //             case(null) {
+        //                 i += 1;
+        //             };
+        //             case(?tweet) { 
+        //                 i += 1;
+        //                 tweets := Array.append(tweets, [tweet]);
+        //             };
+        //         };
+        //     };
+        //     tweets
+        // }else{
             while(i < array.size()){
                 switch(tweetDB.getTweetById(array[array.size() - i -1])){
                     case(null) {
@@ -123,7 +123,7 @@ actor DTwitter{
                 };
             };
             tweets
-        }
+        // }
     };
 
 

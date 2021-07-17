@@ -20,12 +20,16 @@
   margin-top: 20px;
 }
 .post_img {
-  width: 500px;
-  height: 300px;
+  border-radius: 20px;
+  max-width: 540px;
+  myimg: expression_r(
+    onload=function(){this.style.width=(this.offsetWidth > 540) ? "540px":
+      "auto"}
+  );
 }
 .post__headerDescription {
-  margin-bottom: 10px;
-  font-size: 15px;
+  font-size: 18px;
+  font-family: "Source Han Sans CN" !important;
 }
 
 .post__headerText > h3 {
@@ -46,4 +50,12 @@
 
 .post__avatar {
   padding: 20px;
+}
+.post_delet_button {
+  border: 0;
+
+  background-color: transparent;
+  margin-top: 11px;
+  outline: none;
+  float: right;
 }

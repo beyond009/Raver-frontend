@@ -19,7 +19,7 @@ function Widgets() {
         <h2>What's happening</h2>
 
         <TwitterTweetEmbed tweetId={"1394087958169341954"} />
-        <TwitterTweetEmbed tweetId={"1390188659832287232"} />
+        {/* <TwitterTweetEmbed tweetId={"1390188659832287232"} /> */}
         {/* <TwitterTimelineEmbed
           sourceType="profile"
           screenName="cleverqazi"

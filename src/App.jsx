@@ -35,6 +35,8 @@ const App = () => {
     return authActor;
   }
   async function handleAuthenticated(authClient) {
+    setIsLogin(true);
+    history.push({ pathname: "/home" });
     if (authActor === null) {
       identity = await authClient.getIdentity();
       const principal = identity.getPrincipal();
@@ -51,14 +53,8 @@ const App = () => {
       });
       setAuthActor(tauthActor);
       var isSigned = await tauthActor.ifUserExisted();
-      console.log("has user", isSigned);
-      if (isSigned) {
-        setUpDate(flag);
-        flag = !flag;
-        setIsLogin(true);
-        history.push({ pathname: "/home" });
-      } else {
-        history.push({ pathname: "/signup" });
+      if (!isSigned) {
+        tauthActor.addUser("User", "");
       }
     }
   }
@@ -82,7 +78,7 @@ const App = () => {
     const authClient = await AuthClient.create();
     await authClient.login({
       onSuccess: async () => {
-        history.push({ pathname: "waiting" });
+        // history.push({ pathname: "waiting" });
         handleAuthenticated(authClient);
       },
       identityProvider:

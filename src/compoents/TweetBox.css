@@ -13,17 +13,27 @@
   padding: 20px;
   display: flex;
 }
-
+.tweetBox__Avatar {
+  margin-right: 20px;
+}
 .tweetBox__input > input {
   flex: 1;
   margin-left: 20px;
   font-size: 20px;
-  border: none;
+  border: none !important;
 }
 
+.TextField {
+  flex: 1;
+  margin-left: 20px;
+  font-size: 20px;
+  outline: none !important;
+  border: none;
+}
 .tweetBox__imageInput {
   border: none;
   padding: 10px;
+  outline: none !important;
 }
 
 .tweetBox__tweetButton {
