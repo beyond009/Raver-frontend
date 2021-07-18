@@ -8,7 +8,7 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import PublishIcon from "@material-ui/icons/Publish";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import Zmage from "react-zmage";
-
+import LikeButton from "./LikeButton";
 const Post = forwardRef(
   (
     { tid, deletPost, displayName, username, verified, text, image, avatar },
@@ -31,18 +31,16 @@ const Post = forwardRef(
               </h3>
             </div>
 
-            <div className="post__headerDescription">
-              <pre>{text}</pre>
-            </div>
+            <div className="post__headerDescription">{text}</div>
           </div>
           <div>
             {image ? <img className="post_img" src={image} alt="" /> : null}
           </div>
           <div className="post__footer">
             <ChatBubbleOutlineIcon fontSize="small" />
-            {/* <RepeatIcon fontSize="small" /> */}
-            <FavoriteBorderIcon fontSize="small" />
-            {/* <PublishIcon fontSize="small" /> */}
+            <RepeatIcon fontSize="small" />
+            <LikeButton />
+            <PublishIcon fontSize="small" />
           </div>
         </div>
         <div>

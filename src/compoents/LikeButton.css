@@ -1,6 +1,7 @@
 .fave-container {
-  height: 35px;
-  width: 35px;
+  height: 21px;
+  width: 20px;
+  /* margin: 20px; */
   position: relative;
   cursor: pointer;
 }

@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(/src/assets/SOURCEHANSANSCN-MEDIUM.OTF);
+}
 .post {
   display: flex;
   align-items: flex-start;
@@ -27,9 +31,14 @@
       "auto"}
   );
 }
+
 .post__headerDescription {
   font-size: 18px;
-  font-family: "Source Han Sans CN" !important;
+  font-family: Roboto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  width: 500px;
+  /* font-weight: 610; */
 }
 
 .post__headerText > h3 {
@@ -53,7 +62,6 @@
 }
 .post_delet_button {
   border: 0;
-
   background-color: transparent;
   margin-top: 11px;
   outline: none;

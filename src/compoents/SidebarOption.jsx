@@ -1,5 +1,6 @@
 import React from "react";
 import "./SidebarOption.css";
+import { Link } from "react-router-dom";
 
 function SidebarOption({ active, text, Icon }) {
   return (

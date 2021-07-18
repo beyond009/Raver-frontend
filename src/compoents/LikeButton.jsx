@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import "./App.css";
 import Fave from "../assets/fave";
-
+import "./LikeButton.css";
 class FaveContainer extends Component {
   state = {
     fave: false,
@@ -27,10 +26,8 @@ class FaveContainer extends Component {
     return (
       <div>
         <div className="fave-container" onClick={this.handleClick}>
-          <Fave size={100} fave={this.state.fave} />
+          <Fave size={63} fave={this.state.fave} />
         </div>
-        直接点击桃心 或者 点击按钮
-        <button onClick={this.handleClick}>toggle</button>
       </div>
     );
   }

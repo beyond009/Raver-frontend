@@ -19,7 +19,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [authActor, setAuthActor] = useState(null);
   const [upDate, setUpDate] = useState(true);
-
+  const [user, setUser] = useState();
   var flag = false;
   var identity = null;
 
@@ -28,15 +28,10 @@ const App = () => {
       pathname: "/login",
     });
 
-  function setIsLoginTrue() {
-    setIsLogin(true);
-  }
+  // function setIsLoginTrue() {
+  //   setIsLogin(true);
+  // }
   async function getActor(authClient) {
-    return authActor;
-  }
-  async function handleAuthenticated(authClient) {
-    setIsLogin(true);
-    history.push({ pathname: "/home" });
     if (authActor === null) {
       identity = await authClient.getIdentity();
       const principal = identity.getPrincipal();
@@ -52,17 +47,25 @@ const App = () => {
         canisterId: canisterId,
       });
       setAuthActor(tauthActor);
-      var isSigned = await tauthActor.ifUserExisted();
+      let isSigned = await tauthActor.ifUserExisted();
       if (!isSigned) {
-        tauthActor.addUser("User", "");
+        await tauthActor.addUser("User", "");
       }
     }
   }
+  async function handleAuthenticated(authClient) {
+    setIsLogin(true);
+    history.push({ pathname: "/home" });
+    getActor(authClient);
+  }
+
   async function checkLogin() {
     console.log("Check login!");
     const authClient = await AuthClient.create();
     if (await authClient.isAuthenticated()) {
-      handleAuthenticated(authClient);
+      // handleAuthenticated(authClient);
+      setIsLogin(true);
+      getActor(authClient);
     } else {
       setIsLogin(false);
       console.log("go to login page!");
@@ -90,7 +93,8 @@ const App = () => {
     <div className="app">
       {isLogin ? <Sidebar /> : null}
       {/* <Sidebar /> */}
-      <Router history={history}>
+
+      <Switch>
         <Route
           exact
           path="/login"
@@ -124,11 +128,12 @@ const App = () => {
           path="/profile"
           component={(props) => {
             let obj = Object.assign({}, { authActor: authActor }, props);
-            return <Login {...obj} />;
+            return <Profile {...obj} />;
           }}
         />
         <Route exact path="/waiting" component={Waiting} />
-      </Router>
+      </Switch>
+
       {isLogin ? <Widgets /> : null}
       {/* <Widgets /> */}
     </div>

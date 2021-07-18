@@ -11,18 +11,25 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { Button } from "@material-ui/core";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
-
+import { Link } from "react-router-dom";
 function Sidebar() {
   return (
     <div className="sidebar">
-      <SidebarOption active Icon={HomeIcon} text="Home" />
+      <Link to="/home" className="sidebar__link">
+        <SidebarOption Icon={HomeIcon} text="Home" />{" "}
+      </Link>
       {/* <SidebarOption Icon={SearchIcon} text="Explore" /> */}
       {/* <SidebarOption Icon={NotificationsNoneIcon} text="Notifications" />
       <SidebarOption Icon={MailOutlineIcon} text="Messages" />
       <SidebarOption Icon={BookmarkBorderIcon} text="Bookmarks" />
       <SidebarOption Icon={ListAltIcon} text="Lists" /> */}
-      <SidebarOption Icon={AccountBalanceWalletIcon} text="Wallet" />
-      <SidebarOption Icon={PermIdentityIcon} text="Profile" />
+      <SidebarOption Icon={AccountBalanceWalletIcon} text="Wallet">
+        {" "}
+      </SidebarOption>
+      <Link to="/profile" className="sidebar__link">
+        <SidebarOption Icon={PermIdentityIcon} text="Profile" />{" "}
+      </Link>
+
       <SidebarOption Icon={MoreHorizIcon} text="More" />
     </div>
   );

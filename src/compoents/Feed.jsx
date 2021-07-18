@@ -6,9 +6,11 @@ import { Button, Avatar, TextField } from "@material-ui/core";
 import "./TweetBox.css";
 import "./Feed.css";
 import FlipMove from "react-flip-move";
+import { BlockLoading } from "react-loadingg";
 
 function Feed(props) {
   const [update, setUpdate] = useState(false);
+  const [isloading, setIsloading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
@@ -16,25 +18,25 @@ function Feed(props) {
   let flag = false;
   let cnt = 0;
   let ct = 0;
-  let tposts = new Array(100);
   let changing = false;
   const sendTweet = (e) => {
     e.preventDefault();
     console.log("sending Tweet");
-    console.log(tweetMessage);
     let a = posts;
-    console.log("a", a);
+    let t = 0;
+    if (posts.length) {
+      t = posts[0].tid + 1;
+    }
     a.unshift({
-      tid: posts[0].tid + 1,
+      tid: t,
       content: tweetMessage,
       url: tweetImage,
-      user: props.user,
+      user: user,
     });
     setPosts(a);
     props.authActor
       .addTweet("", tweetMessage, "", tweetImage)
       .then((tmp) => console.log(tmp));
-    // props.setUpdate();
     setTweetMessage("");
     setTweetImage("");
   };
@@ -43,9 +45,10 @@ function Feed(props) {
       console.log("fetching data");
       changing = true;
       let a = await props.authActor.getUserLastestTenTweets();
-      console.log(a);
+      setIsloading(false);
       setPosts(a);
-      // let b = await props.authActor.getUs;
+      let b = await props.authActor.getUserProfile();
+      setUser(b);
     }
     changing = false;
   }
@@ -64,7 +67,7 @@ function Feed(props) {
           <div className="tweetBox__input">
             <Avatar
               className="tweetBox__Avatar"
-              src={props.user ? props.user.avatarimg : ""}
+              src={user ? user.avatarimg : ""}
             />
             {/* <input
           onChange={(e) => setTweetMessage(e.target.value)}
@@ -89,7 +92,6 @@ function Feed(props) {
             placeholder="Optional: Enter image URL"
             type="text"
           />
-
           <Button
             onClick={sendTweet}
             type="submit"
@@ -99,24 +101,25 @@ function Feed(props) {
           </Button>
         </form>
       </div>
-      <div className="feed">
-        <Button onClick={fetchData}> refresh </Button>
-        <FlipMove>
-          {console.log(posts)}
-          {/* {posts.map((post) => console.log(post))} */}
-          {posts.map((post) => (
-            <Post
-              key={post.tid}
-              tid={post.tid}
-              displayName={post.user.uname}
-              // username={post.user.uname}
-              text={post.content}
-              image={post.url}
-              deletPost={deletPost}
-            />
-          ))}
-        </FlipMove>
-      </div>
+      {isloading ? (
+        <BlockLoading color="#50b7f5" />
+      ) : (
+        <div className="feed">
+          <Button onClick={fetchData}> refresh </Button>
+          <FlipMove>
+            {posts.map((post) => (
+              <Post
+                key={post.tid}
+                tid={post.tid}
+                displayName={post.user.uname}
+                text={post.content}
+                image={post.url}
+                deletPost={deletPost}
+              />
+            ))}
+          </FlipMove>
+        </div>
+      )}
     </div>
   );
 }
