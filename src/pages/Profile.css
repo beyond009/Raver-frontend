@@ -1,7 +1,8 @@
 .profile {
   flex: 0.59;
   border-right: 1px solid var(--twitter-background);
-  min-width: 200px;
+  flex-flow: column;
+  min-width: fit-content;
   overflow-y: scroll;
 }
 
@@ -14,4 +15,26 @@
 .profile {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+.Signup_Avatar {
+  margin-top: 150px;
+  margin-left: 310px;
+  margin-right: 290px;
+  margin-bottom: 50px;
+  width: 5px;
+  height: 5px;
+}
+.signup__form {
+  margin-left: 130px;
+}
+.submit__button {
+  margin-left: 142px !important;
+}
+#avatar_img {
+  width: 300px;
+  margin-left: 150px;
+}
+#name {
+  width: 300px;
+  margin-left: 150px;
 }

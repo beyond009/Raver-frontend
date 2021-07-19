@@ -11,6 +11,9 @@
   text-decoration: none;
   color: inherit;
 }
+.link__active {
+  color: var(--twitter-color);
+}
 /* .sidebar__tweet {
   background-color: var(--twitter-color) !important;
   border: none !important;

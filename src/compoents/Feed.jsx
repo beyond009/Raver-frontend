@@ -112,6 +112,7 @@ function Feed(props) {
                 key={post.tid}
                 tid={post.tid}
                 displayName={post.user.uname}
+                avatar={post.user.avatarimg}
                 text={post.content}
                 image={post.url}
                 deletPost={deletPost}

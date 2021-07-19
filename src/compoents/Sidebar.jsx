@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Sidebar.css";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
@@ -11,13 +11,19 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { Button } from "@material-ui/core";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 function Sidebar() {
+  const [activeHome, setactiveHome] = useState();
+  const [activeProfile, setactiveProfile] = useState();
   return (
     <div className="sidebar">
-      <Link to="/home" className="sidebar__link">
-        <SidebarOption Icon={HomeIcon} text="Home" />{" "}
-      </Link>
+      <NavLink
+        to="/home"
+        className="sidebar__link"
+        activeClassName="link__active"
+      >
+        <SidebarOption active={activeHome} Icon={HomeIcon} text="Home" />{" "}
+      </NavLink>
       {/* <SidebarOption Icon={SearchIcon} text="Explore" /> */}
       {/* <SidebarOption Icon={NotificationsNoneIcon} text="Notifications" />
       <SidebarOption Icon={MailOutlineIcon} text="Messages" />
@@ -26,9 +32,13 @@ function Sidebar() {
       <SidebarOption Icon={AccountBalanceWalletIcon} text="Wallet">
         {" "}
       </SidebarOption>
-      <Link to="/profile" className="sidebar__link">
+      <NavLink
+        to="/profile"
+        className="sidebar__link"
+        activeClassName="link__active"
+      >
         <SidebarOption Icon={PermIdentityIcon} text="Profile" />{" "}
-      </Link>
+      </NavLink>
 
       <SidebarOption Icon={MoreHorizIcon} text="More" />
     </div>
