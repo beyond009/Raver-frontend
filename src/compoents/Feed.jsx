@@ -27,12 +27,13 @@ function Feed(props) {
     if (posts.length) {
       t = posts[0].tid + 1;
     }
-    a.unshift({
-      tid: t,
-      content: tweetMessage,
-      url: tweetImage,
-      user: user,
-    });
+    if (user)
+      a.unshift({
+        tid: t,
+        content: tweetMessage,
+        url: tweetImage,
+        user: user,
+      });
     setPosts(a);
     props.authActor
       .addTweet("", tweetMessage, "", tweetImage)
@@ -45,6 +46,7 @@ function Feed(props) {
       console.log("fetching data");
       changing = true;
       let a = await props.authActor.getUserLastestTenTweets();
+
       setIsloading(false);
       setPosts(a);
       let b = await props.authActor.getUserProfile();

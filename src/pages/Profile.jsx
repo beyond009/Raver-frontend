@@ -21,6 +21,11 @@ const Profile = (props) => {
       <div>
         <Avatar src={avatarimg ? avatarimg : ""} className="Signup_Avatar" />
       </div>
+      <div className="profile__your">Your Principal:</div>
+      <div className="profile__principal">
+        <br /> {props.principal.toText()}
+      </div>
+
       <div className="signup__form">
         <form noValidate autoComplete="off">
           <Input
@@ -41,7 +46,7 @@ const Profile = (props) => {
         inputProps={{ "aria-label": "description" }}
       /> */}
           <br />
-        </form>
+        </form>{" "}
         <br />
         <br />
         <Button onClick={handleSubmit} className="submit__button">

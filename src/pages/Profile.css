@@ -10,11 +10,17 @@
 .profile::-webkit-scrollbar {
   display: none;
 }
-
 /* Hide scrollbar for IE, Edge and Firefox */
 .profile {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+.profile__your {
+  margin-left: 277px;
+}
+.profile__principal {
+  margin-left: 90px;
+  margin-bottom: 30px;
 }
 .Signup_Avatar {
   margin-top: 150px;

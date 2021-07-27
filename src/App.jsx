@@ -10,7 +10,9 @@ import history from "./History";
 import Feed from "./compoents/Feed";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
+import { isDelegationValid } from "@dfinity/authentication";
 import { idlFactory, canisterId } from "dfx-generated/backend";
+import { DelegationIdentity } from "@dfinity/identity";
 import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
 import "./App.css";
 
@@ -20,6 +22,7 @@ const App = () => {
   const [authActor, setAuthActor] = useState(null);
   const [upDate, setUpDate] = useState(true);
   const [user, setUser] = useState();
+  const [principal, setPrincipal] = useState();
   var flag = false;
   var identity = null;
 
@@ -34,10 +37,15 @@ const App = () => {
   async function getActor(authClient) {
     if (authActor === null) {
       identity = await authClient.getIdentity();
+      if (identity instanceof DelegationIdentity) {
+        console.log("delegationidentity");
+        console.log(identity.getDelegation());
+        console.log(isDelegationValid(identity.getDelegation()));
+      }
       const principal = identity.getPrincipal();
-      console.log(principal);
+      setPrincipal(principal);
       const agent = new HttpAgent({
-        // identity: identity,
+        identity: identity,
         host: "http://localhost:8000",
       });
       console.log(agent);
@@ -80,12 +88,13 @@ const App = () => {
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({
+      // maxTimeToLive: BigInt("0x7f7f7f7f7f"),
+      identityProvider:
+        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
         // history.push({ pathname: "waiting" });
         handleAuthenticated(authClient);
       },
-      identityProvider:
-        "http://localhost:8080/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
     });
   };
 
@@ -127,7 +136,11 @@ const App = () => {
           exact
           path="/profile"
           component={(props) => {
-            let obj = Object.assign({}, { authActor: authActor }, props);
+            let obj = Object.assign(
+              {},
+              { authActor: authActor, principal: principal },
+              props
+            );
             return <Profile {...obj} />;
           }}
         />
