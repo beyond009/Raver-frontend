@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { Button } from "@material-ui/core";
-import dfinityicon from "../assets/dfinity.png";
+import dfinityicon from "../../assets/dfinity.png";
 
 import { idlFactory, canisterId } from "dfx-generated/backend";
 import history from "../History";

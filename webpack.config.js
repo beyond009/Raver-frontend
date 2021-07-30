@@ -42,12 +42,17 @@ function generateWebpackConfigForCanister(name, info) {
       // to replace the extension to `.js`.
       index: path
         .join(__dirname, info.frontend.entrypoint)
-        .replace(/\.html$/, ".js"),
+        .replace(/\.html$/, ".jsx"),
     },
     devtool: "source-map",
     optimization: {
       minimize: true,
       minimizer: [new TerserPlugin()],
+    },
+    devServer: {
+      client: {
+        overlay: false,
+      },
     },
     resolve: {
       alias: aliases,
@@ -64,25 +69,21 @@ function generateWebpackConfigForCanister(name, info) {
       filename: "[name].js",
       path: path.join(__dirname, "dist", name),
     },
-    devServer: {
-      port: 7080,
-      proxy: {
-        "/api": "http://localhost:8000",
-      },
-      allowedHosts: [".localhost", ".local", ".ngrok.io"],
-    },
+
     // Depending in the language or framework you are using for
     // front-end development, add module loaders to the default
     // webpack configuration. For example, if you are using React
     // modules and CSS as described in the "Adding a stylesheet"
     // tutorial, uncomment the following lines:
-    // module: {
-    //  rules: [
-    //    { test: /\.(ts|tsx|jsx)$/, loader: "ts-loader" },
-    //    { test: /\.css$/, use: ['style-loader','css-loader'] }
-    //  ]
-    // },
-
+    module: {
+      rules: [
+        { test: /\.(ts|tsx|jsx)$/, loader: "ts-loader" },
+        { test: /\.css$/, use: ["style-loader", "css-loader"] },
+        { test: /\.(ttf|TTF)$/, loader: "file-loader" },
+        { test: /\.(otf|OTF)$/, loader: "file-loader" },
+        { test: /\.png$/, loader: "file-loader" },
+      ],
+    },
     plugins: [
       new HtmlWebpackPlugin({
         template: path.join(__dirname, info.frontend.entrypoint),

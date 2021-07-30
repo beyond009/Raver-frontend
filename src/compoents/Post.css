@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Roboto";
-  src: url(/src/assets/SOURCEHANSANSCN-MEDIUM.OTF);
+  src: url("../../assets/SOURCEHANSANSCN-MEDIUM.OTF");
 }
 .post {
   display: flex;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Fave from "../assets/fave";
+import Fave from "../../assets/fave";
 import "./LikeButton.css";
 class FaveContainer extends Component {
   state = {
