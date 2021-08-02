@@ -9,11 +9,10 @@
         "backend"
       ],
       "frontend": {
-        "entrypoint": "src/index.html"
+        "entrypoint": "dist/index.html"
       },
       "source": [
-        "assets",
-        "dist/assets"
+        "dist/"
       ],
       "type": "assets"
     }

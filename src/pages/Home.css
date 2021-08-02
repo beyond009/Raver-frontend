@@ -21,8 +21,8 @@
   top: 0;
   background-color: white;
   z-index: 100;
-  border: 1px solid var(--twitter-background);
-  padding: 15px 20px;
+  border: 1px solid var(--background);
+  padding: 5px 15px 5px 15px;
 }
 
 .home__header > h2 {

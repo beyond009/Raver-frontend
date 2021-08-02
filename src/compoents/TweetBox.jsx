@@ -9,22 +9,10 @@ function TweetBox(props) {
 
   const sendTweet = (e) => {
     e.preventDefault();
-
-    // db.collection("posts").add({
-    //   displayName: "Rafeh Qazi",
-    //   username: "cleverqazi",
-    //   verified: true,
-    //   text: tweetMessage,
-    //   image: tweetImage,
-    //   avatar:
-    //     "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png",
-    // })
-    console.log("sending Tweet");
     console.log(tweetMessage);
     props.authActor
       .addTweet("", tweetMessage, "", tweetImage)
       .then((tmp) => console.log(tmp));
-    // props.setUpdate();
     setTweetMessage("");
     setTweetImage("");
   };
@@ -37,12 +25,6 @@ function TweetBox(props) {
             className="tweetBox__Avatar"
             src={props.user ? props.user.avatarimg : ""}
           />
-          {/* <input
-            onChange={(e) => setTweetMessage(e.target.value)}
-            value={tweetMessage}
-            placeholder="What's happening?"
-            type="text"
-          /> */}
           <TextField
             className="TextField"
             id="outlined-textarea"
@@ -60,7 +42,6 @@ function TweetBox(props) {
           placeholder="Optional: Enter image URL"
           type="text"
         />
-
         <Button
           onClick={sendTweet}
           type="submit"

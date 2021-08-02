@@ -1,59 +1,52 @@
-import React, { Component, useState, useEffect } from "react";
+import React from "react";
+import { Avatar, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
 import Feed from "../compoents/Feed";
-import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import { Avatar } from "@material-ui/core";
-import Input from "@material-ui/core/Input";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import MailIcon from "@material-ui/icons/Mail";
+import banner from "../../assets/1500x500.jpeg";
 import history from "../History";
 import "./Profile.css";
-const Profile = (props) => {
-  const [avatarimg, setAvatarimg] = useState();
-  async function handleSubmit() {
-    let username = document.getElementById("name").value;
-    let avatar_img = document.getElementById("avatar_img").value;
-    setAvatarimg(avatar_img);
-    let flag = await props.authActor.changeUserProfile(username, avatar_img);
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+  large: {
+    width: theme.spacing(14),
+    height: theme.spacing(14),
+  },
+}));
+
+export default function Profile() {
+  const classes = useStyles();
+
+  function handleClickEdit() {
+    history.push({ pathname: "/editprofile" });
   }
-  useEffect(() => {}, []);
   return (
     <div className="profile">
-      <div>
-        <Avatar src={avatarimg ? avatarimg : ""} className="Signup_Avatar" />
+      <div className="profile__header">
+        <h2>Profile</h2>
       </div>
-      <div className="profile__your">Your Principal:</div>
-      <div className="profile__principal">
-        <br /> {props.principal.toText()}
+      <img src={banner} className="profile__banner" />
+      <div className="profile__avatar">
+        <Avatar className={classes.large} />
       </div>
-
-      <div className="signup__form">
-        <form noValidate autoComplete="off">
-          <Input
-            id="avatar_img"
-            placeholder="avatar img url"
-            inputProps={{ "aria-label": "description" }}
-          />
-          <br />
-          <br />
-          <Input
-            id="name"
-            placeholder="name"
-            inputProps={{ "aria-label": "description" }}
-          />
-          {/* <Input
-        id="id"
-        placeholder="id"
-        inputProps={{ "aria-label": "description" }}
-      /> */}
-          <br />
-        </form>{" "}
-        <br />
-        <br />
-        <Button onClick={handleSubmit} className="submit__button">
-          Submit
+      <div className="profile__editposition">
+        <Button className="profile__editbutton" onClick={handleClickEdit}>
+          Edit Profile
         </Button>
+      </div>
+      <div className="profile__displaynameposition">
+        <h3>ddd009</h3>
+      </div>
+      <div className="profile__descriptionposition">
+        <p className="profile__description">wo shi sha dan</p>
       </div>
     </div>
   );
-};
-export default Profile;
+}

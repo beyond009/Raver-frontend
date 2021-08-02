@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
-import httpAgent from "../../httpAgent";
 import { Button, Avatar, TextField } from "@material-ui/core";
 import "./TweetBox.css";
 import "./Feed.css";

@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 import Waiting from "./pages/Waiting";
 import Signup from "./pages/Signup";
 import Sidebar from "./compoents/Sidebar";
@@ -142,6 +143,18 @@ const App = () => {
               props
             );
             return <Profile {...obj} />;
+          }}
+        />
+        <Route
+          exact
+          path="/editprofile"
+          component={(props) => {
+            let obj = Object.assign(
+              {},
+              { authActor: authActor, principal: principal },
+              props
+            );
+            return <EditProfile {...obj} />;
           }}
         />
         <Route exact path="/waiting" component={Waiting} />

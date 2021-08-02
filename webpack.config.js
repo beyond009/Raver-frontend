@@ -49,11 +49,6 @@ function generateWebpackConfigForCanister(name, info) {
       minimize: true,
       minimizer: [new TerserPlugin()],
     },
-    devServer: {
-      client: {
-        overlay: false,
-      },
-    },
     resolve: {
       alias: aliases,
       extensions: [".js", ".ts", ".jsx", ".tsx"],
@@ -69,6 +64,10 @@ function generateWebpackConfigForCanister(name, info) {
       filename: "[name].js",
       path: path.join(__dirname, "dist", name),
     },
+    devServer: {
+      contentBase: path.resolve(__dirname, "dist"),
+      hot: true,
+    },
 
     // Depending in the language or framework you are using for
     // front-end development, add module loaders to the default
@@ -81,7 +80,7 @@ function generateWebpackConfigForCanister(name, info) {
         { test: /\.css$/, use: ["style-loader", "css-loader"] },
         { test: /\.(ttf|TTF)$/, loader: "file-loader" },
         { test: /\.(otf|OTF)$/, loader: "file-loader" },
-        { test: /\.png$/, loader: "file-loader" },
+        { test: /\.(png|jpg)$/, loader: "file-loader" },
       ],
     },
     plugins: [
@@ -94,6 +93,7 @@ function generateWebpackConfigForCanister(name, info) {
         Buffer: [require.resolve("buffer/"), "Buffer"],
         process: require.resolve("process/browser"),
       }),
+      new webpack.HotModuleReplacementPlugin(),
     ],
   };
 }

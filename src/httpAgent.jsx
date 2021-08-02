@@ -2,7 +2,7 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { idlFactory, canisterId } from "dfx-generated/backend";
 
-const httpAgent = async () => {
+const HttpAgent = async () => {
   console.log("authActor0");
   const authClient = await AuthClient.create();
   console.log("authActor1");
