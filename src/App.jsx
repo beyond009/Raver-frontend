@@ -47,7 +47,7 @@ const App = () => {
       setPrincipal(principal);
       const agent = new HttpAgent({
         identity: identity,
-        host: "http://localhost:8000",
+        host: "http://ryjl3-tyaaa-aaaaa-aaaba-cai.localhost:8000",
       });
       console.log(agent);
       await agent.fetchRootKey();
