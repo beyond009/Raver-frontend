@@ -5,10 +5,11 @@ import User "./Module/User";
 import Error "mo:base/Error";
 import Array "mo:base/Array";
 import Nat "mo:base/Nat";
+import Option "mo:base/Option";
 
 actor DTwitter{
     type User = User.User;
-    type Tweet = Tweet.showTweet;
+    type ShowTweet = Tweet.showTweet;
     private var userDB = UserDB.userDB();
     private var tweetDB = TweetDB.tweetDB(userDB);
 
@@ -18,13 +19,15 @@ actor DTwitter{
     * @pararm uname ; user name 
     * @return successful -> true; failed : false
     */
-    public shared(msg) func addUser(uname : Text, avatarimg: Text) : async Bool{
+    public shared(msg) func addUser(username : Text,nickname : Text, avatarimg: Text) : async Bool{
         userDB.addUser({
             uid = msg.caller;
-            uname = uname;
+            nickname =nickname;
+            username = username;
             avatarimg = avatarimg;
         })
     };
+    
 
     /**
     * delete user
@@ -32,11 +35,18 @@ actor DTwitter{
     * @return successful -> true; failed : false
     */
     public shared(msg) func deleteUser() : async Bool{
-        userDB.deleteUser(msg.caller)
+        var tweetArray = Option.get<[Nat]>(userDB.getUserAllTweets(msg.caller), []);
+        var status = true;
+        for(x in tweetArray.vals()){
+            if(tweetDB.deleteTweet(msg.caller, x) == false) status := false;
+            userDB.deleteTweetUser(x);
+        };
+        if(userDB.deleteUser(msg.caller) == false) status := false;
+        return status;
     };
 
-    public shared(msg) func ifUserExisted() : async Bool{
-        userDB.isExist(msg.caller)
+    public query func isUserExist(uid : Principal) : async Bool{
+        userDB.isUserExist(uid)
     };
 
     /**
@@ -44,10 +54,11 @@ actor DTwitter{
     * @param uname : Text new user name
     * @return successful -> true; failed : false
     */
-    public shared(msg) func changeUserProfile(uname : Text, avatarimg : Text) : async Bool{
+    public shared(msg) func changeUserProfile(nickname : Text, username : Text, avatarimg : Text) : async Bool{
         userDB.changeUserProfile(msg.caller, {
             uid = msg.caller;
-            uname = uname;
+            nickname = nickname;
+            username = username;
             avatarimg = avatarimg;
         })
     };
@@ -56,10 +67,10 @@ actor DTwitter{
     * @param msg
     * @return User
     */
-    public shared(msg) func getUserProfile() : async User{
-        switch(userDB.getUserProfile(msg.caller)){
+    public query func getUserProfile(uid : Principal) : async User{
+        switch(userDB.getUserProfile(uid)){
             case(?user){ user };
-            case(_){ throw Error.reject("No such user") };
+            case(_){ throw Error.reject("no such user") };
         }
     };
 
@@ -70,8 +81,13 @@ actor DTwitter{
     * @param time : Text -> send tweet time
     * @return bool : if add tweet successfully
     */
-    public shared(msg) func addTweet(topic : Text, content : Text, time : Text, url : Text) : async Bool{
-        tweetDB.createTweet(topic, content, time, msg.caller, url)
+    //todo : topic
+    public shared(msg) func addTweet(content : Text, time : Text, url : Text) : async Bool{
+        if(tweetDB.createTweet(content, time, msg.caller, url) != 0){
+            true
+        }else{
+            false
+        }
     };
 
     /**
@@ -79,10 +95,26 @@ actor DTwitter{
     * @param msg : msg
     * @return user's all tweet id array : [Nat]
     */
-    public shared(msg) func getUserAllTweets() : async [Nat]{
-        switch(userDB.getUserAllTweets(msg.caller)){
+    public query func getUserAllTid(uid : Principal) : async [Nat]{
+        switch(userDB.getUserAllTweets(uid)){
             case ( null ){ [] };
             case (?array) { array };
+        }
+    };
+
+    //get user's all show tweet
+    public query func getUserAllTweets(uid : Principal) : async [ShowTweet]{
+        switch(userDB.getUserAllTweets(uid)){
+            case null { throw Error.reject("no such user") };
+            case (?array){
+                var tempArray = Array.init<ShowTweet>(array.size(), Tweet.defaultType().defaultShowTweet);
+                var i = 0;
+                for(k in array.vals()){
+                    tempArray[i] := Option.unwrap<ShowTweet>(tweetDB.getShowTweetById(k));
+                    i := i + 1;
+                };
+                Array.freeze<ShowTweet>(tempArray)
+            };
         }
     };
 
@@ -90,83 +122,40 @@ actor DTwitter{
     /*
     * get user newest 10 tweets (<= 10)
     */
-    public shared(msg) func getUserLastestTenTweets() : async [Tweet]{
-        var array = switch(userDB.getUserAllTweets(msg.caller)){
-            case ( null ){ [] };
-            case (?array) { array };
+    public shared(msg) func getUserLastestTenTweets() : async [ShowTweet]{
+        tweetDB.getUserLastestTenTweets(msg.caller)
+    };
+
+    //获取关注用户及自己的最新10条post
+    public query func getFollowLastestTenTweets(uid : Principal, lastTid : Nat) : async [ShowTweet]{
+        var TidArray = tweetDB.getFollowLastestTenTweets(uid, lastTid);
+        var tempArray = Array.init<ShowTweet>(TidArray.size(), Tweet.defaultType().defaultShowTweet);
+        var i = 0;
+        for(k in TidArray.vals()){
+            tempArray[i] := Option.unwrap<ShowTweet>(tweetDB.getShowTweetById(k));
+            i := i + 1;
         };
-        var tweets : [Tweet] = [];
-        var i : Nat = 0;
-        if(array.size() >= 10){
-            while(i < 10){
-                switch(tweetDB.getShowTweetById(array[array.size() - i - 1])){
-                    case(null) {
-                        i += 1;
-                    };
-                    case(?tweet) { 
-                        i += 1;
-                        tweets := Array.append(tweets, [tweet]);
-                    };
-                };
-            };
-            tweets
-        }else{
-            while(i < array.size()){
-                switch(tweetDB.getShowTweetById(array[array.size() - i -1])){
-                    case(null) {
-                        i += 1;
-                    };
-                    case(?tweet) { 
-                        i += 1;
-                        tweets := Array.append(tweets, [tweet]);
-                    };
-                };
-            };
-            tweets
-        }
+        Array.freeze<ShowTweet>(tempArray)
     };
 
 
     /**
     * @param number : Nat -> [Tweet] size <= 5
     */
-    public shared(msg) func getUserOlderFiveTweets(number : Nat) : async [Tweet]{
-        switch(userDB.getUserAllTweets(msg.caller)){
-            case(null) { [] };
-            case(?tids){
-                var size = Nat.fromNat(tids.size());
-                if(number >= size){
-                    return [];
-                }else{
-                    var i : Nat = 1;
-                    var tempArray : [Tweet] = [];
-                    while((number + i < size -1) and (i < 5)){
-                        var tempTweet = switch(tweetDB.getShowTweetById(size - 1 - number - i)){
-                            case(?tweet){ tweet };
-                            case(_) { throw Error.reject("no tweet") };
-                        };
-                        tempArray := Array.append(tempArray, [tempTweet]);
-                        i += 1;
-                    };
-                    tempArray
-                }
-            };
-        };
-    };
-
-    /****/
-    public shared(msg) func getFollowFiveTweets(follow : Principal, number : Nat) : async [Tweet]{
-        assert(userDB.isExist(follow));
-        tweetDB.getFollowFiveTweets(follow, number)
+    public query func getUserOlderFiveTweets(tid : Nat, uid : Principal) : async [ShowTweet]{
+        switch(tweetDB.getUserOlderFiveTweets(uid, tid)){
+            case(null) { throw Error.reject(" error ") };
+            case(?tweets){ tweets };
+        }
     };
 
 
     /**
-    * get tweet by tid
-    * @param tid : tweet id
+    * get tweet by Tid
+    * @param Tid : tweet id
     * @return whrow Error or return tweet
     */
-    public query func getTweetById(tid : Nat) : async Tweet{
+    public query func getTweetById(tid : Nat) : async ShowTweet{
         switch(tweetDB.getShowTweetById(tid)){
             case(null){
                 throw Error.reject("no such tweet or worng id")
@@ -177,17 +166,13 @@ actor DTwitter{
         }
     };
 
-    public query func getLastestTweetId() : async Nat{
+    public query func getLastestTweeTid() : async Nat{
         tweetDB.getLastestTweetId()
-    };
-
-    public shared(msg) func reTweet(tid : Nat) : async Bool{
-        tweetDB.reTweet(tid, msg.caller);
     };
 
     /*
     * if tweet is existed
-    * @param tid tweet id
+    * @param Tid tweet id
     * @reutrn existed or do not exist
     */
     public query func isExist(tid : Nat) : async Bool{
@@ -198,30 +183,20 @@ actor DTwitter{
         tweetDB.deleteTweet(msg.caller, tid)
     };
 
-    public shared(msg) func changeTweet(tid : Nat, topic : Text, content : Text, time : Text, url : Text) : async Bool{ 
+    public shared(msg) func changeTweet(tid : Nat, content : Text, time : Text, url : Text) : async Bool{ 
         switch(tweetDB.getShowTweetById(tid)){
             case(null) { return false; };
             case(?t) {
                 assert(t.user.uid == msg.caller);
             };
         };
-        tweetDB.changeTweet(tid, Tweet {
-            tid = tid;
-            topic = topic;
-            content = content;
-            time = time;
-            owner = msg.caller;
-            url = url;
-        })
+        tweetDB.changeTweet(tid, content, time, msg.caller, url)
     };
 
-    public query func getTopicAllTweet(topic : Text) : async [Nat]{
-        switch(tweetDB.findTweetByTopic(topic)){
-            case(null){ [] };
-            case(?array){ array };
-        }
-    };
 
+    /**
+    *The following part is follow moudle-------------------follow-------------------------
+    **/
 
     /**
     * get user attention user
@@ -229,11 +204,17 @@ actor DTwitter{
     * @param uid : user principal
     * @return [Principal] user followed by user  
     */
-    public shared(msg) func getFollow(uid : Principal) : async [Principal]{
-        switch(userDB.getFollow(msg.caller)){
-            case(null){ throw Error.reject("no such user") };
-            case(?array) { array };
+    public query func getFollow(uid : Principal) : async [User]{
+        var followArray = userDB.getFollow(uid);
+        var userArray = Array.init<User>(followArray.size(), User.defaultType().defaultUser);
+        var count = 0;
+        while(count < followArray.size()){
+            userArray[count] := switch(userDB.getUserProfile(followArray[count])){
+                case null{User.defaultType().defaultUser};
+                case(?user){user};
+            };
         };
+        Array.freeze<User>(userArray)
     };
 
     /**
@@ -242,16 +223,90 @@ actor DTwitter{
     * @param uid : user principal
     * @return [Principal] user followed by user  
     */
-    public shared(msg) func getFollower(uid : Principal) : async [Principal]{
-        switch(userDB.getFollower(msg.caller)){
-            case(null){ throw Error.reject("no such user") };
-            case(?array) { array };
+    public query func getFollower(uid : Principal) : async [User]{
+        var followerArray = userDB.getFollower(uid);
+        var userArray = Array.init<User>(followerArray.size(), User.defaultType().defaultUser);
+        var count = 0;
+        while(count < followerArray.size()){
+            userArray[count] := switch(userDB.getUserProfile(followerArray[count])){
+                case null{User.defaultType().defaultUser};
+                case(?user){user};
+            };
         };
+        Array.freeze<User>(userArray)
     };
 
+    public query func isTwoUserFollowEachOther(user_A : Principal, user_B : Principal) : async Bool{
+        var result = userDB.isAFollowedByB(user_A, user_B);
+        if(result == 0) return false;
+        if(result == 6) throw Error.reject("A does not exist");
+        if(result == 7) throw Error.reject("B does not exist");
+        if(result == 10) throw Error.reject("Unknown Error");
+        if(result == 1){
+            var result_reverse = userDB.isAFollowedByB(user_B, user_A);
+            if(result_reverse == 0) return false;
+            if(result_reverse == 10 or result_reverse == 6  or result_reverse == 7) throw Error.reject("Unknown Error");
+            if(result_reverse == 1) return true;
+        };
+        false
+    };
 
-    /** TODO**/
-    // public shared(msg) func deleteFollow() ： async Bool{};
+    public query func isAFollowedByB(user_A : Principal, user_B : Principal) : async Bool{
+        var result = userDB.isAFollowedByB(user_A, user_B);
+        if(result == 0) return false;
+        if(result == 6) throw Error.reject("A does not exist");
+        if(result == 7) throw Error.reject("B does not exist");
+        if(result == 10) throw Error.reject("Unknown Error");
+        if(result == 1) return true;
+        false;
+    };
+
+    public shared(msg) func addFollow(follow : Principal): async Bool{
+        var stepOne = userDB.addFollow(follow, msg.caller);
+        var stepTwo = userDB.addFollower(follow, msg.caller);
+        if(stepOne and stepTwo) true
+        else false
+    };
+
+    public shared(msg) func cancelFollow(follow : Principal): async Bool{
+        var stepOne = userDB.cancelFollow(follow, msg.caller);
+        var stepTwo = userDB.cancelFollower(follow, msg.caller);
+        if(stepOne == 1 and stepTwo == 1) true
+        else false
+    };
+
+    /**                Cooment                                 **/
+    public shared(msg) func addComment(text : Text, time : Text, uid : Principal, url : Text, cid : Nat) : async Bool{
+        let tid = tweetDB.createTweet(text, time, msg.caller, url);
+        tweetDB.addComment(tid, cid);
+    };
+
+    public shared(msg) func deleteComment(tid : Nat, cid : Nat) : async Bool{
+        if(msg.caller != Option.unwrap<Principal>(userDB.getUidByTid(tid))){
+            false
+        }else{
+            tweetDB.deleteComment(tid, cid);
+        }
+    };
+
+    public query func getTweetAllComments(tid : Nat) : async [ShowTweet]{
+        switch(tweetDB.getTweetAllComments(tid)){
+            case null { throw Error.reject(" no such tweet ") };
+            case (?tweets){ tweets };
+        }
+    };
+
+    public query func getTweetCommentNumber(tid : Nat) : async Nat{
+        tweetDB.getCommentNumber(tid)
+    };
+
+    public shared(msg) func deleteTweetAllComment(tid : Nat) : async Bool{
+        if(msg.caller == Option.unwrap<Principal>(userDB.getUidByTid(tid))){
+            tweetDB.deleteTweetAllComment(tid)
+        }else{
+            throw Error.reject("you have no right");
+        }
+    };
 
 
     /**
@@ -280,4 +335,13 @@ actor DTwitter{
         tweetDB.isTweetLiked(tid, uid)
     };
 
+    /**
+    *The following part is like moudle-------------------bio-------------------------
+    **/
+    public query func getBio(uid : Principal) : async Text{
+        userDB.getBio(uid)
+    };
+    public shared(msg) func putBio(uid : Principal, bioText : Text){
+        userDB.putBio(uid, bioText)
+    }
 };

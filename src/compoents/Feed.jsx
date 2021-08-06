@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Principal } from "@dfinity/principal";
+import { useSelector } from "react-redux";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
 import { Button, Avatar, TextField } from "@material-ui/core";
@@ -8,12 +10,11 @@ import FlipMove from "react-flip-move";
 import { BlockLoading } from "react-loadingg";
 
 function Feed(props) {
-  const [update, setUpdate] = useState(false);
+  const { authActor, user, identity } = useSelector((state) => state);
   const [isloading, setIsloading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
-  const [user, setUser] = useState();
   let flag = false;
   let cnt = 0;
   let ct = 0;
@@ -23,44 +24,39 @@ function Feed(props) {
     console.log("sending Tweet");
     let a = posts;
     let t = 0;
-    if (posts.length) {
-      t = posts[0].tid + 1;
-    }
+    console.log(posts[0].tid);
     if (user)
       a.unshift({
-        tid: t,
+        tid: 1,
         content: tweetMessage,
         url: tweetImage,
         user: user,
       });
     setPosts(a);
-    props.authActor
-      .addTweet("", tweetMessage, "", tweetImage)
+    authActor
+      .addTweet(tweetMessage, "time", tweetImage)
       .then((tmp) => console.log(tmp));
     setTweetMessage("");
     setTweetImage("");
   };
+
   async function fetchData() {
-    if (props.authActor !== null && !changing) {
+    console.log(authActor);
+    if (authActor !== null && !changing && identity) {
       console.log("fetching data");
       changing = true;
-      let a = await props.authActor.getUserLastestTenTweets();
-
+      console.log(identity);
+      let a = await authActor.getUserAllTweets(identity);
+      console.log(a);
       setIsloading(false);
       setPosts(a);
-      let b = await props.authActor.getUserProfile();
-      setUser(b);
     }
     changing = false;
   }
-  const deletPost = async (tid) => {
-    if (props.authActor != null) {
-      props.authActor.deleteTweet(tid);
-    }
-  };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [authActor, identity]);
   return (
     <div>
       <div className="tweetBox">
@@ -70,12 +66,6 @@ function Feed(props) {
               className="tweetBox__Avatar"
               src={user ? user.avatarimg : ""}
             />
-            {/* <input
-          onChange={(e) => setTweetMessage(e.target.value)}
-          value={tweetMessage}
-          placeholder="What's happening?"
-          type="text"
-        /> */}
             <TextField
               className="TextField"
               id="outlined-textarea"
@@ -112,11 +102,10 @@ function Feed(props) {
               <Post
                 key={post.tid}
                 tid={post.tid}
-                displayName={post.user.uname}
+                displayName={post.user.nickname}
                 avatar={post.user.avatarimg}
                 text={post.content}
                 image={post.url}
-                deletPost={deletPost}
               />
             ))}
           </FlipMove>

@@ -5,15 +5,14 @@ import Array "mo:base/Array";
 import Text "mo:base/Text";
 import Nat8 "mo:base/Nat8";
 import Option "mo:base/Option";
-
 import Tweet "../Module/Tweet";
 import User "../Module/User";
 import Content "../Module/Content";
-
 import UserDB "./UserDB";
 import LikeDB "./LikeDB";
 import CommentDB "./CommentDB";
 import ContentDB "./ContentDB";
+import tools "../Module/tools";
 
 module{
     type TID = Tweet.TID;
@@ -42,13 +41,17 @@ module{
         // tweet content
         private var contentDB = ContentDB.ContentDB();
 
-        public func createTweet(text : Text, time : Text, uid : Principal, url : Text) : Bool{
+        public func createTweet(text : Text, time : Text, uid : Principal, url : Text) : Nat{
             let tid = increaseTID();
             let tweet : Tweet.Tweet = { tid = tid };
             let content = contentDB.make(text, time, url);
             tweetMap.put(tid, tweet);
             ignore contentDB.add(tid, content);
-            userDB.addTweet(uid, tid);
+            if(userDB.addTweet(uid, tid)){
+                tid
+            }else{
+                0
+            }
             //comment
             //likeDB
             //topicDB.addTopicTweet()
@@ -67,6 +70,10 @@ module{
             }
         };
 
+        public func getLastestTweetId() : Nat{
+            tid
+        };
+
         /**
         * delete tweet from tweet map
         * @param tid : user's Principal
@@ -78,16 +85,15 @@ module{
                 case (?uid){
                     if(uid == oper_){
                         tweetMap.delete(tid);
-                        switch(userDB.deleteTweet(uid, tid), contentDB.delete(tid), commentDB.deleteTweet(tid)){
-                            case(true, true, true){
+                        likeDB.deleteLikeDB(tid);
+                        switch(contentDB.delete(tid), commentDB.deleteTweet(tid)){
+                            case(true, true){
                                 true
                             };
                             case(_){
                                 false
                             };
                         };
-                        //likeDB.delete(tid);
-                        
                         //topic
                     }else{
                         false
@@ -139,51 +145,149 @@ module{
             }
         };
 
-        /**
-        * @return the lastest tid
-        */
-        public func getLastestTweetId() : Nat{
-            tid
+        //获取关注用户及自己的最新10条post
+        public func getFollowLastestTenTweets(uid : Principal, lastTID : Nat) : [Nat]{
+            var followArray = userDB.getFollow(uid);
+            var tweetArray = Array.init<[Nat]>(followArray.size()+1, []);
+            var count = 0; var result_count = 0;
+            var result = Array.init<Nat>(10,0);
+            var allSize=0;
+            for(x in followArray.vals()){
+                tweetArray[count] := switch(userDB.getUserAllTweets(x)){
+                    case null{[]};
+                    case(?array){
+                        allSize+=array.size();
+                        array
+                    };
+                };
+                count+=1;
+            };
+            tweetArray[count] := switch(userDB.getUserAllTweets(uid)){
+                case null{[]};
+                case(?array){
+                    allSize+=array.size();
+                    array
+                };
+            };
+            var i = 1;
+            var hasSel = Array.init<Nat>(followArray.size()+1,1);
+            while(i <= 10 and i <= allSize){
+                count := 0;
+                var maxn=0;
+                var maxn_count=0;
+                while(count < followArray.size()+1){
+                    if(tweetArray[count][tweetArray[count].size()-hasSel[count]] > maxn){
+                        maxn := tweetArray[count][tweetArray[count].size()-hasSel[count]];
+                        maxn_count := count;
+                    };
+                    count+=1;
+                };
+                if(maxn <= lastTID){
+                    return Array.freeze<Nat>(result);
+                };
+                hasSel[maxn_count]+=1;
+                result[result_count]:=maxn;
+                result_count+=1;
+                i+=1;
+            };
+            Array.freeze<Nat>(result)
         };
-        
-        /*
-        * get user older five tweets
-        * 
-        */
-        public func getUserOlderFiveTweets(user : Principal, number : Nat) : ?[var ShowTweet]{
-            switch(userDB.getUserAllTweets(user)){
-                case(null) { null };
-                case(?tids){
-                    var size : Nat = tids.size();
-                    if(number >= size){
-                        return null;
-                    }else{
-                        var i : Nat = 1;
-                        var tempArray = Array.init<ShowTweet>(size, Tweet.defaultType().defaultShowTweet);
-                        while((number + i < size -1) and (i < 5)){
-                            var tempTweet : ShowTweet = switch(getShowTweetById(size - 1 - number - i)){
-                                case(?tweet){ tweet };
-                                case(_) { Tweet.defaultType().defaultShowTweet };
-                            };
-                            tempArray[i-1] := tempTweet;
+
+
+        public func getUserLastestTenTweets(uid : Principal) : [ShowTweet]{
+            // user tweet tid
+            var array : [Nat] = switch(userDB.getUserAllTweets(uid)){
+                case ( null ){ [] };
+                case (?array) { array };
+            };
+            let tweets : [var ShowTweet] = Array.init<ShowTweet>(10, Tweet.defaultType().defaultShowTweet);
+            var i : Nat = 0;
+            if(array.size() >= 10){
+                while(i < 10){
+                    switch(getShowTweetById(array[array.size() - i - 1])){
+                        case(null) {
                             i += 1;
                         };
-                        ?tempArray
+                        case(?tweet) { 
+                            tweets[i] := tweet;
+                            i += 1;
+                        };
+                    };
+                };
+                Array.freeze<ShowTweet>(tweets)
+            }else{
+                while(i < array.size()){
+                    switch(getShowTweetById(array[array.size() - i -1])){
+                        case(null) {
+                            i += 1;
+                        };
+                        case(?tweet) { 
+                            i += 1;
+                            tweets[i] := tweet;
+                        };
+                    };
+                };
+                Array.freeze<ShowTweet>(tweets)
+            }
+        };
+        
+        public func getUserOlderFiveTweets(user : Principal, tid : Nat) : ?[ShowTweet]{
+            switch(userDB.getUserAllTweets(user)){
+                case(null) { null };
+                case(?tidArray){
+                    //return array
+                    let array : [var ShowTweet] = Array.init<ShowTweet>(5, Tweet.defaultType().defaultShowTweet);
+                    var key = tools.binarySearch(tidArray, tid);
+                    if(key == array.size()) { return null };                    
+                    var i = 0;
+                    loop{
+                        if(key - 1 - i < 0){ return ?(Array.freeze<ShowTweet>(array)); };
+                        array[i] := Option.unwrap<ShowTweet>(getShowTweetById(tidArray[key - 1 - i]));
+                        i := i + 1;
+                        if(i == 5){
+                            return ?(Array.freeze<ShowTweet>(array));
+                        };
                     }
                 };
             }
         };
 
+        /********************* COMMENT DATABASE ************************************************/
+        //the type of tid and cid is TID, tid : commented tweet, cid : comment tweet
+        public func addComment(tid : Nat, cid : Nat) : Bool{
+            commentDB.add(tid, cid)
+        };
+
+        //the type of tid and cid is TID, tid : commented tweet, cid : comment tweet
+        public func deleteComment(tid : Nat, cid : Nat) : Bool{
+            commentDB.delete(tid, cid)
+        };
+
+        public func getTweetAllComments(tid : Nat) : ?[ShowTweet]{
+            switch(commentDB.getTweetAllComments(tid)){
+                case null { null };
+                case (?tweetId){
+                    let size = tweetId.size();
+                    var backArray = Array.init<ShowTweet>(size, Tweet.defaultType().defaultShowTweet);
+                    var i = 0;
+                    for(k in tweetId.vals()){
+                        //WARNNING Error
+                        backArray[i] := Option.unwrap<ShowTweet>(getShowTweetById(k));
+                        i := i + 1;
+                    };
+                    ?Array.freeze<ShowTweet>(backArray);
+                };
+            }
+        };
+
+        public func deleteTweetAllComment(tid : Nat) : Bool{
+            commentDB.deleteAllComment(tid)
+        };
+
+        public func getCommentNumber(tid : Nat) : Nat{
+            commentDB.getNumber(tid)
+        };
         
-        
-        /**
-        *The following part is comment moudle-------------------comment-------------------------
-        **/     
-
-
-
-
-
         /**
         *The following part is like moudle-------------------like-------------------------
         **/
@@ -215,8 +319,6 @@ module{
             tid := tid + 1;
             getLastestTweetId()
         };
-
-
 
     };
 };

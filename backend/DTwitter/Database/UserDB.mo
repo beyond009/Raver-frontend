@@ -6,6 +6,9 @@ import Hash "mo:base/Hash";
 import Principal "mo:base/Principal";
 import List "mo:base/List";
 import Nat "mo:base/Nat";
+import Option "mo:base/Option";
+import Text "mo:base/Text";
+import TrieSet "mo:base/TrieSet";
 
 module{
     type User = User.User;
@@ -17,11 +20,16 @@ module{
         // uid -> tweets tid
         private var userTweet = HashMap.HashMap<Principal, [Nat]>(1, Principal.equal, Principal.hash);
         // follower : user uid -> follower uid List
-        private var follower = HashMap.HashMap<Principal, List.List<Principal>>(1, Principal.equal, Principal.hash);
+        private var follower = HashMap.HashMap<Principal, TrieSet.Set<Principal>>(1, Principal.equal, Principal.hash);
         // follow user : user uid -> follow uid List
-        private var follow = HashMap.HashMap<Principal, List.List<Principal>>(1, Principal.equal, Principal.hash);        
+        private var follow = HashMap.HashMap<Principal, TrieSet.Set<Principal>>(1, Principal.equal, Principal.hash);        
         // get user principal by tweet id
         private var tweet_user = HashMap.HashMap<Nat, Principal>(1, Nat.equal, Hash.hash);
+        // get user principal by username
+        private var userName2Uid = HashMap.HashMap<Text, Principal>(1, Text.equal, Text.hash);
+
+        private var bioMap = HashMap.HashMap<Principal,Text>(1, Principal.equal, Principal.hash);
+
 
 
 //*******************************  User *******************************************
@@ -29,7 +37,7 @@ module{
         * @param user : User
         */
         public func addUser(user : User) : Bool{
-            if(isExist(user.uid)){
+            if(isUserExist(user.uid) or isUserNameUsed(user.username)){
                 false
             }else{
                 userDB.put(user.uid, user);
@@ -40,10 +48,10 @@ module{
         /**
         * delete user from user database
         * @param uid -> owner : Princiapl
-        * @return Bool -> successful : true; failed : false 
+        * @return Bool -> successful : true; failed : false
         */
         public func deleteUser(uid : Principal) : Bool{
-            if(isExist(uid)){
+            if(isUserExist(uid)){
                 //operator is owner
                 var operator_ = switch(getUserProfile(uid)){
                     case(?user){
@@ -56,6 +64,14 @@ module{
                 assert(uid == operator_);
                 userDB.delete(uid);
                 userTweet.delete(uid);
+                deleteFollowMap(uid);
+                switch(getUserNameByPrincipal(uid)){
+                    case null{
+                    };
+                    case(?text){
+                        userName2Uid.delete(text);
+                    };
+                };
                 true
             }else{
                 false
@@ -67,7 +83,7 @@ module{
         * as changer's uid
         */
         public func changeUserProfile(uid : Principal, user : User) : Bool{
-            if(isExist(uid)){
+            if(isUserExist(uid)){
                 var user_uid = switch(getUserProfile(user.uid)){
                     case(?user){
                         user.uid
@@ -96,7 +112,7 @@ module{
         };
 
         /**private function : is user is existed**/
-        public func isExist(uid : Principal) : Bool{
+        public func isUserExist(uid : Principal) : Bool{
             switch(userDB.get(uid)){
                 case(?user){ true };
                 case(_){ false };
@@ -111,7 +127,7 @@ module{
         * @param tid : tweet id
         */
         public func addTweet(uid : Principal, tid : Nat) : Bool{
-            if(isExist(uid)){
+            if(isUserExist(uid)){
                 switch(userTweet.get(uid)){
                     case(?tweet){
                         var tweetArray : [Nat] = Array.append(tweet, [tid]);
@@ -138,26 +154,7 @@ module{
             userTweet.get(uid)
         };
 
-        //TODO : tweet [] -> Tree
-        public func deleteTweet(uid : Principal, tid : Nat) : Bool{
-            var newArray : [Nat] = []; 
-            if(isExist(uid)){
-                var tweet : [Nat] = switch(userTweet.get(uid)){
-                    case(null) { [] };
-                    case(?array) { array };
-                };
-                for(v in tweet.vals()){
-                    if(v != tid){
-                        newArray := Array.append(newArray, [v]);
-                    }
-                };
-                ignore userTweet.replace(uid, newArray);
-                deleteTweetUser(tid);
-                true
-            }else{
-                false
-            }
-        };
+        
 
         /** tweet_user database **/
         private func putTweetUser(tid : Nat, uid : Principal){
@@ -165,7 +162,7 @@ module{
         };
 
         /** tweet_user database **/
-        private func deleteTweetUser(tid : Nat){
+        public func deleteTweetUser(tid : Nat){
             tweet_user.delete(tid);
         };
 
@@ -175,8 +172,7 @@ module{
         };
 
 
-//***********************************************************************/
-                            /** TODO **/
+        //**********************follow part****************************/
 
         /**
         * add follower
@@ -184,17 +180,17 @@ module{
         * @param follower : follower user Principal 
         */
         public func addFollower(user : Principal, follower_user : Principal) : Bool{
-            assert(isExist(user));
-            assert(isExist(follower_user));
+            assert(isUserExist(user));
+            assert(isUserExist(follower_user));
             switch(follower.get(user)){
                 case(null){ 
-                    follower.put(user, ?(follower_user, null));
-                    ignore addFollow(user, follower_user);
+                    var tempSet=TrieSet.empty<Principal>();
+                    tempSet := TrieSet.put<Principal>(tempSet,follower_user,Principal.hash(follower_user),Principal.equal);
+                    follower.put(user, tempSet);
                 };  
-                case(?list){
-                    var newList = List.push<Principal>(follower_user, list);
-                    ignore follower.replace(user, newList);
-                    ignore addFollow(user, follower_user);
+                case(?set){
+                    var newSet = TrieSet.put<Principal>(set, follower_user, Principal.hash(follower_user),Principal.equal);
+                    ignore follower.replace(user, newSet);
                 };
             };
             true
@@ -204,27 +200,163 @@ module{
         * attention people
         */
         public func addFollow(user : Principal, follower_user : Principal) : Bool{
-            assert(isExist(user));
-            assert(isExist(follower_user));
+            assert(isUserExist(user));
+            assert(isUserExist(follower_user));
             switch(follow.get(follower_user)){
-                case(null){
-                    follow.put(follower_user, ?(user, null));
-                    ignore addFollower(user, follower_user);
-                };
-                case(?list){
-                    var newList = List.push<Principal>(user, list);
-                    ignore follow.replace(follower_user, newList);
-                    ignore addFollower(user, follower_user);
+                case(null){ 
+                    var tempSet=TrieSet.empty<Principal>();
+                    tempSet := TrieSet.put<Principal>(tempSet,user,Principal.hash(user),Principal.equal);
+                    follow.put(follower_user, tempSet);
+                };  
+                case(?set){
+                    var newSet = TrieSet.put<Principal>(set, user, Principal.hash(user),Principal.equal);
+                    ignore follow.replace(follower_user, newSet);
                 };
             };
             true
         };
 
+        public func cancelFollow(user : Principal, follower_user : Principal) : Nat{
+            var check = isAFollowedByB(user, follower_user);
+            if(check == 1){
+                switch(follow.get(follower_user)){
+                    case(null){
+                        return 10;
+                    };
+                    case(?set){
+                        var newSet = TrieSet.delete<Principal>(set, user, Principal.hash(user), Principal.equal);
+                        ignore follow.replace(follower_user, newSet);
+                        return 1;
+                    };
+                };
+            }else{
+                return check;
+            };
+        };
+
+        public func cancelFollower(user : Principal, follower_user : Principal) : Nat{
+            var check = isAFollowedByB(user, follower_user);
+            if(check == 1){
+                switch(follower.get(user)){
+                    case(null){
+                        return 10;
+                    };
+                    case(?set){
+                        var newSet = TrieSet.delete<Principal>(set, follower_user, Principal.hash(follower_user), Principal.equal);
+                        ignore follower.replace(user, newSet);
+                        return 1;
+                    };
+                };
+            }else{
+                return check;
+            };
+        };
 
 
+        public func getFollow(user : Principal) : [Principal]{
+            if(isUserExist(user)){
+                switch(follow.get(user)){
+                    case null {
+                        []
+                    };
+                    case(?set){
+                        TrieSet.toArray<Principal>(set)
+                    };
+                };
+            }else{
+                []
+            };      
+        };
 
+        public func getFollower(user : Principal) : [Principal]{
+            if(isUserExist(user)){
+                switch(follower.get(user)){
+                    case null {
+                        []
+                    };
+                    case(?set){
+                        TrieSet.toArray<Principal>(set)
+                    };
+                };
+            }else{
+                []
+            };
+        };
+
+        public func isAFollowedByB(user_A : Principal, user_B : Principal) : Nat{
+            if(isUserExist(user_A)){
+                if(isUserExist(user_B)){
+                    switch(follower.get(user_A)){
+                        case null {
+                            return 10; //Unknown Error
+                        };
+                        case(?set){
+                            if(TrieSet.mem<Principal>(set, user_B, Principal.hash(user_B),Principal.equal)) return 1;
+                            return 0; //false
+                        };
+                    };
+                }else{
+                    return 7; //B does not exist
+                };
+            }else{
+                return 6; //A does not exist
+            };
+        };
+
+        private func deleteFollowMap(user : Principal) {
+            follower.delete(user);
+            follow.delete(user);
+        };
+        
+        //**********************username part****************************/
+        public func isUserNameUsed(userName : Text) : Bool{
+            switch(userName2Uid.get(userName)){
+                case null{
+                    false
+                };
+                case(?principal){
+                    true
+                }
+            };
+        };
+
+        public func getPrincipalByUserName(userName : Text) : ?Principal{
+            switch(userName2Uid.get(userName)){
+                case null{
+                    null
+                };
+                case(?principal){
+                    Option.make<Principal>(principal)
+                };
+            };
+        };
+
+        public func getUserNameByPrincipal(uid : Principal) : ?Text{
+            switch(userDB.get(uid)){
+                case null{
+                    null
+                };
+                case(?user){
+                    Option.make<Text>(user.username)
+                };
+            };
+        };
+        //---------------------bio----------------------
+        public func putBio(uid : Principal, bioText : Text) {
+            if(isUserExist(uid))
+            bioMap.put(uid, bioText);
+        };
+
+        public func getBio(uid : Principal) : Text{
+            switch(bioMap.get(uid)){
+                case null{
+                    ""
+                };
+                case(?text){
+                    text
+                };
+            };
+        };
 
     };
-
-
 };

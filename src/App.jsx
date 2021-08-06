@@ -1,4 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -14,54 +16,53 @@ import { AuthClient } from "@dfinity/auth-client";
 import { isDelegationValid } from "@dfinity/authentication";
 import { idlFactory, canisterId } from "dfx-generated/backend";
 import { DelegationIdentity } from "@dfinity/identity";
-import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
+import { authActor, updateAuthActor } from "./redux/features/authActor";
+import { updateIdentity } from "./redux/features/identity";
+import { updateUser } from "./redux/features/user";
 import "./App.css";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [authActor, setAuthActor] = useState(null);
-  const [upDate, setUpDate] = useState(true);
-  const [user, setUser] = useState();
-  const [principal, setPrincipal] = useState();
-  var flag = false;
-  var identity = null;
-
+  const { authActor, identity } = useSelector((state) => state);
   const goToLoginPage = () =>
     history.push({
       pathname: "/login",
     });
 
-  // function setIsLoginTrue() {
-  //   setIsLogin(true);
-  // }
   async function getActor(authClient) {
-    if (authActor === null) {
-      identity = await authClient.getIdentity();
-      if (identity instanceof DelegationIdentity) {
-        console.log("delegationidentity");
-        console.log(identity.getDelegation());
-        console.log(isDelegationValid(identity.getDelegation()));
-      }
-      const principal = identity.getPrincipal();
-      setPrincipal(principal);
-      const agent = new HttpAgent({
-        identity: identity,
-        host: "http://ryjl3-tyaaa-aaaaa-aaaba-cai.localhost:8000",
-      });
-      console.log(agent);
-      await agent.fetchRootKey();
-      let tauthActor = Actor.createActor(idlFactory, {
-        agent,
-        canisterId: canisterId,
-      });
-      setAuthActor(tauthActor);
-      let isSigned = await tauthActor.ifUserExisted();
-      if (!isSigned) {
-        await tauthActor.addUser("User", "");
-      }
+    let tIdentity = await authClient.getIdentity();
+    let principal = tIdentity.getPrincipal();
+    let principalString = principal.toText();
+    dispatch(updateIdentity(principal));
+    if (tIdentity instanceof DelegationIdentity) {
+      console.log(tIdentity.getDelegation());
+    }
+    const agent = new HttpAgent({
+      identity: tIdentity,
+      host: "http://ryjl3-tyaaa-aaaaa-aaaba-cai.localhost:8000",
+    });
+
+    agent.fetchRootKey();
+
+    let tAuthActor = Actor.createActor(idlFactory, {
+      agent,
+      canisterId: canisterId,
+    });
+    console.log(principal, identity);
+    dispatch(updateAuthActor(tAuthActor));
+    let isSigned = await tAuthActor.isUserExist(principal);
+    console.log(true);
+    if (!isSigned) {
+      await tAuthActor.addUser(principalString, "User", "");
+      let res = await tAuthActor.getUserProfile(principal);
+      dispatch(updateUser(res));
+    } else {
+      let res = await tAuthActor.getUserProfile(principal);
+      dispatch(updateUser(res));
     }
   }
+
   async function handleAuthenticated(authClient) {
     setIsLogin(true);
     history.push({ pathname: "/home" });
@@ -81,11 +82,11 @@ const App = () => {
       goToLoginPage();
     }
   }
+
   useEffect(() => {
     checkLogin();
   }, []);
 
-  // onClick login button
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({
@@ -93,7 +94,6 @@ const App = () => {
       identityProvider:
         "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
-        // history.push({ pathname: "waiting" });
         handleAuthenticated(authClient);
       },
     });
@@ -102,8 +102,6 @@ const App = () => {
   return (
     <div className="app">
       {isLogin ? <Sidebar /> : null}
-      {/* <Sidebar /> */}
-
       <Switch>
         <Route
           exact
@@ -113,55 +111,12 @@ const App = () => {
             return <Login {...obj} />;
           }}
         />
-        <Route
-          exact
-          path="/home"
-          component={(props) => {
-            let obj = Object.assign({}, { authActor: authActor }, props);
-            return <Home {...obj} />;
-          }}
-        />
-        <Route
-          exact
-          path="/signup"
-          component={(props) => {
-            let obj = Object.assign(
-              {},
-              { authActor: authActor, setIsLoginTrue: setIsLoginTrue },
-              props
-            );
-            return <Signup {...obj} />;
-          }}
-        />
-        <Route
-          exact
-          path="/profile"
-          component={(props) => {
-            let obj = Object.assign(
-              {},
-              { authActor: authActor, principal: principal },
-              props
-            );
-            return <Profile {...obj} />;
-          }}
-        />
-        <Route
-          exact
-          path="/editprofile"
-          component={(props) => {
-            let obj = Object.assign(
-              {},
-              { authActor: authActor, principal: principal },
-              props
-            );
-            return <EditProfile {...obj} />;
-          }}
-        />
+        <Route exact path="/home" component={Home} />
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/editprofile" component={EditProfile} />
         <Route exact path="/waiting" component={Waiting} />
       </Switch>
-
       {isLogin ? <Widgets /> : null}
-      {/* <Widgets /> */}
     </div>
   );
 };
