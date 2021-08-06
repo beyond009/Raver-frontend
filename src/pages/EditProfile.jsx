@@ -31,9 +31,13 @@ const EditProfile = (props) => {
     let username = document.getElementById("name").value;
     let avatar_img = document.getElementById("avatar_img").value;
     setAvatarimg(avatar_img);
-    let flag = await props.authActor.changeUserProfile(username, avatar_img);
+    let flag = await authActor.changeUserProfile(username, avatar_img);
   }
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if(user) {
+      setAvatarimg(user.avatarimg);
+    }
+  }, [user]);
   return (
     <div className="edit__profile">
       <div>
@@ -45,7 +49,7 @@ const EditProfile = (props) => {
       </div>
       <div className="profile__your">Your Principal:</div>
       <div className="profile__principal">
-        <br /> {props.principal ? props.principal.toText() : null}
+        <br /> {identity ? identity.toText() : null}
       </div>
 
       <div className="signup__form">

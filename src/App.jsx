@@ -34,7 +34,9 @@ const App = () => {
     let tIdentity = await authClient.getIdentity();
     let principal = tIdentity.getPrincipal();
     let principalString = principal.toText();
+
     dispatch(updateIdentity(principal));
+
     if (tIdentity instanceof DelegationIdentity) {
       console.log(tIdentity.getDelegation());
     }
@@ -49,6 +51,7 @@ const App = () => {
       agent,
       canisterId: canisterId,
     });
+
     console.log(principal, identity);
     dispatch(updateAuthActor(tAuthActor));
     let isSigned = await tAuthActor.isUserExist(principal);
