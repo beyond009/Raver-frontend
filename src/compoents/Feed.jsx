@@ -7,7 +7,7 @@ import { Button, Avatar, TextField } from "@material-ui/core";
 import "./TweetBox.css";
 import "./Feed.css";
 import FlipMove from "react-flip-move";
-import { BlockLoading } from "react-loadingg";
+import { LoopCircleLoading } from "react-loadingg";
 
 function Feed(props) {
   const { authActor, user, identity } = useSelector((state) => state);
@@ -24,7 +24,6 @@ function Feed(props) {
     console.log("sending Tweet");
     let a = posts;
     let t = 0;
-    console.log(posts[0].tid);
     if (user)
       a.unshift({
         tid: 1,
@@ -41,19 +40,16 @@ function Feed(props) {
   };
 
   async function fetchData() {
-    console.log(authActor);
     if (authActor !== null && !changing && identity) {
       console.log("fetching data");
       changing = true;
-      console.log(identity);
       let a = await authActor.getUserAllTweets(identity);
-      console.log(a);
       setIsloading(false);
+      // a.reverse();
       setPosts(a);
     }
     changing = false;
   }
-
   useEffect(() => {
     fetchData();
   }, [authActor, identity]);
@@ -93,7 +89,7 @@ function Feed(props) {
         </form>
       </div>
       {isloading ? (
-        <BlockLoading color="#50b7f5" />
+        <LoopCircleLoading color="#f09217" />
       ) : (
         <div className="feed">
           <Button onClick={fetchData}> refresh </Button>
@@ -103,6 +99,8 @@ function Feed(props) {
                 key={post.tid}
                 tid={post.tid}
                 displayName={post.user.nickname}
+                username={post.user.username}
+                verified={true}
                 avatar={post.user.avatarimg}
                 text={post.content}
                 image={post.url}

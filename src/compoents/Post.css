@@ -4,8 +4,9 @@
 }
 .post {
   display: flex;
+  flex: 0.5;
   align-items: flex-start;
-  border-bottom: 1px solid var(--twitter-background);
+  border-bottom: 1px solid var(--acolor);
   padding-bottom: 10px;
 }
 
@@ -33,12 +34,12 @@
 }
 
 .post__headerDescription {
-  font-size: 18px;
+  font-size: 16px;
   font-family: Roboto;
   white-space: pre-wrap;
   word-wrap: break-word;
   width: 500px;
-  /* font-weight: 610; */
+  /* font-weight: 300; */
 }
 
 .post__headerText > h3 {

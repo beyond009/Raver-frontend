@@ -1,8 +1,8 @@
 .edit__profile {
-  flex: 0.59;
-  border-right: 1px solid var(--twitter-background);
+  flex: var(--middlewidth);
+  border-right: 1px solid var(--background);
   flex-flow: column;
-  min-width: fit-content;
+  /* min-width: fit-content; */
   overflow-y: scroll;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -15,23 +15,18 @@
   scrollbar-width: none; /* Firefox */
 }
 .profile__your {
-  margin-left: 277px;
+  margin-left: 245px;
 }
 .profile__principal {
-  margin-left: 90px;
+  margin-left: 60px;
   margin-bottom: 30px;
 }
 .signup__form {
-  margin-left: 130px;
+  margin-left: 70px;
 }
 .submit__button {
-  margin-left: 142px !important;
+  margin-left: 190px !important;
 }
-#avatar_img {
-  width: 300px;
-  margin-left: 150px;
-}
-#name {
-  width: 300px;
-  margin-left: 150px;
+.signup__input {
+  width: 500px;
 }

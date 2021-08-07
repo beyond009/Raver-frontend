@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import PostPage from "./pages/PostPage";
 import Waiting from "./pages/Waiting";
 import Signup from "./pages/Signup";
 import Sidebar from "./compoents/Sidebar";
@@ -34,11 +35,8 @@ const App = () => {
     let tIdentity = await authClient.getIdentity();
     let principal = tIdentity.getPrincipal();
     let principalString = principal.toText();
-
     dispatch(updateIdentity(principal));
-
     if (tIdentity instanceof DelegationIdentity) {
-      console.log(tIdentity.getDelegation());
     }
     const agent = new HttpAgent({
       identity: tIdentity,
@@ -52,10 +50,8 @@ const App = () => {
       canisterId: canisterId,
     });
 
-    console.log(principal, identity);
     dispatch(updateAuthActor(tAuthActor));
     let isSigned = await tAuthActor.isUserExist(principal);
-    console.log(true);
     if (!isSigned) {
       await tAuthActor.addUser(principalString, "User", "");
       let res = await tAuthActor.getUserProfile(principal);
@@ -76,12 +72,10 @@ const App = () => {
     console.log("Check login!");
     const authClient = await AuthClient.create();
     if (await authClient.isAuthenticated()) {
-      // handleAuthenticated(authClient);
       setIsLogin(true);
       getActor(authClient);
     } else {
       setIsLogin(false);
-      console.log("go to login page!");
       goToLoginPage();
     }
   }
@@ -93,7 +87,6 @@ const App = () => {
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({
-      // maxTimeToLive: BigInt("0x7f7f7f7f7f"),
       identityProvider:
         "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
@@ -118,6 +111,7 @@ const App = () => {
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/editprofile" component={EditProfile} />
         <Route exact path="/waiting" component={Waiting} />
+        <Route path="/post/:tid" component={PostPage} />
       </Switch>
       {isLogin ? <Widgets /> : null}
     </div>

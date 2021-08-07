@@ -1,7 +1,10 @@
 body {
-  --twitter-color: #50b7f5;
-  --twitter-background: #e6ecf0;
+  --twitter-color: #f09217;
+  --twitter-background: #eff3f7;
+  --acolor: #f09217;
   --background: var(--twitter-background);
+  --middlewidth: 0.5;
+  background-color: rgb(255, 255, 255);
 }
 
 .app {

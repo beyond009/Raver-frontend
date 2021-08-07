@@ -1,0 +1,7 @@
+.post__page {
+   flex: var(--middlewidth);
+   border-right: 1px solid var(--background);
+   flex-flow: column;
+   /* min-width: fit-content; */
+   overflow-y: scroll;
+ }

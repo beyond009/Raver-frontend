@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Avatar, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Badge from "@material-ui/core/Badge";
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Profile() {
+  const { user, authActor, identity } = useSelector((state) => state);
   const classes = useStyles();
 
   function handleClickEdit() {
@@ -34,7 +36,7 @@ export default function Profile() {
       </div>
       <img src={banner} className="profile__banner" />
       <div className="profile__avatar">
-        <Avatar className={classes.large} />
+        <Avatar className={classes.large} src={user ? user.avatarimg : ""} />
       </div>
       <div className="profile__editposition">
         <Button className="profile__editbutton" onClick={handleClickEdit}>
@@ -42,7 +44,7 @@ export default function Profile() {
         </Button>
       </div>
       <div className="profile__displaynameposition">
-        <h3>ddd009</h3>
+        <h3>{user ? user.nickname : null}</h3>
       </div>
       <div className="profile__descriptionposition">
         <p className="profile__description">wo shi sha dan</p>

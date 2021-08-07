@@ -43,11 +43,6 @@ const Post = forwardRef(
             <PublishIcon fontSize="small" />
           </div>
         </div>
-        <div>
-          <button className="post_delet_button">
-            <DeleteForeverIcon />
-          </button>
-        </div>
       </div>
     );
   }
