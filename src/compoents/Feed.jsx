@@ -26,7 +26,7 @@ function Feed(props) {
     let t = 0;
     if (user)
       a.unshift({
-        tid: 1,
+        tid: null,
         content: tweetMessage,
         url: tweetImage,
         user: user,
@@ -89,14 +89,13 @@ function Feed(props) {
         </form>
       </div>
       {isloading ? (
-        <LoopCircleLoading color="#f09217" />
+        <LoopCircleLoading color="#f09217" size="small" />
       ) : (
         <div className="feed">
-          <Button onClick={fetchData}> refresh </Button>
           <FlipMove>
-            {posts.map((post) => (
+            {posts.map((post, k) => (
               <Post
-                key={post.tid}
+                key={k}
                 tid={post.tid}
                 displayName={post.user.nickname}
                 username={post.user.username}

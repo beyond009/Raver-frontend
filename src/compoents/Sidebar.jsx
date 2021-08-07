@@ -17,6 +17,8 @@ function Sidebar() {
   const [activeProfile, setactiveProfile] = useState();
   return (
     <div className="sidebar">
+      <br />
+      <br />
       <NavLink
         to="/home"
         className="sidebar__link"
@@ -41,6 +43,7 @@ function Sidebar() {
       </NavLink>
 
       <SidebarOption Icon={MoreHorizIcon} text="More" />
+      <br />
     </div>
   );
 }

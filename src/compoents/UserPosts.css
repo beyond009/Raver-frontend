@@ -1,0 +1,8 @@
+.user__posts::-webkit-scrollbar {
+  display: none;
+}
+
+.user__posts {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

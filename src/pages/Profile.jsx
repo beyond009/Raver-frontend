@@ -7,6 +7,7 @@ import Feed from "../compoents/Feed";
 import MailIcon from "@material-ui/icons/Mail";
 import banner from "../../assets/1500x500.jpeg";
 import history from "../History";
+import UserPosts from "../compoents/UserPosts";
 import "./Profile.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,24 +32,31 @@ export default function Profile() {
   }
   return (
     <div className="profile">
-      <div className="profile__header">
-        <h2>Profile</h2>
+      <div className="profile__a">
+        <div className="profile__header">
+          <h2>Profile</h2>
+        </div>
+        <img src={banner} className="profile__banner" />
+        <div className="profile__avatar">
+          <Avatar className={classes.large} src={user ? user.avatarimg : ""} />
+        </div>
+        <div className="profile__editposition">
+          <Button className="profile__editbutton" onClick={handleClickEdit}>
+            Edit Profile
+          </Button>
+        </div>
+        <div className="profile__displaynameposition">
+          <h3>{user ? user.nickname : null}</h3>
+        </div>
+        <div className="profile__descriptionposition">
+          <p className="profile__description">wo shi sha dan</p>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
-      <img src={banner} className="profile__banner" />
-      <div className="profile__avatar">
-        <Avatar className={classes.large} src={user ? user.avatarimg : ""} />
-      </div>
-      <div className="profile__editposition">
-        <Button className="profile__editbutton" onClick={handleClickEdit}>
-          Edit Profile
-        </Button>
-      </div>
-      <div className="profile__displaynameposition">
-        <h3>{user ? user.nickname : null}</h3>
-      </div>
-      <div className="profile__descriptionposition">
-        <p className="profile__description">wo shi sha dan</p>
-      </div>
+      <UserPosts />
     </div>
   );
 }
