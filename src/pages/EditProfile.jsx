@@ -35,13 +35,11 @@ const EditProfile = (props) => {
     let description = document.getElementById("description").value;
     let username = document.getElementById("username").value;
     setAvatarimg(avatar_img);
-    let flag = await authActor.changeUserProfile(
-      nickname,
-      username,
-      avatar_img
-    );
+    authActor.changeUserProfile(nickname, username, avatar_img);
+    authActor.putBio(description);
   }
   useEffect(() => {
+    console.log(1, user);
     if (user) {
       setAvatarimg(user.avatarimg);
     }
@@ -59,7 +57,6 @@ const EditProfile = (props) => {
       <div className="profile__principal">
         <br /> {identity ? identity.toText() : null}
       </div>
-
       <div className="signup__form">
         <form noValidate autoComplete="off">
           <Input
@@ -67,6 +64,7 @@ const EditProfile = (props) => {
             placeholder="avatar img url"
             inputProps={{ "aria-label": "description" }}
             className="signup__input"
+            defaultValue={user ? user.avatarimg : null}
           />
           <br />
           <br />
@@ -75,6 +73,7 @@ const EditProfile = (props) => {
             placeholder="nickname"
             inputProps={{ "aria-label": "description" }}
             className="signup__input"
+            defaultValue={user ? user.nickname : null}
           />
           <br />
           <br />
@@ -83,6 +82,7 @@ const EditProfile = (props) => {
             placeholder="description"
             inputProps={{ "aria-label": "description" }}
             className="signup__input"
+            defaultValue={user ? user.bio : null}
           />
           <br />
           <br />
@@ -91,6 +91,7 @@ const EditProfile = (props) => {
             placeholder="username"
             inputProps={{ "aria-label": "description" }}
             className="signup__input"
+            defaultValue={user ? user.username : null}
           />
           <br />
         </form>{" "}

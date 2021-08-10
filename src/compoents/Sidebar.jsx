@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "./Sidebar.css";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
@@ -15,6 +16,7 @@ import { Link, NavLink } from "react-router-dom";
 function Sidebar() {
   const [activeHome, setactiveHome] = useState();
   const [activeProfile, setactiveProfile] = useState();
+  const { user } = useSelector((state) => state);
   return (
     <div className="sidebar">
       <br />
@@ -35,7 +37,7 @@ function Sidebar() {
         {" "}
       </SidebarOption>
       <NavLink
-        to="/profile"
+        to={`/profile/${user ? user.username : null}`}
         className="sidebar__link"
         activeClassName="link__active"
       >

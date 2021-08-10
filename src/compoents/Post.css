@@ -8,6 +8,7 @@
   align-items: flex-start;
   border-bottom: 1px solid var(--acolor);
   padding-bottom: 10px;
+  overflow-x: hidden;
 }
 
 .post__body {
@@ -26,9 +27,9 @@
 }
 .post_img {
   border-radius: 20px;
-  max-width: 540px;
+  max-width: 470px;
   myimg: expression_r(
-    onload=function(){this.style.width=(this.offsetWidth > 540) ? "540px":
+    onload=function(){this.style.width=(this.offsetWidth > 470) ? "470px":
       "auto"}
   );
 }
@@ -66,5 +67,16 @@
   background-color: transparent;
   margin-top: 11px;
   outline: none;
+  float: right;
+}
+.comment__number {
+  font-weight: 300;
+  font-size: 12px;
+}
+.comment__link {
+  text-decoration: none;
+  color: inherit;
+}
+.post__follow__button {
   float: right;
 }

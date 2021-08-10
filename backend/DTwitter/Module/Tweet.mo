@@ -3,12 +3,6 @@ import Hash "mo:base/Hash";
 import User "./User";
 
 module {
-    //type User = User.User;
-    // private type User = {
-    //     uid : Principal;
-    //     uname : Text;
-    //     avatarimg : Text;
-    // };
     //Tweet ID
     public type TID = Nat;
     //Tweet content
@@ -19,12 +13,24 @@ module {
     public type Time = Text;
     //tweet owner
     public type Owner = Principal;
-
-    //外键， tweet内容全部用数据库存着
-    //存储的tweet 当前版本要将字段全部转换为相应数据库的主键
+    
+    //Todo : visiable
     public type Tweet = {
         tid : Nat;
-        //visiable : todo
+        // parentTid = 0  no parent tweet
+        // parentTid > 0 the type of this tweet is comment, comment is parentTid
+        // parentTid < 0 the type of this tweet is  retweet
+        parentTid : Int;
+    };
+
+    public type parentTweet = {
+        // cor : true -> comment; false -> retweet
+        cor : Bool;
+        tid : Nat;
+        content : Text;
+        time : Text;
+        user : User.User;
+        url : Text;
     };
 
     /*
@@ -40,11 +46,13 @@ module {
         url : Text;
         likeNumber : Nat;
         commentNumber : Nat;
+        parentTweet : ?parentTweet;
     };
 
     public class defaultType() {
         public let defaultTweet : Tweet = {
             tid = 0;
+            parentTid = 0;
         };
 
         public let defaultShowTweet : showTweet = {
@@ -55,7 +63,20 @@ module {
             url = "default";
             likeNumber = 0;
             commentNumber = 0;
+            parentTweet = null;
         };
     };
+
+    // get tweet type from parentTid
+    // parentTid = 0  no parent tweet, return null
+    // parentTid > 0 the type of this tweet is comment, return true
+    // parentTid < 0 the type of this tweet is  retweet, return false
+    public func getTweetType(parentTid : Int) : ?Bool{
+        if(parentTid < 0){ ?false }
+        else if(parentTid == 0) { null }
+        else{ ?true }
+    };
+
+
 
 };

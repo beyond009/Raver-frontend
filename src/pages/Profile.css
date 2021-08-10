@@ -1,9 +1,11 @@
 .profile {
   flex: var(--middlewidth);
   border-right: 1px solid var(--background);
-  flex-flow: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .profile__a {
+  position: relative;
   border-bottom: 1px solid var(--acolor);
 }
 .profile__header {

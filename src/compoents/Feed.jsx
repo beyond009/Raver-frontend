@@ -33,7 +33,7 @@ function Feed(props) {
       });
     setPosts(a);
     authActor
-      .addTweet(tweetMessage, "time", tweetImage)
+      .addTweet(tweetMessage, "time", tweetImage, 0)
       .then((tmp) => console.log(tmp));
     setTweetMessage("");
     setTweetImage("");
@@ -43,8 +43,9 @@ function Feed(props) {
     if (authActor !== null && !changing && identity) {
       console.log("fetching data");
       changing = true;
-      let a = await authActor.getUserAllTweets(identity);
+      let a = await authActor.getFollowLastestAmountTweets(identity, 0, 100);
       setIsloading(false);
+      console.log(a);
       // a.reverse();
       setPosts(a);
     }
@@ -99,10 +100,13 @@ function Feed(props) {
                 tid={post.tid}
                 displayName={post.user.nickname}
                 username={post.user.username}
+                uid={post.user.uid}
                 verified={true}
                 avatar={post.user.avatarimg}
                 text={post.content}
                 image={post.url}
+                commentNumver={post.commentNumber}
+                likeNumber={post.likeNumber}
               />
             ))}
           </FlipMove>

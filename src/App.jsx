@@ -40,7 +40,7 @@ const App = () => {
     }
     const agent = new HttpAgent({
       identity: tIdentity,
-      host: "http://ryjl3-tyaaa-aaaaa-aaaba-cai.localhost:8000",
+      host: "http://localhost:8000",
     });
 
     agent.fetchRootKey();
@@ -54,10 +54,10 @@ const App = () => {
     let isSigned = await tAuthActor.isUserExist(principal);
     if (!isSigned) {
       await tAuthActor.addUser(principalString, "User", "");
-      let res = await tAuthActor.getUserProfile(principal);
+      let res = await tAuthActor.getShowUserProfileByPrincipal(principal);
       dispatch(updateUser(res));
     } else {
-      let res = await tAuthActor.getUserProfile(principal);
+      let res = await tAuthActor.getShowUserProfileByPrincipal(principal);
       dispatch(updateUser(res));
     }
   }
@@ -108,7 +108,7 @@ const App = () => {
           }}
         />
         <Route exact path="/home" component={Home} />
-        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/profile/:username" component={Profile} />
         <Route exact path="/editprofile" component={EditProfile} />
         <Route exact path="/waiting" component={Waiting} />
         <Route path="/post/:tid" component={PostPage} />

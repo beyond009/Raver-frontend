@@ -8,19 +8,19 @@ import "./userPosts.css";
 export default function UserPosts(props) {
   const [posts, setPosts] = useState([]);
   const [isloading, setIsloading] = useState(true);
-  const { identity, authActor, user } = useSelector((state) => state);
+  const { authActor } = useSelector((state) => state);
   async function fetchData() {
-    if (authActor !== null && identity) {
+    if (authActor !== null && props.user) {
       console.log("fetching data");
-      let a = await authActor.getUserAllTweets(identity);
+      let a = await authActor.getUserAllTweets(props.user.uid);
       setIsloading(false);
-      // a.reverse();
+      a.reverse();
       setPosts(a);
     }
   }
   useEffect(() => {
     fetchData();
-  }, [authActor, identity]);
+  }, [authActor, props.user]);
   return (
     <div className="user__posts">
       {isloading ? (
@@ -35,8 +35,13 @@ export default function UserPosts(props) {
               tid={post.tid}
               displayName={post.user.nickname}
               avatar={post.user.avatarimg}
+              verified={true}
+              username={post.user.username}
               text={post.content}
               image={post.url}
+              commentNumber={post.commentNumber}
+              likeNumber={post.likeNumber}
+              uid={post.user.uid}
             />
           ))}
         </FlipMove>
