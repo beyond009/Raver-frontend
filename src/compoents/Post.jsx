@@ -32,19 +32,6 @@ const Post = forwardRef(
     const { authActor, user } = useSelector((state) => state);
     const [isLoading, setIsLoading] = useState(true);
     const [isFollowed, setIsFollowed] = useState(true);
-    // useEffect(async () => {
-    //   if (authActor && user) {
-    //     try {
-    //       console.log(uid, user.uid);
-    //       let t = await authActor.isAFollowedByB(uid, user.uid);
-    //       console.log(t);
-    //       setIsLoading(false);
-    //       if (!t) setIsFollowed(false);
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
-    // }, [authActor, user]);
     return (
       <div className="post" ref={ref}>
         <div className="post__avatar">

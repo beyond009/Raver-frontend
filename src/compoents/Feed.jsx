@@ -45,7 +45,6 @@ function Feed(props) {
       changing = true;
       let a = await authActor.getFollowLastestAmountTweets(identity, 0, 100);
       setIsloading(false);
-      console.log(a);
       // a.reverse();
       setPosts(a);
     }

@@ -17,6 +17,7 @@
   font-weight: 800;
 }
 .post__page__input {
+  border-bottom: 1px solid coral;
 }
 .post__page__avatar {
 }
