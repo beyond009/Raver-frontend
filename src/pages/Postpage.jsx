@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, TextField, Input } from "@material-ui/core";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import FlipMove from "react-flip-move";
 import Post from "../compoents/Post";
-import "./Postpage.css";
+import "./PostPage.css";
 export default function PostPage(props) {
   const { user, identity, authActor } = useSelector((state) => state);
   const [comments, setComments] = useState([]);
+  const [commentMessage, setCommentMessage] = useState();
   const [post, setPost] = useState();
-  async function handleSubmit() {
+  function handleSubmit() {
+    console.log("dfasdfsa");
     if (authActor && post) {
       try {
-        let tp = document.getElementById("comment").value;
-        authActor.addComment(
-          value,
-          "time",
-          "",
-          "url",
-          parseInt(props.match.params.tid)
-        );
-      } catch (error) {}
+        console.log("sending Tweet");
+        let a = comments;
+        if (user)
+          a.unshift({
+            tid: null,
+            content: commentMessage,
+            user: user,
+          });
+        setComments(a);
+        authActor
+          .addComment(
+            commentMessage,
+            "time",
+            "url",
+            parseInt(props.match.params.tid)
+          )
+          .then((a) => console.log(a));
+
+        setCommentMessage("");
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   useEffect(async () => {
@@ -40,7 +56,7 @@ export default function PostPage(props) {
         console.log(e);
       }
     }
-  }, [authActor]);
+  }, [authActor, props.match.params.tid]);
   return (
     <div className="post__page">
       <div className="post__page__header">
@@ -60,18 +76,30 @@ export default function PostPage(props) {
           commentNumber={post.commentNumber}
         />
       ) : null}
-      <div className="post__page__input">
-        <div className="post__page__avatar">
-          <Avatar src={user ? user.avatarimg : ""} />
-        </div>
-        <Input
-          id="comments"
-          inputProps={{ "aria-label": "description" }}
-          className="signup__input"
-        />
-        <Button onClick={handleSubmit} className="submit__button">
-          Submit
-        </Button>
+      <div className="commentBox">
+        <form>
+          {/* <div className="post__page__input"> */}
+          <TextField
+            className="TextField"
+            id="comment"
+            label=""
+            multiline
+            variant="outlined"
+            value={commentMessage}
+            onChange={(e) => setCommentMessage(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Avatar src={user ? user.avatarimg : ""} />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button onClick={handleSubmit} className="submit__button">
+            Reply
+          </Button>
+          {/* </div> */}
+        </form>
       </div>
       <div className="post__page__comments">
         <FlipMove>

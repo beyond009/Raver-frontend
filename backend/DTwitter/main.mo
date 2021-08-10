@@ -6,6 +6,7 @@ import Error "mo:base/Error";
 import Array "mo:base/Array";
 import Nat "mo:base/Nat";
 import Option "mo:base/Option";
+import Int "mo:base/Int";
 
 actor DTwitter{
     type User = User.User;
@@ -196,7 +197,7 @@ actor DTwitter{
     */
     public query func getUserOlder20Tweets(tid : Nat, uid : Principal) : async [ShowTweet]{
         switch(tweetDB.getUserOlder20Tweets(uid, tid)){
-            case(null) { throw Error.reject(" error ") };
+            case(null) { [] };
             case(?tweets){ tweets };
         }
     };
@@ -340,22 +341,19 @@ actor DTwitter{
     };
 
     /**                Cooment                                 **/
-    public shared(msg) func addComment(text : Text, time : Text, uid : Principal, url : Text, cid : Nat, parentTid : Int) : async Bool{
-        let tid = tweetDB.createTweet(text, time, msg.caller, url, parentTid);
-        tweetDB.addComment(tid, cid);
+    public shared(msg) func addComment(text : Text, time : Text, url : Text, parentTid : Int) : async Bool{
+        let cid = tweetDB.createTweet(text, time, msg.caller, url, parentTid);
+        tweetDB.addComment(Int.abs(parentTid), cid);
     };
 
-    public shared(msg) func deleteComment(tid : Nat, cid : Nat) : async Bool{
-        if(msg.caller != Option.unwrap<Principal>(userDB.getUidByTid(tid))){
-            false
-        }else{
-            tweetDB.deleteComment(tid, cid);
-        }
+    public shared(msg) func deleteComment(cid : Nat) : async Bool{
+        if(tweetDB.deleteTweet(msg.caller,cid) and tweetDB.deleteComment(cid)) {return true;};
+        false
     };
 
     public query func getTweetAllComments(tid : Nat) : async [ShowTweet]{
         switch(tweetDB.getTweetAllComments(tid)){
-            case null { throw Error.reject(" no such tweet ") };
+            case null { [] };
             case (?tweets){ tweets };
         }
     };

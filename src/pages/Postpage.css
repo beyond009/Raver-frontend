@@ -1,7 +1,6 @@
 .post__page {
   flex: var(--middlewidth);
   border-right: 1px solid var(--background);
-  flex-flow: column;
   overflow-y: scroll;
 }
 .post__page__header {
@@ -16,8 +15,11 @@
   font-size: 20px;
   font-weight: 800;
 }
-.post__page__input {
-  border-bottom: 1px solid coral;
+.commentBox > form {
+  display: flex;
+  flex-direction: column;
 }
-.post__page__avatar {
+
+.TextField {
+  flex: 1;
 }

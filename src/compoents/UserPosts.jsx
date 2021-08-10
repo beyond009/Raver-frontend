@@ -12,7 +12,7 @@ export default function UserPosts(props) {
   async function fetchData() {
     if (authActor !== null && props.user) {
       console.log("fetching data");
-      let a = await authActor.getUserAllTweets(props.user.uid);
+      let a = await authActor.getUserOlder20Tweets(0, props.user.uid);
       setIsloading(false);
       a.reverse();
       setPosts(a);
