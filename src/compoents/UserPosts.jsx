@@ -8,6 +8,8 @@ import "./userPosts.css";
 export default function UserPosts(props) {
   const [posts, setPosts] = useState([]);
   const [isloading, setIsloading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [noMore, setNoMore] = useState(false);
   const { authActor } = useSelector((state) => state);
   async function fetchData() {
     if (authActor !== null && props.user) {
@@ -18,7 +20,27 @@ export default function UserPosts(props) {
       setPosts(a);
     }
   }
-  async function handleLoadMore() {}
+  async function handleLoadMore() {
+    if (authActor && posts.length && props.user.uid) {
+      try {
+        setIsLoadingMore(true);
+        let a = await authActor.geUserOlder20Tweets(
+          props.user.uid,
+          posts[posts.length - 1].tid
+        );
+        if (!a.length) {
+          setNoMore(true);
+          setIsLoadingMore(false);
+          return;
+        }
+        let b = posts.concat(a);
+        setIsLoadingMore(false);
+        setPosts(b);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
   useEffect(() => {
     fetchData();
   }, [authActor, props.user]);
@@ -48,8 +70,12 @@ export default function UserPosts(props) {
         </FlipMove>
       )}
       <div className="user__load">
-        <Button className="user__load__button" onClick={handleLoadMore}>
-          load more
+        <Button
+          className="user__load__button"
+          onClick={handleLoadMore}
+          disabled={isLoadingMore || noMore}
+        >
+          {noMore ? "no more" : isLoadingMore ? "loading" : "load more"}
         </Button>
       </div>
     </div>

@@ -88,7 +88,7 @@ const App = () => {
     const authClient = await AuthClient.create();
     await authClient.login({
       identityProvider:
-        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
+        "http://localhost:8000/?canisterId=r7inp-6aaaa-aaaaa-aaabq-cai",
       onSuccess: async () => {
         handleAuthenticated(authClient);
       },

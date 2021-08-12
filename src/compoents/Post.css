@@ -80,3 +80,10 @@
 .post__follow__button {
   float: right;
 }
+.like__number {
+  position: relative;
+  bottom: 13px;
+  left: 22px;
+  font-weight: 300;
+  font-size: 12px;
+}

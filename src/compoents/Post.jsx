@@ -33,7 +33,25 @@ const Post = forwardRef(
     const { authActor, user } = useSelector((state) => state);
     const [isLoading, setIsLoading] = useState(true);
     const [isFollowed, setIsFollowed] = useState(true);
+    const [cNumber, setCNumber] = useState(0);
+    const [lNumber, setLNumber] = useState(0);
     const location = useLocation();
+    useEffect(async () => {
+      try {
+        let a = await authActor.getTweetCommentNumber(tid);
+        setCNumber(parseInt(a));
+      } catch (e) {
+        console.log(e);
+      }
+    }, [authActor]);
+    useEffect(async () => {
+      try {
+        let a = await authActor.likeAmount(tid);
+        setLNumber(parseInt(a));
+      } catch (e) {
+        console.log(e);
+      }
+    }, [authActor]);
 
     return (
       <div className="post" ref={ref}>
@@ -69,12 +87,15 @@ const Post = forwardRef(
               <div>
                 <ChatBubbleOutlineIcon fontSize="small" />
                 <span className="comment__number">
-                  {commentNumber ? commentNumber : null}
+                  {cNumber ? cNumber : null}
                 </span>
               </div>
             </NavLink>
             <RepeatIcon fontSize="small" />
-            <LikeButton />
+            <div>
+              <LikeButton />{" "}
+              <div className="like__number">{lNumber ? lNumber : null}</div>
+            </div>
             <PublishIcon fontSize="small" />
           </div>
         </div>

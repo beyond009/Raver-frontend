@@ -12,6 +12,8 @@ import { LoopCircleLoading } from "react-loadingg";
 function Feed(props) {
   const { authActor, user } = useSelector((state) => state);
   const [isloading, setIsloading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [noMore, setNoMore] = useState(false);
   const [posts, setPosts] = useState([]);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
@@ -48,10 +50,17 @@ function Feed(props) {
   async function handleLoadMore() {
     if (authActor && posts.length) {
       try {
+        setIsLoadingMore(true);
         let a = await authActor.getFollowOlder50Tweets(
           posts[posts.length - 1].tid
         );
+        if (!a.length) {
+          setNoMore(true);
+          setIsLoadingMore(false);
+          return;
+        }
         let b = posts.concat(a);
+        setIsLoadingMore(false);
         setPosts(b);
       } catch (error) {}
     }
@@ -116,8 +125,12 @@ function Feed(props) {
             ))}
           </FlipMove>
           <div className="feed__load">
-            <Button className="feed__load__button" onClick={handleLoadMore}>
-              load more
+            <Button
+              className="feed__load__button"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore || noMore}
+            >
+              {noMore ? "no more" : isLoadingMore ? "loading" : "load more"}
             </Button>
           </div>
         </div>

@@ -9,6 +9,8 @@ export default function PostPage(props) {
   const { user, identity, authActor } = useSelector((state) => state);
   const [comments, setComments] = useState([]);
   const [commentMessage, setCommentMessage] = useState();
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [noMore, setNoMore] = useState(false);
   const [post, setPost] = useState();
   function handleSubmit() {
     console.log("dfasdfsa");
@@ -38,7 +40,27 @@ export default function PostPage(props) {
       }
     }
   }
-  async function handleLoadMore() {}
+  async function handleLoadMore() {
+    if (authActor && comments.length) {
+      try {
+        setIsLoadingMore(true);
+        let a = await authActor.getTweetOlder20Comments(
+          parseInt(props.match.params.tid),
+          comments[comments.length - 1].tid
+        );
+        if (!a.length) {
+          setNoMore(true);
+          setIsLoadingMore(false);
+          return;
+        }
+        let b = comments.concat(a);
+        setIsLoadingMore(false);
+        setComments(b);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
   useEffect(async () => {
     if (authActor) {
       try {
@@ -52,7 +74,7 @@ export default function PostPage(props) {
           parseInt(props.match.params.tid),
           0
         );
-        console.log(tp);
+        if (!tp.length) setNoMore(true);
         setComments(tp);
       } catch (e) {
         console.log(e);
@@ -126,8 +148,12 @@ export default function PostPage(props) {
         </FlipMove>
       </div>
       <div className="post__load">
-        <Button className="post__load__button" onClick={handleLoadMore}>
-          load more
+        <Button
+          className="post__load__button"
+          onClick={handleLoadMore}
+          disabled={isLoadingMore || noMore}
+        >
+          {noMore ? "no more" : isLoadingMore ? "loading" : "load more"}
         </Button>
       </div>
     </div>
