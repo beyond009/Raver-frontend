@@ -51,7 +51,7 @@ const App = () => {
     });
 
     dispatch(updateAuthActor(tAuthActor));
-    let isSigned = await tAuthActor.isUserExist(principal);
+    let isSigned = await tAuthActor.isUserExist();
     if (!isSigned) {
       await tAuthActor.addUser(principalString, "User", "");
       let res = await tAuthActor.getShowUserProfileByPrincipal(principal);

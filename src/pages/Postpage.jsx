@@ -38,6 +38,7 @@ export default function PostPage(props) {
       }
     }
   }
+  async function handleLoadMore() {}
   useEffect(async () => {
     if (authActor) {
       try {
@@ -47,8 +48,9 @@ export default function PostPage(props) {
         console.log(e);
       }
       try {
-        let tp = await authActor.getTweetAllComments(
-          parseInt(props.match.params.tid)
+        let tp = await authActor.getTweetOlder20Comments(
+          parseInt(props.match.params.tid),
+          0
         );
         console.log(tp);
         setComments(tp);
@@ -101,6 +103,9 @@ export default function PostPage(props) {
           {/* </div> */}
         </form>
       </div>
+      <div>
+        <h4>comments</h4>
+      </div>
       <div className="post__page__comments">
         <FlipMove>
           {comments.map((post, k) => (
@@ -119,6 +124,11 @@ export default function PostPage(props) {
             />
           ))}
         </FlipMove>
+      </div>
+      <div className="post__load">
+        <Button className="post__load__button" onClick={handleLoadMore}>
+          load more
+        </Button>
       </div>
     </div>
   );

@@ -10,15 +10,13 @@ import FlipMove from "react-flip-move";
 import { LoopCircleLoading } from "react-loadingg";
 
 function Feed(props) {
-  const { authActor, user, identity } = useSelector((state) => state);
+  const { authActor, user } = useSelector((state) => state);
   const [isloading, setIsloading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
   let flag = false;
-  let cnt = 0;
-  let ct = 0;
-  let changing = false;
+
   const sendTweet = (e) => {
     e.preventDefault();
     console.log("sending Tweet");
@@ -40,19 +38,27 @@ function Feed(props) {
   };
 
   async function fetchData() {
-    if (authActor !== null && !changing && identity) {
+    if (authActor) {
       console.log("fetching data");
-      changing = true;
-      let a = await authActor.getFollowLastestAmountTweets(identity, 0, 100);
+      let a = await authActor.getFollowLastestAmountTweets(0, 20);
       setIsloading(false);
-      // a.reverse();
       setPosts(a);
     }
-    changing = false;
+  }
+  async function handleLoadMore() {
+    if (authActor && posts.length) {
+      try {
+        let a = await authActor.getFollowOlder50Tweets(
+          posts[posts.length - 1].tid
+        );
+        let b = posts.concat(a);
+        setPosts(b);
+      } catch (error) {}
+    }
   }
   useEffect(() => {
     fetchData();
-  }, [authActor, identity]);
+  }, [authActor]);
   return (
     <div>
       <div className="tweetBox">
@@ -109,6 +115,11 @@ function Feed(props) {
               />
             ))}
           </FlipMove>
+          <div className="feed__load">
+            <Button className="feed__load__button" onClick={handleLoadMore}>
+              load more
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -6,7 +6,7 @@
   display: flex;
   flex: 0.5;
   align-items: flex-start;
-  border-bottom: 1px solid var(--acolor);
+  border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
   overflow-x: hidden;
 }

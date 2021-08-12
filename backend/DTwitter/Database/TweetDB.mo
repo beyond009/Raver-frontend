@@ -27,7 +27,7 @@ module{
         * global tweet id 
         * tid : Nat
         */
-        private var tid : Nat = 1;
+        private var tid : Nat = 0;
 
         /**
         * tweet map : map<tweet TID , Tweet>
@@ -148,12 +148,12 @@ module{
         };
 
 
-        //获取关注用户及自己的最新20条post
-        public func getFollowLastest20Tweets(uid : Principal, lastTID : Nat) : [Nat]{
+        //获取关注用户及自己的50条post
+        public func getFollowOlder50Tweets(uid : Principal, oldTID : Nat) : [Nat]{
             var followArray = userDB.getFollow(uid);
             var tweetArray = Array.init<[Nat]>(followArray.size()+1, []);
             var count = 0; var result_count = 0;
-            var result = Array.init<Nat>(20,0);
+            var result = Array.init<Nat>(50,0);
             var allSize=0;
             for(x in followArray.vals()){
                 tweetArray[count] := switch(userDB.getUserAllTweets(x)){
@@ -173,8 +173,9 @@ module{
                 };
             };
             var i = 1;
+            var acti = 1;
             var hasSel = Array.init<Nat>(followArray.size()+1,1);
-            while(i <= 20 and i <= allSize){
+            while(i <= 50 and i <= allSize and acti <= allSize){
                 count := 0;
                 var maxn=0;
                 var maxn_count=0;
@@ -186,13 +187,16 @@ module{
                     };
                     count+=1;
                 };
-                if(maxn <= lastTID){
-                    return Array.freeze<Nat>(result);
+                if(maxn >= oldTID){
+                    hasSel[maxn_count]+=1;
+                    acti+=1;
+                }else{
+                    hasSel[maxn_count]+=1;
+                    result[result_count]:=maxn;
+                    result_count+=1;
+                    i+=1;
+                    acti+=1;
                 };
-                hasSel[maxn_count]+=1;
-                result[result_count]:=maxn;
-                result_count+=1;
-                i+=1;
             };
             Array.freeze<Nat>(result)
         };
@@ -245,7 +249,7 @@ module{
             };
             Array.freeze<Nat>(result)
         };
-
+        
         public func getUserLastestTenTweets(uid : Principal) : [ShowTweet]{
             // user tweet tid
             var array : [Nat] = switch(userDB.getUserAllTweets(uid)){
@@ -283,24 +287,23 @@ module{
             }
         };
         
-        public func getUserOlder20Tweets(user : Principal, tid : Nat) : ?[ShowTweet]{
+        public func getUserOlder20Tweets(user : Principal, oldTid : Nat) : [ShowTweet]{
             switch(userDB.getUserAllTweets(user)){
-                case(null) { null };
-                case(?tidArray){
-                    //return array
-                    let array : [var ShowTweet] = Array.init<ShowTweet>(20, Tweet.defaultType().defaultShowTweet);
-                    var key = tools.binarySearch(tidArray, tid);
-                    if(key == array.size() or key == 0) { return null };                    
-                    var i : Nat = 0;
-                    loop{
-                        var t : Int = key - 1 - i;
-                        if(t < 0){ return ?(Array.freeze<ShowTweet>(array)); };
-                        array[i] := Option.unwrap<ShowTweet>(getShowTweetById(tidArray[key - 1 - i]));
-                        i := i + 1;
-                        if(i == 20){
-                            return ?(Array.freeze<ShowTweet>(array));
+                case(null) { [] };
+                case(?tweetId){
+                    var size = tweetId.size();
+                    var backArray = Array.init<ShowTweet>(20, Tweet.defaultType().defaultShowTweet);
+                    var i = 0;
+                    while(size > 0 and i < 20){
+                        if(tweetId[size-1] >= oldTid and oldTid != 0) {
+                            size-=1;
+                        }else{
+                            backArray[i] := Option.unwrap<ShowTweet>(getShowTweetById(tweetId[size-1]));
+                            size -= 1;
+                            i += 1;
                         };
-                    }
+                    };
+                    Array.freeze<ShowTweet>(backArray);
                 };
             }
         };
@@ -317,19 +320,23 @@ module{
             commentDB.delete(tid, cid)
         };
 
-        public func getTweetAllComments(tid : Nat) : ?[ShowTweet]{
-            switch(commentDB.getTweetAllComments(tid)){
-                case null { null };
+        public func getTweetOlder20Comments(tid : Nat, oldTid : Nat) : [ShowTweet]{
+            switch(commentDB.getTweetOlder20Comments(tid)){
+                case null { [] };
                 case (?tweetId){
-                    let size = tweetId.size();
-                    var backArray = Array.init<ShowTweet>(size, Tweet.defaultType().defaultShowTweet);
+                    var size = tweetId.size();
+                    var backArray = Array.init<ShowTweet>(20, Tweet.defaultType().defaultShowTweet);
                     var i = 0;
-                    for(k in tweetId.vals()){
-                        //WARNNING Error
-                        backArray[i] := Option.unwrap<ShowTweet>(getShowTweetById(k));
-                        i := i + 1;
+                    while(size > 0 and i < 20){
+                        if(tweetId[size-1] >= oldTid and oldTid != 0) {
+                            size-=1;
+                        }else{
+                            backArray[i] := Option.unwrap<ShowTweet>(getShowTweetById(tweetId[size-1]));
+                            size -= 1;
+                            i += 1;
+                        };
                     };
-                    ?Array.freeze<ShowTweet>(backArray);
+                    Array.freeze<ShowTweet>(backArray);
                 };
             }
         };

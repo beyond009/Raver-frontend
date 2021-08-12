@@ -47,8 +47,8 @@ actor DTwitter{
         return status;
     };
 
-    public query func isUserExist(uid : Principal) : async Bool{
-        userDB.isUserExist(uid)
+    public shared query(msg) func isUserExist() : async Bool{
+        userDB.isUserExist(msg.caller)
     };
 
     public query func isUserNameUsed(userName : Text) : async Bool{
@@ -106,6 +106,7 @@ actor DTwitter{
     */
     //todo : topic
     public shared(msg) func addTweet(content : Text, time : Text, url : Text, parentTid : Int) : async Bool{
+        if(content.size() > 300) return false;
         if(tweetDB.createTweet(content, time, msg.caller, url, parentTid) != 0){
             true
         }else{
@@ -118,18 +119,6 @@ actor DTwitter{
             true
         }else{
             false
-        }
-    };
-
-    /**
-    * get user's all tweet id
-    * @param msg : msg
-    * @return user's all tweet id array : [Nat]
-    */
-    public query func getUserAllTid(uid : Principal) : async [Nat]{
-        switch(userDB.getUserAllTweets(uid)){
-            case ( null ){ [] };
-            case (?array) { array };
         }
     };
 
@@ -158,9 +147,9 @@ actor DTwitter{
     };
 
 
-    //获取关注用户及自己的最新20条post
-    public query func getFollowLastest20Tweets(uid : Principal, lastTid : Nat) : async [ShowTweet]{
-        var TidArray = tweetDB.getFollowLastest20Tweets(uid, lastTid);
+    //获取关注用户及自己的50条post
+    public shared query(msg) func getFollowOlder50Tweets(oldTid : Nat) : async [ShowTweet]{
+        var TidArray = tweetDB.getFollowOlder50Tweets(msg.caller, oldTid);
         var size = 0;
         for(k in TidArray.vals()){
             if(k != 0) size := size + 1; 
@@ -175,13 +164,14 @@ actor DTwitter{
         Array.freeze<ShowTweet>(tempArray)
     };
 
-    //获取关注用户及自己的最新amount条post
-    public query func getFollowLastestAmountTweets(uid : Principal, lastTid : Nat, amount : Nat) : async [ShowTweet]{
-        var TidArray = tweetDB.getFollowLastestAmountTweets(uid, lastTid, amount);
+    //获取关注用户及自己的最新amount条post，实际获取超过100条报error
+    public shared query(msg) func getFollowLastestAmountTweets(lastTid : Nat, amount : Nat) : async [ShowTweet]{
+        var TidArray = tweetDB.getFollowLastestAmountTweets(msg.caller, lastTid, amount);
         var size = 0;
         for(k in TidArray.vals()){
             if(k != 0) size := size + 1; 
         };
+        if(size > 100) {throw Error.reject("new tweet amount exceed 100")};
         var tempArray = Array.init<ShowTweet>(size, Tweet.defaultType().defaultShowTweet);
         var i = 0;
         for(k in TidArray.vals()){
@@ -195,11 +185,20 @@ actor DTwitter{
     /**
     * @param number : Nat -> [Tweet] size <= 5
     */
-    public query func getUserOlder20Tweets(tid : Nat, uid : Principal) : async [ShowTweet]{
-        switch(tweetDB.getUserOlder20Tweets(uid, tid)){
-            case(null) { [] };
-            case(?tweets){ tweets };
-        }
+    public query func getUserOlder20Tweets(uid : Principal, oldTid : Nat) : async [ShowTweet]{
+        var tweetArray = tweetDB.getUserOlder20Tweets(uid, oldTid);
+        var size : Int = 0;
+        for(k in tweetArray.vals()){
+            if(k.tid!=0) size := size + 1; 
+        };
+        var tempArray = Array.init<ShowTweet>(Int.abs(size),Tweet.defaultType().defaultShowTweet);
+        var i =0;
+        while(size > 0){
+            tempArray[i] := tweetArray[i];
+            size-=1;
+            i+=1;
+        };
+        Array.freeze<ShowTweet>(tempArray)
     };
 
 
@@ -351,11 +350,20 @@ actor DTwitter{
         false
     };
 
-    public query func getTweetAllComments(tid : Nat) : async [ShowTweet]{
-        switch(tweetDB.getTweetAllComments(tid)){
-            case null { [] };
-            case (?tweets){ tweets };
-        }
+    public query func getTweetOlder20Comments(tid : Nat, oldTid : Nat) : async [ShowTweet]{
+        var tweetArray = tweetDB.getTweetOlder20Comments(tid, oldTid);
+        var size : Int = 0;
+        for(k in tweetArray.vals()){
+            if(k.tid != 0) size := size + 1; 
+        };
+        var tempArray = Array.init<ShowTweet>(Int.abs(size),Tweet.defaultType().defaultShowTweet);
+        var i =0;
+        while(size > 0){
+            tempArray[i] := tweetArray[i];
+            i+=1;
+            size-=1;
+        };
+        Array.freeze<ShowTweet>(tempArray)
     };
 
     public query func getTweetCommentNumber(tid : Nat) : async Nat{

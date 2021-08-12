@@ -12,12 +12,13 @@ export default function UserPosts(props) {
   async function fetchData() {
     if (authActor !== null && props.user) {
       console.log("fetching data");
-      let a = await authActor.getUserOlder20Tweets(0, props.user.uid);
+      let a = await authActor.getUserOlder20Tweets(props.user.uid, 0);
+      console.log(a);
       setIsloading(false);
-      a.reverse();
       setPosts(a);
     }
   }
+  async function handleLoadMore() {}
   useEffect(() => {
     fetchData();
   }, [authActor, props.user]);
@@ -46,6 +47,11 @@ export default function UserPosts(props) {
           ))}
         </FlipMove>
       )}
+      <div className="user__load">
+        <Button className="user__load__button" onClick={handleLoadMore}>
+          load more
+        </Button>
+      </div>
     </div>
   );
 }

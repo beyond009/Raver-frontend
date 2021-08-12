@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import history from "../History";
 import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
@@ -32,6 +33,8 @@ const Post = forwardRef(
     const { authActor, user } = useSelector((state) => state);
     const [isLoading, setIsLoading] = useState(true);
     const [isFollowed, setIsFollowed] = useState(true);
+    const location = useLocation();
+
     return (
       <div className="post" ref={ref}>
         <div className="post__avatar">
@@ -59,7 +62,10 @@ const Post = forwardRef(
             {image ? <img className="post_img" src={image} alt="" /> : null}
           </div>
           <div className="post__footer">
-            <NavLink to={`/post/${tid}`} className="comment__link">
+            <NavLink
+              to={tid ? `/post/${tid}` : location.pathname}
+              className="comment__link"
+            >
               <div>
                 <ChatBubbleOutlineIcon fontSize="small" />
                 <span className="comment__number">
