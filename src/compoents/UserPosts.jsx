@@ -4,7 +4,7 @@ import FlipMove from "react-flip-move";
 import { LoopCircleLoading } from "react-loadingg";
 import { Button } from "@material-ui/core";
 import Post from "./Post";
-import "./userPosts.css";
+import "./UserPosts.css";
 export default function UserPosts(props) {
   const [posts, setPosts] = useState([]);
   const [isloading, setIsloading] = useState(true);
