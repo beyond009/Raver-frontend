@@ -1,0 +1,42 @@
+.post__page {
+  flex: var(--middlewidth);
+  border-right: 1px solid var(--background);
+  overflow-y: scroll;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.post__page::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.post__page {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.post__page__header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100;
+  border: 1px solid var(--background);
+  padding: 5px 15px 5px 15px;
+}
+.post__page__header > h2 {
+  font-size: 20px;
+  font-weight: 800;
+}
+.commentBox > form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--background);
+  border-radius: 20px;
+  padding: 5px 15px 5px 15px;
+}
+
+.TextField {
+  flex: 1;
+}
+.post__load {
+  margin-left: 42%;
+}
