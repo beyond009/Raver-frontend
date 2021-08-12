@@ -80,7 +80,7 @@ function generateWebpackConfigForCanister(name, info) {
         { test: /\.css$/, use: ["style-loader", "css-loader"] },
         { test: /\.(ttf|TTF)$/, loader: "file-loader" },
         { test: /\.(otf|OTF)$/, loader: "file-loader" },
-        { test: /\.(png|jpg)$/, loader: "file-loader" },
+        { test: /\.(png|jpg|jpeg)$/, loader: "file-loader" },
       ],
     },
     plugins: [
