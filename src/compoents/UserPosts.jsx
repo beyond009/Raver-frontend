@@ -16,15 +16,15 @@ export default function UserPosts(props) {
     if (authActor !== null && props.user) {
       console.log("fetching data");
       let a = await authActor.getUserOlder20Tweets(props.user.uid, 0);
-      if(!a.length) setNoMore(true);
+      if (!a.length) setNoMore(true);
       setIsloading(false);
       setPosts(a);
     }
   }
   async function handleLoadMore() {
+    setIsLoadingMore(true);
     if (authActor && posts.length && props.user.uid) {
       try {
-        setIsLoadingMore(true);
         let a = await authActor.getUserOlder20Tweets(
           props.user.uid,
           posts[posts.length - 1].tid

@@ -44,15 +44,16 @@ function Feed(props) {
     if (authActor) {
       console.log("fetching data");
       let a = await authActor.getFollowLastestAmountTweets(0, 20);
-      if(a.length) setNoMore(true);
+      console.log(a);
+      if (!a.length) setNoMore(true);
       setIsloading(false);
       setPosts(a);
     }
   }
   async function handleLoadMore() {
+    setIsLoadingMore(true);
     if (authActor && posts.length) {
       try {
-        setIsLoadingMore(true);
         let a = await authActor.getFollowOlder50Tweets(
           posts[posts.length - 1].tid
         );

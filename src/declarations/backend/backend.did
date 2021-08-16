@@ -1,0 +1,89 @@
+type parentTweet = 
+ record {
+   content: text;
+   cor: bool;
+   tid: nat;
+   time: text;
+   url: text;
+   user: User__1;
+ };
+type User__1 = 
+ record {
+   avatarimg: Avatarimg;
+   nickname: NickName;
+   uid: UID;
+   username: UserName;
+ };
+type UserName = text;
+type User = 
+ record {
+   avatarimg: Avatarimg;
+   nickname: NickName;
+   uid: UID;
+   username: UserName;
+ };
+type UID = principal;
+type ShowUser = 
+ record {
+   avatarimg: Avatarimg;
+   bio: BIO;
+   nickname: NickName;
+   uid: UID;
+   username: UserName;
+ };
+type ShowTweet = 
+ record {
+   commentNumber: nat;
+   content: text;
+   likeNumber: nat;
+   parentTweet: opt parentTweet;
+   tid: nat;
+   time: text;
+   url: text;
+   user: User__1;
+ };
+type NickName = text;
+type BIO = text;
+type Avatarimg = text;
+service : {
+  addComment: (text, text, text, int) -> (bool);
+  addFollow: (principal) -> (bool);
+  addTweet: (text, text, text, int) -> (bool);
+  addUser: (text, text, text) -> (bool);
+  cancelFollow: (principal) -> (bool);
+  cancelLike: (nat) -> (bool);
+  changeTweet: (nat, text, text, text) -> (bool);
+  changeUserProfile: (text, text, text) -> (bool);
+  deleteComment: (nat) -> (bool);
+  deleteTweet: (nat) -> (bool);
+  deleteTweetAllComment: (nat) -> (bool);
+  deleteUser: () -> (bool);
+  getBio: (principal) -> (text) query;
+  getFollow: (principal) -> (vec ShowUser) query;
+  getFollowAmount: (principal) -> (nat) query;
+  getFollowLastestAmountTweets: (nat, nat) -> (vec ShowTweet) query;
+  getFollowOlder50Tweets: (nat) -> (vec ShowTweet) query;
+  getFollower: (principal) -> (vec ShowUser) query;
+  getFollowerAmount: (principal) -> (nat) query;
+  getLastestTweeTid: () -> (nat) query;
+  getShowUserProfileByPrincipal: (principal) -> (ShowUser) query;
+  getShowUserProfileByUserName: (text) -> (ShowUser) query;
+  getTweetById: (nat) -> (ShowTweet) query;
+  getTweetCommentNumber: (nat) -> (nat) query;
+  getTweetLikeUsers: (nat) -> (vec principal) query;
+  getTweetOlder20Comments: (nat, nat) -> (vec ShowTweet) query;
+  getUserAllTweets: (principal) -> (vec ShowTweet) query;
+  getUserLastestTenTweets: () -> (vec ShowTweet);
+  getUserOlder20Tweets: (principal, nat) -> (vec ShowTweet) query;
+  getUserProfile: (principal) -> (User) query;
+  isAFollowedByB: (principal, principal) -> (bool) query;
+  isExist: (nat) -> (bool) query;
+  isTweetLiked: (nat) -> (bool) query;
+  isTwoUserFollowEachOther: (principal, principal) -> (bool) query;
+  isUserExist: () -> (bool) query;
+  isUserNameUsed: (text) -> (bool) query;
+  likeAmount: (nat) -> (nat) query;
+  likeTweet: (nat) -> (bool);
+  putBio: (text) -> () oneway;
+  reTweet: (text, text, text, int) -> (bool);
+}

@@ -40,9 +40,9 @@ export default function PostPage(props) {
     }
   }
   async function handleLoadMore() {
+    setIsLoadingMore(true);
     if (authActor && comments.length) {
       try {
-        setIsLoadingMore(true);
         let a = await authActor.getTweetOlder20Comments(
           parseInt(props.match.params.tid),
           comments[comments.length - 1].tid

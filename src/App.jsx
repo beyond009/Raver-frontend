@@ -15,13 +15,16 @@ import Feed from "./compoents/Feed";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { isDelegationValid } from "@dfinity/authentication";
-import { idlFactory, canisterId } from "dfx-generated/backend";
+import { idlFactory } from "./declarations/backend/backend.did.js";
+import canisterIds from "../.dfx/local/canister_ids.json";
 import { DelegationIdentity } from "@dfinity/identity";
 import { authActor, updateAuthActor } from "./redux/features/authActor";
 import { updateIdentity } from "./redux/features/identity";
 import { updateUser } from "./redux/features/user";
 import "./App.css";
-
+const canisterId =
+  new URLSearchParams(window.location.search).get("backend") ||
+  canisterIds.backend.local;
 const App = () => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
