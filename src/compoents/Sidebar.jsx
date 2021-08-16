@@ -12,8 +12,9 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { Button } from "@material-ui/core";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 function Sidebar() {
+  const location = useLocation();
   const [activeHome, setactiveHome] = useState();
   const [activeProfile, setactiveProfile] = useState();
   const { user } = useSelector((state) => state);
@@ -26,13 +27,12 @@ function Sidebar() {
         className="sidebar__link"
         activeClassName="link__active"
       >
-        <SidebarOption active={activeHome} Icon={HomeIcon} text="Home" />{" "}
+        <SidebarOption
+          active={location.pathname === "/home"}
+          Icon={HomeIcon}
+          text="Home"
+        />{" "}
       </NavLink>
-      {/* <SidebarOption Icon={SearchIcon} text="Explore" /> */}
-      {/* <SidebarOption Icon={NotificationsNoneIcon} text="Notifications" />
-      <SidebarOption Icon={MailOutlineIcon} text="Messages" />
-      <SidebarOption Icon={BookmarkBorderIcon} text="Bookmarks" />
-      <SidebarOption Icon={ListAltIcon} text="Lists" /> */}
       <SidebarOption Icon={AccountBalanceWalletIcon} text="Wallet">
         {" "}
       </SidebarOption>
@@ -41,7 +41,11 @@ function Sidebar() {
         className="sidebar__link"
         activeClassName="link__active"
       >
-        <SidebarOption Icon={PermIdentityIcon} text="Profile" />{" "}
+        <SidebarOption
+          active={location.pathname.substr(0, 8) === "/profile"}
+          Icon={PermIdentityIcon}
+          text="Profile"
+        />{" "}
       </NavLink>
 
       <SidebarOption Icon={MoreHorizIcon} text="More" />
