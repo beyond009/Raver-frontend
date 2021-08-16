@@ -78,7 +78,6 @@ const App = () => {
     if (await authClient.isAuthenticated()) {
       setIsLogin(true);
       getActor(authClient);
-      history.push({ pathname: "/home" });
     } else {
       setIsLogin(false);
       goToLoginPage();

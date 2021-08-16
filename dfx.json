@@ -9,7 +9,7 @@
         "backend"
       ],
       "frontend": {
-        "entrypoint": "dist/index.html"
+        "entrypoint": "src/index.html"
       },
       "source": [
         "assets/",

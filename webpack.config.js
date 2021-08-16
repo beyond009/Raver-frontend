@@ -63,6 +63,7 @@ module.exports = {
   },
   output: {
     filename: "index.js",
+    publicPath: "/",
     path: path.join(__dirname, "dist"),
   },
 
