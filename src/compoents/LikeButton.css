@@ -21,3 +21,7 @@
   background-position: right 0;
   transition: background-position 1s steps(28);
 }
+
+.twitter-fave.liked {
+  background-position: right 0;
+}

@@ -35,7 +35,33 @@ const Post = forwardRef(
     const [isFollowed, setIsFollowed] = useState(true);
     const [cNumber, setCNumber] = useState(0);
     const [lNumber, setLNumber] = useState(0);
+    const [fave, setFave] = useState(false);
+    const [liked, setLiked] = useState(false);
     const location = useLocation();
+    const handleClickLike = () => {
+      if (fave) {
+        setLiked(false);
+        setFave(false);
+        setLNumber(lNumber - 1);
+        if (authActor) {
+          try {
+            authActor.cancelLike(tid);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      } else {
+        setFave(true);
+        setLNumber(lNumber + 1);
+        if (authActor) {
+          try {
+            authActor.likeTweet(tid);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      }
+    };
     useEffect(async () => {
       try {
         let a = await authActor.getTweetCommentNumber(tid);
@@ -52,7 +78,17 @@ const Post = forwardRef(
         console.log(e);
       }
     }, [authActor]);
-
+    useEffect(async () => {
+      if (authActor) {
+        try {
+          let a = await authActor.isTweetLiked(tid);
+          if (a) {
+            setLiked(true);
+            setFave(true);
+          }
+        } catch (error) {}
+      }
+    }, [authActor]);
     return (
       <div className="post" ref={ref}>
         <div className="post__avatar">
@@ -72,10 +108,6 @@ const Post = forwardRef(
             </div>
             <div className="post__headerDescription">{text}</div>
           </div>
-          {/* <div className="post__follow__button">
-            {" "}
-        
-          </div> */}
           <div>
             {image ? <img className="post_img" src={image} alt="" /> : null}
           </div>
@@ -92,9 +124,13 @@ const Post = forwardRef(
               </div>
             </NavLink>
             <RepeatIcon fontSize="small" />
-            <div>
-              <LikeButton />{" "}
-              <div className="like__number">{lNumber ? lNumber : null}</div>
+            <div className="like__button">
+              <LikeButton
+                handleClickLike={handleClickLike}
+                fave={fave}
+                liked={liked}
+              />
+              <span className="like__number">{lNumber ? lNumber : null}</span>
             </div>
             <PublishIcon fontSize="small" />
           </div>

@@ -14,9 +14,6 @@ export default class Login extends Component {
       islogin: false,
     };
   }
-  // toSignup() {
-  //   history.push({ pathname: "/signup" });
-  // }
   render() {
     return (
       <div>

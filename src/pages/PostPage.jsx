@@ -13,7 +13,6 @@ export default function PostPage(props) {
   const [noMore, setNoMore] = useState(false);
   const [post, setPost] = useState();
   function handleSubmit() {
-    console.log("dfasdfsa");
     if (authActor && post) {
       try {
         console.log("sending Tweet");
@@ -62,6 +61,7 @@ export default function PostPage(props) {
     }
   }
   useEffect(async () => {
+    setNoMore(false);
     if (authActor) {
       try {
         let tp = await authActor.getTweetById(parseInt(props.match.params.tid));

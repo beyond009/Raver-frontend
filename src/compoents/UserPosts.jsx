@@ -12,10 +12,11 @@ export default function UserPosts(props) {
   const [noMore, setNoMore] = useState(false);
   const { authActor } = useSelector((state) => state);
   async function fetchData() {
+    setNoMore(false);
     if (authActor !== null && props.user) {
       console.log("fetching data");
       let a = await authActor.getUserOlder20Tweets(props.user.uid, 0);
-      console.log(a);
+      if(!a.length) setNoMore(true);
       setIsloading(false);
       setPosts(a);
     }
@@ -24,7 +25,7 @@ export default function UserPosts(props) {
     if (authActor && posts.length && props.user.uid) {
       try {
         setIsLoadingMore(true);
-        let a = await authActor.geUserOlder20Tweets(
+        let a = await authActor.getUserOlder20Tweets(
           props.user.uid,
           posts[posts.length - 1].tid
         );

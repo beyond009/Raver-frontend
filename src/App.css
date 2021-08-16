@@ -1,8 +1,8 @@
 body {
-  --twitter-color: #f09217;
+  --twitter-color:rgb(15,20,25);
   --twitter-background: #eff3f7;
-  --acolor: #f09217;
-  --background: var(--twitter-background);
+  --acolor:rgb(15,20,25);
+  --background: rgb(239,249,243);
   --middlewidth: 0.5;
   background-color: rgb(255, 255, 255);
 }

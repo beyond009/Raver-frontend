@@ -40,9 +40,11 @@ function Feed(props) {
   };
 
   async function fetchData() {
+    setNoMore(false);
     if (authActor) {
       console.log("fetching data");
       let a = await authActor.getFollowLastestAmountTweets(0, 20);
+      if(a.length) setNoMore(true);
       setIsloading(false);
       setPosts(a);
     }

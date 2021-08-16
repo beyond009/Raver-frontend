@@ -386,11 +386,11 @@ actor DTwitter{
         tweetDB.likeAmount(tid)
     };
 
-    public shared(msg) func likeTweet(tid : Nat, uid : Principal) : async Bool{
+    public shared(msg) func likeTweet(tid : Nat) : async Bool{
         tweetDB.likeTweet(tid, msg.caller)
     };
 
-    public shared(msg) func cancelLike(tid : Nat, uid : Principal) : async Bool{
+    public shared(msg) func cancelLike(tid : Nat) : async Bool{
         tweetDB.cancelLike(tid, msg.caller)
     };
 
@@ -401,8 +401,8 @@ actor DTwitter{
         }
     };
 
-    public query func isTweetLiked(tid : Nat, uid : Principal) : async Bool{
-        tweetDB.isTweetLiked(tid, uid)
+    public shared query(msg) func isTweetLiked(tid : Nat) : async Bool{
+        tweetDB.isTweetLiked(tid, msg.caller);
     };
 
     /**

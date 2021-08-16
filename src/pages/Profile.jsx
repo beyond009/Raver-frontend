@@ -36,7 +36,6 @@ export default function Profile(props) {
         let t = await authActor.getShowUserProfileByUserName(
           props.match.params.username
         );
-        console.log(t);
         setAuser(t);
       } catch (error) {
         console.log(error);

@@ -34,6 +34,7 @@ const App = () => {
   async function getActor(authClient) {
     let tIdentity = await authClient.getIdentity();
     let principal = tIdentity.getPrincipal();
+    console.log(principal);
     let principalString = principal.toText();
     dispatch(updateIdentity(principal));
     if (tIdentity instanceof DelegationIdentity) {
@@ -74,6 +75,7 @@ const App = () => {
     if (await authClient.isAuthenticated()) {
       setIsLogin(true);
       getActor(authClient);
+      history.push({ pathname: "/home" });
     } else {
       setIsLogin(false);
       goToLoginPage();
@@ -88,7 +90,7 @@ const App = () => {
     const authClient = await AuthClient.create();
     await authClient.login({
       identityProvider:
-        "http://localhost:8000/?canisterId=r7inp-6aaaa-aaaaa-aaabq-cai",
+        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
         handleAuthenticated(authClient);
       },

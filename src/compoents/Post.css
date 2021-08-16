@@ -9,6 +9,7 @@
   border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .post__body {
@@ -79,6 +80,9 @@
 }
 .post__follow__button {
   float: right;
+}
+.like__button {
+  height: 10px;
 }
 .like__number {
   position: relative;
