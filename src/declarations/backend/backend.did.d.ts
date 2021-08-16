@@ -83,7 +83,7 @@ export interface _SERVICE {
   'getFollower' : (arg_0: Principal) => Promise<Array<ShowUser>>,
   'getFollowerAmount' : (arg_0: Principal) => Promise<bigint>,
   'getLastestTweeTid' : () => Promise<bigint>,
-  'getShowUserProfileByPrincipal' : (arg_0: Principal) => Promise<ShowUser>,
+  'getShowUserProfileByPrincipal' : () => Promise<ShowUser>,
   'getShowUserProfileByUserName' : (arg_0: string) => Promise<ShowUser>,
   'getTweetById' : (arg_0: bigint) => Promise<ShowTweet>,
   'getTweetCommentNumber' : (arg_0: bigint) => Promise<bigint>,
@@ -96,7 +96,7 @@ export interface _SERVICE {
   'getUserOlder20Tweets' : (arg_0: Principal, arg_1: bigint) => Promise<
       Array<ShowTweet>
     >,
-  'getUserProfile' : (arg_0: Principal) => Promise<User>,
+  'getUserProfile' : () => Promise<User>,
   'isAFollowedByB' : (arg_0: Principal, arg_1: Principal) => Promise<boolean>,
   'isExist' : (arg_0: bigint) => Promise<boolean>,
   'isTweetLiked' : (arg_0: bigint) => Promise<boolean>,

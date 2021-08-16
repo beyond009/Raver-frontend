@@ -86,11 +86,7 @@ export const idlFactory = ({ IDL }) => {
     'getFollower' : IDL.Func([IDL.Principal], [IDL.Vec(ShowUser)], ['query']),
     'getFollowerAmount' : IDL.Func([IDL.Principal], [IDL.Nat], ['query']),
     'getLastestTweeTid' : IDL.Func([], [IDL.Nat], ['query']),
-    'getShowUserProfileByPrincipal' : IDL.Func(
-        [IDL.Principal],
-        [ShowUser],
-        ['query'],
-      ),
+    'getShowUserProfileByPrincipal' : IDL.Func([], [ShowUser], ['query']),
     'getShowUserProfileByUserName' : IDL.Func(
         [IDL.Text],
         [ShowUser],
@@ -119,7 +115,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(ShowTweet)],
         ['query'],
       ),
-    'getUserProfile' : IDL.Func([IDL.Principal], [User], ['query']),
+    'getUserProfile' : IDL.Func([], [User], ['query']),
     'isAFollowedByB' : IDL.Func(
         [IDL.Principal, IDL.Principal],
         [IDL.Bool],

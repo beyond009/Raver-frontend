@@ -73,15 +73,15 @@ actor DTwitter{
     * @param msg
     * @return User
     */
-    public query func getUserProfile(uid : Principal) : async User{
-        switch(userDB.getUserProfile(uid)){
+    public shared query(msg) func getUserProfile() : async User{
+        switch(userDB.getUserProfile(msg.caller)){
             case(?user){ user };
             case(_){ throw Error.reject("no such user") };
         }
     };
 
-    public query func getShowUserProfileByPrincipal(uid : Principal) : async ShowUser{
-        switch(userDB.getShowUserProfile(uid)){
+    public shared query(msg) func getShowUserProfileByPrincipal() : async ShowUser{
+        switch(userDB.getShowUserProfile(msg.caller)){
             case(?showuser){ showuser };
             case(_){ throw Error.reject("no such user") };
         }

@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Feed from "../compoents/Feed";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import { Avatar } from "@material-ui/core";
@@ -8,6 +8,7 @@ import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import history from "../History";
+import { updateUser } from "../redux/features/user";
 import "./EditProfile.css";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EditProfile = (props) => {
-  const { identity, user, authActor } = useSelector((state) => state);
+  const { user, authActor } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const classes = useStyles();
   const [avatarimg, setAvatarimg] = useState();
   async function handleSubmit() {
@@ -35,11 +37,15 @@ const EditProfile = (props) => {
     let description = document.getElementById("description").value;
     let username = document.getElementById("username").value;
     setAvatarimg(avatar_img);
-    authActor.changeUserProfile(nickname, username, avatar_img);
-    authActor.putBio(description);
+    Promise.all([
+      authActor.changeUserProfile(nickname, username, avatar_img),
+      authActor.putBio(description),
+    ]).then(async () => {
+      let tu = await authActor.getShowUserProfileByPrincipal();
+      dispatch(updateUser(tu));
+    });
   }
   useEffect(() => {
-    console.log(1, user);
     if (user) {
       setAvatarimg(user.avatarimg);
     }
@@ -55,7 +61,7 @@ const EditProfile = (props) => {
       </div>
       <div className="profile__your">Your Principal:</div>
       <div className="profile__principal">
-        <br /> {identity ? identity.toText() : null}
+        <br /> {user ? user.uid.toText() : null}
       </div>
       <div className="signup__form">
         <form noValidate autoComplete="off">

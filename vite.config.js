@@ -19,7 +19,7 @@ const aliases = Object.entries(dfxJson.canisters).reduce(
 
     return {
       ...acc,
-      ["dfx-generated/" + name]: path.join(outputRoot, name + ".js"),
+      ["dfx-generated/" + name]: path.join(outputRoot),
     };
   },
   {}
@@ -32,6 +32,9 @@ export default defineConfig({
     alias: {
       ...aliases,
     },
+  },
+  define: {
+    "process.env": {},
   },
   rollupInputOptions: {
     plugins: [

@@ -19,7 +19,6 @@ import { idlFactory } from "./declarations/backend/backend.did.js";
 import canisterIds from "../.dfx/local/canister_ids.json";
 import { DelegationIdentity } from "@dfinity/identity";
 import { authActor, updateAuthActor } from "./redux/features/authActor";
-import { updateIdentity } from "./redux/features/identity";
 import { updateUser } from "./redux/features/user";
 import "./App.css";
 const canisterId =
@@ -28,7 +27,7 @@ const canisterId =
 const App = () => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
-  const { authActor, identity } = useSelector((state) => state);
+  const { authActor } = useSelector((state) => state);
   const goToLoginPage = () =>
     history.push({
       pathname: "/login",
@@ -37,11 +36,7 @@ const App = () => {
   async function getActor(authClient) {
     let tIdentity = await authClient.getIdentity();
     let principal = tIdentity.getPrincipal();
-    console.log(principal);
     let principalString = principal.toText();
-    dispatch(updateIdentity(principal));
-    if (tIdentity instanceof DelegationIdentity) {
-    }
     const agent = new HttpAgent({
       identity: tIdentity,
       host: "http://localhost:8000",
@@ -58,10 +53,10 @@ const App = () => {
     let isSigned = await tAuthActor.isUserExist();
     if (!isSigned) {
       await tAuthActor.addUser(principalString, "User", "");
-      let res = await tAuthActor.getShowUserProfileByPrincipal(principal);
+      let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
     } else {
-      let res = await tAuthActor.getShowUserProfileByPrincipal(principal);
+      let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
     }
   }

@@ -6,7 +6,7 @@ import FlipMove from "react-flip-move";
 import Post from "../compoents/Post";
 import "./PostPage.css";
 export default function PostPage(props) {
-  const { user, identity, authActor } = useSelector((state) => state);
+  const { user, authActor } = useSelector((state) => state);
   const [comments, setComments] = useState([]);
   const [commentMessage, setCommentMessage] = useState();
   const [isLoadingMore, setIsLoadingMore] = useState(false);

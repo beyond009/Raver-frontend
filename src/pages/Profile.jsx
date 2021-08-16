@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Profile(props) {
-  const { authActor, identity, user } = useSelector((state) => state);
+  const { authActor, user } = useSelector((state) => state);
   const [auser, setAuser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFollowed, setIsFollowed] = useState(true);

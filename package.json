@@ -2,7 +2,7 @@
   "name": "twitter-frontend",
   "version": "0.0.0",
   "scripts": {
-    "build": "webpack",
+    "build": "vite build",
     "dev" :"vite",
     "prebuild": "npm run copy:types",
     "start": "webpack serve --mode development --env development",
