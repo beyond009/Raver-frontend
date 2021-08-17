@@ -8,6 +8,7 @@ import "./PostPage.css";
 export default function PostPage(props) {
   const { user, authActor } = useSelector((state) => state);
   const [comments, setComments] = useState([]);
+  const [disable, setDisable] = useState(true);
   const [commentMessage, setCommentMessage] = useState();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [noMore, setNoMore] = useState(false);
@@ -37,6 +38,15 @@ export default function PostPage(props) {
       } catch (error) {
         console.log(error);
       }
+    }
+  }
+  function handleOnChange(e) {
+    if (e.target.value && e.target.value.length <= 300) {
+      setCommentMessage(e.target.value);
+      setDisable(false);
+    } else {
+      setCommentMessage(e.target.value);
+      setDisable(true);
     }
   }
   async function handleLoadMore() {
@@ -110,7 +120,7 @@ export default function PostPage(props) {
             multiline
             variant="outlined"
             value={commentMessage}
-            onChange={(e) => setCommentMessage(e.target.value)}
+            onChange={(e) => handleOnChange(e)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -119,7 +129,11 @@ export default function PostPage(props) {
               ),
             }}
           />
-          <Button onClick={handleSubmit} className="submit__button">
+          <Button
+            onClick={handleSubmit}
+            className="submit__button"
+            disabled={disable}
+          >
             Reply
           </Button>
           {/* </div> */}

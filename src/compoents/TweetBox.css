@@ -37,7 +37,19 @@
 }
 
 .tweetBox__tweetButton {
-  background-color: var(--twitter-color) !important;
+  background-color: var(--acolor) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 900 !important;
+  text-transform: inherit !important;
+  border-radius: 30px !important;
+  width: 80px;
+  height: 40px !important;
+  margin-top: 20px !important;
+  margin-left: auto !important;
+}
+.tweetBox__tweetButton__disabled {
+  background-color: var(--graycolor) !important;
   border: none !important;
   color: white !important;
   font-weight: 900 !important;

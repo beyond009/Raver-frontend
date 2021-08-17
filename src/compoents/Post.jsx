@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
+import LinkAvatar from "../utils/LinkAvatar";
 import history from "../History";
 import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
@@ -92,7 +93,7 @@ const Post = forwardRef(
     return (
       <div className="post" ref={ref}>
         <div className="post__avatar">
-          <Avatar src={avatar} />
+          <LinkAvatar username={username} avatar={avatar} />
         </div>
 
         <div className="post__body">

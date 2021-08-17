@@ -15,6 +15,7 @@ function Feed(props) {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [noMore, setNoMore] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [disable, setDisable] = useState(true);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
   let flag = false;
@@ -35,10 +36,19 @@ function Feed(props) {
     authActor
       .addTweet(tweetMessage, "time", tweetImage, 0)
       .then((tmp) => console.log(tmp));
+    setDisable(true);
     setTweetMessage("");
     setTweetImage("");
   };
-
+  function handleOnChange(e) {
+    if (e.target.value && e.target.value.length <= 300) {
+      setTweetMessage(e.target.value);
+      setDisable(false);
+    } else {
+      setTweetMessage(e.target.value);
+      setDisable(true);
+    }
+  }
   async function fetchData() {
     setNoMore(false);
     if (authActor) {
@@ -83,7 +93,7 @@ function Feed(props) {
             <TextField
               className="TextField"
               id="outlined-textarea"
-              onChange={(e) => setTweetMessage(e.target.value)}
+              onChange={(e) => handleOnChange(e)}
               value={tweetMessage}
               label="What's happening?"
               multiline
@@ -100,7 +110,12 @@ function Feed(props) {
           <Button
             onClick={sendTweet}
             type="submit"
-            className="tweetBox__tweetButton"
+            className={
+              disable
+                ? "tweetBox__tweetButton__disabled"
+                : "tweetBox__tweetButton"
+            }
+            disabled={disable}
           >
             Post
           </Button>
