@@ -1,6 +1,6 @@
 .profile {
-  flex: var(--middlewidth);
   border-right: 1px solid var(--background);
+  flex: 1;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -22,7 +22,7 @@
 }
 .profile__banner {
   position: absolute;
-  width: 631.2px;
+  width: 100%;
   height: 210px;
 }
 .profile__avatar {
@@ -32,9 +32,9 @@
 }
 .profile__editposition {
   position: relative;
-  top: 90px;
-  left: 475px;
-  z-index: 100;
+  top: 110px;
+  left: 490px;
+  z-index: 1;
 }
 .profile__editbutton {
   background-color: var(--backgroundcolor) !important;

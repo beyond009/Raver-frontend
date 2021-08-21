@@ -10,8 +10,9 @@ body {
 
 .app {
   display: flex;
-  height: 100vh;
-  max-width: 1300px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
   margin-left: auto;
   margin-right: auto;
   padding: 0 10px;

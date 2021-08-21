@@ -6,7 +6,7 @@
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .feed::-webkit-scrollbar {
-  display: none;
+  float: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */

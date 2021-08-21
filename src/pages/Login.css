@@ -1,13 +1,22 @@
+.login {
+  background-image: url(../../assets/avatar-1.png);
+  background-size: cover;
+  width: 100%;
+}
+.login_position {
+  margin-left: 550px !important;
+  margin-top: 200px !important;
+}
 .Login_LoginButton {
   background: linear-gradient(120deg, #2980b9, #8e44ad) !important;
   border: none !important;
   color: white !important;
   font-weight: 900 !important;
+  font-size: x-large !important;
   text-transform: inherit !important;
-  border-radius: 30px !important;
-  width: 166px;
-  height: 40px !important;
-  margin-top: 20px !important;
-  margin-left: auto !important;
+  border-radius: 50px !important;
+  width: 300px;
+  height: 70px !important;
+  margin-left: 10px !important;
   /* boxshadow: "0 3px 5px 2px rgba(255, 105, 135, .3)" !important; */
 }
