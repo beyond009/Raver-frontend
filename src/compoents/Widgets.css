@@ -25,6 +25,7 @@
 .widgets__widgetContainer {
   margin-top: 15px;
   margin-left: 20px;
+  width: 300px;
   padding: 20px;
   background-color: #f5f8fa;
   border-radius: 20px;

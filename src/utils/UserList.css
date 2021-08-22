@@ -1,0 +1,22 @@
+.userList {
+  border: solid lightgray 1px;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 16.66px;
+}
+.userList__linkAvatar {
+  display: inline-block !important;
+}
+.userList__displayName {
+  display: inline-block !important;
+  position: relative;
+  bottom: 19px;
+  left: 10px;
+}
+
+.userList__userName {
+  display: inline-block !important;
+  position: relative;
+  font-weight: lighter;
+  right: 50px;
+}
