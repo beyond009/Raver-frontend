@@ -1,6 +1,4 @@
 import React, { Component, useState, useEffect } from "react";
-
-import Fave from "../../assets/fave";
 import "./LikeButton.css";
 const LikeButton = (props) => {
   const animation_class = props.liked ? "liked" : props.fave ? "fave-ani" : "";
