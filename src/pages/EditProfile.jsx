@@ -52,18 +52,18 @@ const EditProfile = (props) => {
   }, [user]);
   return (
     <div className="edit__profile">
-      <div>
-        <Avatar
-          src={avatarimg ? avatarimg : ""}
-          className="Signup_Avatar"
-          className={classes.large}
-        />
-      </div>
-      <div className="profile__your">Your Principal:</div>
-      <div className="profile__principal">
-        <br /> {user ? user.uid.toText() : null}
-      </div>
       <div className="signup__form">
+        <div>
+          <Avatar
+            src={avatarimg ? avatarimg : ""}
+            className="Signup_Avatar"
+            className={classes.large}
+          />
+        </div>
+        <div className="profile__your">Your Principal:</div>
+        <div className="profile__principal">
+          <br /> {user ? user.uid.toText() : null}
+        </div>
         <form noValidate autoComplete="off">
           <Input
             id="avatar_img"

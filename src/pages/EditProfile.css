@@ -22,10 +22,15 @@
   margin-bottom: 30px;
 }
 .signup__form {
-  margin-left: 70px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto !important;
 }
 .submit__button {
-  margin-left: 190px !important;
+  margin: 0 auto !important;
 }
 .signup__input {
   width: 500px;
