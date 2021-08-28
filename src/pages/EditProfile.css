@@ -7,11 +7,11 @@
   overflow-y: scroll;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
-.profile::-webkit-scrollbar {
+.edit__profile::-webkit-scrollbar {
   display: none;
 }
 /* Hide scrollbar for IE, Edge and Firefox */
-.profile {
+.edit__profile {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
@@ -35,4 +35,5 @@
 }
 .signup__input {
   width: 500px;
+  margin: 0 auto !important;
 }

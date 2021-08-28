@@ -53,12 +53,8 @@ const EditProfile = (props) => {
   return (
     <div className="edit__profile">
       <div className="signup__form">
-        <div>
-          <Avatar
-            src={avatarimg ? avatarimg : ""}
-            className="Signup_Avatar"
-            className={classes.large}
-          />
+        <div className="signup_Avatar">
+          <Avatar src={avatarimg ? avatarimg : ""} className={classes.large} />
         </div>
         <div className="profile__your">Your Principal:</div>
         <div className="profile__principal">
@@ -103,9 +99,9 @@ const EditProfile = (props) => {
         </form>{" "}
         <br />
         <br />
-        <Button onClick={handleSubmit} className="submit__button">
-          Submit
-        </Button>
+        <div>
+          <Button onClick={handleSubmit}>Submit</Button>
+        </div>
       </div>
     </div>
   );
