@@ -20,10 +20,6 @@ const useStyles = makeStyles((theme) => ({
   large: {
     width: theme.spacing(14),
     height: theme.spacing(14),
-    "margin-top": "50px",
-    "margin-left": "240px",
-    "margin-right": "290px",
-    "margin-bottom": "50px",
   },
 }));
 const EditProfile = (props) => {

@@ -20,12 +20,13 @@
   margin: 30px auto;
 }
 .profile__your {
-  width: fit-content;
+  width: max-content;
   margin: 0 auto;
 }
 .profile__principal {
   width: fit-content;
-  margin: 30px auto;
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 .signup__form {
   position: absolute;
