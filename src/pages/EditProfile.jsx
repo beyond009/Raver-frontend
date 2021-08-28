@@ -61,7 +61,7 @@ const EditProfile = (props) => {
           <br /> {user ? user.uid.toText() : null}
         </div>
         <form noValidate autoComplete="off">
-          <div className="signup__form_son">
+          <div className="signup__form__son">
             <Input
               id="avatar_img"
               placeholder="avatar img url"
