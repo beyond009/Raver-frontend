@@ -4,7 +4,7 @@ body {
   --acolor: rgb(15, 20, 25);
   --background: rgb(239, 249, 243);
   --graycolor: rgb(205, 214, 214);
-  --middlewidth: 0.62;
+  --middlewidth: 0.5;
   background-color: rgb(255, 255, 255);
 }
 
