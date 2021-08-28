@@ -1,7 +1,6 @@
 .sidebar {
   border-right: 1px solid var(--background);
-  min-width: 250px;
-  flex: 0.1;
+  flex: 0.21;
   padding-right: 50px;
 }
 .sidebar__link {
