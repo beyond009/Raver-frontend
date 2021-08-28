@@ -1,6 +1,6 @@
 .home {
   border-right: 1px solid var(--background);
-  flex: 0.7;
+  flex: var(--middlewidth);
   /* min-width: fit-content; */
   overflow-y: scroll;
 }
