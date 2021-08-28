@@ -20,9 +20,6 @@ import { DelegationIdentity } from "@dfinity/identity";
 import { authActor, updateAuthActor } from "./redux/features/authActor";
 import { updateUser } from "./redux/features/user";
 import "./App.css";
-const canisterId =
-  new URLSearchParams(window.location.search).get("backend") ||
-  canisterIds.backend.local;
 const App = () => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
