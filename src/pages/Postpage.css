@@ -1,6 +1,6 @@
 .post__page {
   border-right: 1px solid var(--background);
-  flex: 1;
+  flex: 0.7;
   overflow-y: scroll;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */

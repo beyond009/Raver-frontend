@@ -85,7 +85,9 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getFollower' : IDL.Func([IDL.Principal], [IDL.Vec(ShowUser)], ['query']),
     'getFollowerAmount' : IDL.Func([IDL.Principal], [IDL.Nat], ['query']),
+    'getHot20Tweets' : IDL.Func([IDL.Nat], [IDL.Vec(ShowTweet)], ['query']),
     'getLastestTweeTid' : IDL.Func([], [IDL.Nat], ['query']),
+    'getNew20Tweets' : IDL.Func([IDL.Nat], [IDL.Vec(ShowTweet)], ['query']),
     'getShowUserProfileByPrincipal' : IDL.Func([], [ShowUser], ['query']),
     'getShowUserProfileByUserName' : IDL.Func(
         [IDL.Text],
@@ -109,7 +111,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(ShowTweet)],
         ['query'],
       ),
-    'getUserLastestTenTweets' : IDL.Func([], [IDL.Vec(ShowTweet)], []),
     'getUserOlder20Tweets' : IDL.Func(
         [IDL.Principal, IDL.Nat],
         [IDL.Vec(ShowTweet)],
@@ -121,7 +122,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Bool],
         ['query'],
       ),
-    'isExist' : IDL.Func([IDL.Nat], [IDL.Bool], ['query']),
+    'isTweetExist' : IDL.Func([IDL.Nat], [IDL.Bool], ['query']),
     'isTweetLiked' : IDL.Func([IDL.Nat], [IDL.Bool], ['query']),
     'isTwoUserFollowEachOther' : IDL.Func(
         [IDL.Principal, IDL.Principal],

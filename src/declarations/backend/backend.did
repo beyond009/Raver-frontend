@@ -65,7 +65,9 @@ service : {
   getFollowOlder50Tweets: (nat) -> (vec ShowTweet) query;
   getFollower: (principal) -> (vec ShowUser) query;
   getFollowerAmount: (principal) -> (nat) query;
+  getHot20Tweets: (nat) -> (vec ShowTweet) query;
   getLastestTweeTid: () -> (nat) query;
+  getNew20Tweets: (nat) -> (vec ShowTweet) query;
   getShowUserProfileByPrincipal: () -> (ShowUser) query;
   getShowUserProfileByUserName: (text) -> (ShowUser) query;
   getTweetById: (nat) -> (ShowTweet) query;
@@ -73,11 +75,10 @@ service : {
   getTweetLikeUsers: (nat) -> (vec principal) query;
   getTweetOlder20Comments: (nat, nat) -> (vec ShowTweet) query;
   getUserAllTweets: (principal) -> (vec ShowTweet) query;
-  getUserLastestTenTweets: () -> (vec ShowTweet);
   getUserOlder20Tweets: (principal, nat) -> (vec ShowTweet) query;
   getUserProfile: () -> (User) query;
   isAFollowedByB: (principal, principal) -> (bool) query;
-  isExist: (nat) -> (bool) query;
+  isTweetExist: (nat) -> (bool) query;
   isTweetLiked: (nat) -> (bool) query;
   isTwoUserFollowEachOther: (principal, principal) -> (bool) query;
   isUserExist: () -> (bool) query;

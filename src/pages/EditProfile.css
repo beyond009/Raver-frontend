@@ -1,5 +1,5 @@
 .edit__profile {
-  flex: 1;
+  flex: 0.7;
   border-right: 1px solid var(--background);
   flex-flow: column;
   /* min-width: fit-content; */
