@@ -31,9 +31,13 @@
   margin: auto !important;
 }
 .submit__button {
+  width: 40px;
   margin: 0 auto !important;
+}
+.signup__form__son {
+  width: 500px;
+  margin: 0 auto;
 }
 .signup__input {
   width: 500px;
-  margin: 0 auto !important;
 }

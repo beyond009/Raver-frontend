@@ -61,41 +61,43 @@ const EditProfile = (props) => {
           <br /> {user ? user.uid.toText() : null}
         </div>
         <form noValidate autoComplete="off">
-          <Input
-            id="avatar_img"
-            placeholder="avatar img url"
-            inputProps={{ "aria-label": "description" }}
-            className="signup__input"
-            defaultValue={user ? user.avatarimg : null}
-          />
-          <br />
-          <br />
-          <Input
-            id="name"
-            placeholder="nickname"
-            inputProps={{ "aria-label": "description" }}
-            className="signup__input"
-            defaultValue={user ? user.nickname : null}
-          />
-          <br />
-          <br />
-          <Input
-            id="description"
-            placeholder="description"
-            inputProps={{ "aria-label": "description" }}
-            className="signup__input"
-            defaultValue={user ? user.bio : null}
-          />
-          <br />
-          <br />
-          <Input
-            id="username"
-            placeholder="username"
-            inputProps={{ "aria-label": "description" }}
-            className="signup__input"
-            defaultValue={user ? user.username : null}
-          />
-          <br />
+          <div className="signup__form_son">
+            <Input
+              id="avatar_img"
+              placeholder="avatar img url"
+              inputProps={{ "aria-label": "description" }}
+              className="signup__input"
+              defaultValue={user ? user.avatarimg : null}
+            />
+            <br />
+            <br />
+            <Input
+              id="name"
+              placeholder="nickname"
+              inputProps={{ "aria-label": "description" }}
+              className="signup__input"
+              defaultValue={user ? user.nickname : null}
+            />
+            <br />
+            <br />
+            <Input
+              id="description"
+              placeholder="description"
+              inputProps={{ "aria-label": "description" }}
+              className="signup__input"
+              defaultValue={user ? user.bio : null}
+            />
+            <br />
+            <br />
+            <Input
+              id="username"
+              placeholder="username"
+              inputProps={{ "aria-label": "description" }}
+              className="signup__input"
+              defaultValue={user ? user.username : null}
+            />
+            <br />
+          </div>
         </form>{" "}
         <br />
         <br />
