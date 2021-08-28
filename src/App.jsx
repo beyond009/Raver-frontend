@@ -16,7 +16,6 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { isDelegationValid } from "@dfinity/authentication";
 import { idlFactory } from "./declarations/backend/backend.did.js";
-import canisterIds from "../.dfx/local/canister_ids.json";
 import { DelegationIdentity } from "@dfinity/identity";
 import { authActor, updateAuthActor } from "./redux/features/authActor";
 import { updateUser } from "./redux/features/user";
