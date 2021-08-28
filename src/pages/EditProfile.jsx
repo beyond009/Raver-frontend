@@ -101,7 +101,7 @@ const EditProfile = (props) => {
         </form>{" "}
         <br />
         <br />
-        <div>
+        <div className="submit__button">
           <Button onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
