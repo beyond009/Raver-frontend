@@ -8,11 +8,14 @@
   height: 100%;
 }
 .login_position {
+  width: 300px !important;
+  height: 70px !important;
+  position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
-  margin: auto;
+  bottom: 0;
+  margin: auto !important;
 }
 .Login_LoginButton {
   background: linear-gradient(120deg, #2980b9, #8e44ad) !important;
@@ -22,7 +25,7 @@
   font-size: x-large !important;
   text-transform: inherit !important;
   border-radius: 50px !important;
-  width: 300px;
   height: 70px !important;
+  width: 300px;
   /* boxshadow: "0 3px 5px 2px rgba(255, 105, 135, .3)" !important; */
 }

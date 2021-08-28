@@ -25,17 +25,9 @@ export default class Login extends Component {
             className="Login_LoginButton"
           >
             Login With &nbsp;&nbsp;{" "}
-            <img src={dfinityicon} style={{ height: "23px" }} />
+            <img src={dfinityicon} style={{ height: "25px" }} />
           </Button>
         </div>
-        {/* <Button
-          variant="contained"
-          onClick={this.toSignup}
-          className="Login_LoginButton"
-        >
-          Signup With &nbsp;&nbsp;{" "}
-          <img src={dfinityicon} style={{ height: "16px" }} />
-        </Button> */}
       </div>
     );
   }
