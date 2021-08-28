@@ -5,10 +5,14 @@
   background-position: 0% 100%;
   background-attachment: fixed;
   width: 100%;
+  height: 100%;
 }
 .login_position {
-  margin-left: 550px !important;
-  margin-top: 200px !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 .Login_LoginButton {
   background: linear-gradient(120deg, #2980b9, #8e44ad) !important;
@@ -20,6 +24,5 @@
   border-radius: 50px !important;
   width: 300px;
   height: 70px !important;
-  margin-left: 10px !important;
   /* boxshadow: "0 3px 5px 2px rgba(255, 105, 135, .3)" !important; */
 }
