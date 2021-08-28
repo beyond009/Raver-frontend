@@ -15,6 +15,10 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.signup_Avatar {
+  width: fit-content;
+  margin: 30px auto;
+}
 .profile__your {
   width: fit-content;
   margin: 0 auto;
