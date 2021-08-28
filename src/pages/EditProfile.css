@@ -2,6 +2,7 @@
   flex: var(--middlewidth);
   border-right: 1px solid var(--background);
   flex-flow: column;
+  position: relative;
   /* min-width: fit-content; */
   overflow-y: scroll;
 }
