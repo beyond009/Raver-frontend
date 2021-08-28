@@ -16,11 +16,12 @@
   scrollbar-width: none; /* Firefox */
 }
 .profile__your {
-  margin-left: 245px;
+  width: fit-content;
+  margin: 0 auto;
 }
 .profile__principal {
-  margin-left: 60px;
-  margin-bottom: 30px;
+  width: fit-content;
+  margin: 30px auto;
 }
 .signup__form {
   position: absolute;
