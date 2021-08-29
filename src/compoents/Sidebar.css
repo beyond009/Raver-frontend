@@ -1,5 +1,4 @@
 .sidebar {
-  border-right: 1px solid var(--background);
   flex: 0.21;
   left: 0;
   right: 0;

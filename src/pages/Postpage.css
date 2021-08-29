@@ -1,5 +1,6 @@
 .post__page {
   border-right: 1px solid var(--background);
+  border-left: 1px solid var(--background);
   flex: var(--middlewidth);
   overflow-y: scroll;
 }
