@@ -49,7 +49,7 @@ export default function UserPosts(props) {
     <div className="user__posts">
       {isloading ? (
         <div>
-          <LoopCircleLoading color="#f09217" />
+          <LoopCircleLoading color="rgb(15, 20, 25)" />
         </div>
       ) : (
         <FlipMove>

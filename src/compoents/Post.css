@@ -15,7 +15,13 @@
   flex: 1;
   padding: 10px;
 }
-
+.post__sending {
+  float: right;
+  font-weight: lighter;
+  width: max-content;
+  border: 1px solid var(--graycolor);
+  border-radius: 5px;
+}
 .post__body > img {
   border-radius: 20px;
 }
@@ -67,7 +73,6 @@
   background-color: transparent;
   margin-top: 11px;
   outline: none;
-  float: right;
 }
 .comment__number {
   font-weight: 300;

@@ -35,10 +35,10 @@ const App = () => {
     let principalString = principal.toText();
     const agent = new HttpAgent({
       identity: tIdentity,
-      host: "boundary.ic0.app",
+      host: "ic0.app",
     });
 
-    agent.fetchRootKey();
+    // agent.fetchRootKey();
 
     let tAuthActor = Actor.createActor(idlFactory, {
       agent,
@@ -82,6 +82,8 @@ const App = () => {
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({
+      identityProvider:
+        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
         handleAuthenticated(authClient);
       },

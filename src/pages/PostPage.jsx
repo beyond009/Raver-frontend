@@ -13,7 +13,7 @@ export default function PostPage(props) {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [noMore, setNoMore] = useState(false);
   const [post, setPost] = useState();
-  function handleSubmit() {
+  async function handleSubmit() {
     if (authActor && post) {
       try {
         console.log("sending Tweet");
@@ -23,18 +23,22 @@ export default function PostPage(props) {
             tid: null,
             content: commentMessage,
             user: user,
+            sending: true,
           });
-        setComments(a);
-        authActor
-          .addComment(
-            commentMessage,
-            "time",
-            "url",
-            parseInt(props.match.params.tid)
-          )
-          .then((a) => console.log(a));
-
+        setDisable(true);
         setCommentMessage("");
+        setComments(a);
+        await authActor.addComment(
+          commentMessage,
+          "time",
+          "url",
+          parseInt(props.match.params.tid)
+        );
+        let tp = await authActor.getTweetOlder20Comments(
+          parseInt(props.match.params.tid),
+          0
+        );
+        setComments(tp);
       } catch (error) {
         console.log(error);
       }
@@ -114,7 +118,7 @@ export default function PostPage(props) {
         <form>
           {/* <div className="post__page__input"> */}
           <TextField
-            className="TextField"
+            className="post__page__TextField"
             id="comment"
             label=""
             multiline
@@ -131,7 +135,7 @@ export default function PostPage(props) {
           />
           <Button
             onClick={handleSubmit}
-            className="submit__button"
+            className="post__page__submit__button"
             disabled={disable}
           >
             Reply
@@ -157,6 +161,7 @@ export default function PostPage(props) {
               image={post.url}
               commentNumver={post.commentNumber}
               likeNumber={post.likeNumber}
+              sending={post.sending}
             />
           ))}
         </FlipMove>

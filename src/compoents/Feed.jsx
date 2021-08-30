@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Principal } from "@dfinity/principal";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
 import { Button, Avatar, TextField } from "@material-ui/core";
@@ -8,37 +8,41 @@ import "./TweetBox.css";
 import "./Feed.css";
 import FlipMove from "react-flip-move";
 import { LoopCircleLoading } from "react-loadingg";
+import { updateFeed } from "../redux/features/feed";
 
 function Feed(props) {
-  const { authActor, user } = useSelector((state) => state);
-  const [isloading, setIsloading] = useState(true);
+  const { authActor, user, feed } = useSelector((state) => state);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [noMore, setNoMore] = useState(false);
   const [posts, setPosts] = useState([]);
   const [disable, setDisable] = useState(true);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
+  const dispatch = useDispatch();
   let flag = false;
 
-  const sendTweet = (e) => {
+  const sendTweet = async (e) => {
     e.preventDefault();
     console.log("sending Tweet");
-    let a = posts;
+    setDisable(true);
     let t = 0;
-    if (user)
-      a.unshift({
+    let a = [
+      {
         tid: null,
         content: tweetMessage,
         url: tweetImage,
         user: user,
-      });
-    setPosts(a);
-    authActor
-      .addTweet(tweetMessage, "time", tweetImage, 0)
-      .then((tmp) => console.log(tmp));
-    setDisable(true);
+        sending: true,
+      },
+      ...feed,
+    ];
+    dispatch(updateFeed(a));
     setTweetMessage("");
     setTweetImage("");
+    let tmp = await authActor.addTweet(tweetMessage, "time", tweetImage, 0);
+    let b = await authActor.getFollowLastestAmountTweets(0, 50);
+    dispatch(updateFeed(b));
   };
   function handleOnChange(e) {
     if (e.target.value && e.target.value.length <= 300) {
@@ -51,30 +55,31 @@ function Feed(props) {
   }
   async function fetchData() {
     setNoMore(false);
-    if (authActor) {
+    if (authActor && !feed.length) {
       console.log("fetching data");
+      setIsLoading(true);
       let a = await authActor.getFollowLastestAmountTweets(0, 20);
       console.log(a);
+      dispatch(updateFeed(a));
       if (!a.length) setNoMore(true);
-      setIsloading(false);
-      setPosts(a);
+      setIsLoading(false);
     }
   }
   async function handleLoadMore() {
     setIsLoadingMore(true);
-    if (authActor && posts.length) {
+    if (authActor && feed.length) {
       try {
         let a = await authActor.getFollowOlder50Tweets(
-          posts[posts.length - 1].tid
+          feed[feed.length - 1].tid
         );
         if (!a.length) {
           setNoMore(true);
           setIsLoadingMore(false);
           return;
         }
-        let b = posts.concat(a);
+        let b = feed.concat(a);
         setIsLoadingMore(false);
-        setPosts(b);
+        dispatch(updateFeed(b));
       } catch (error) {}
     }
   }
@@ -121,12 +126,12 @@ function Feed(props) {
           </Button>
         </form>
       </div>
-      {isloading ? (
-        <LoopCircleLoading color="#f09217" size="small" />
+      {isLoading ? (
+        <LoopCircleLoading color="rgb(15, 20, 25)" size="small" />
       ) : (
         <div className="feed">
           <FlipMove>
-            {posts.map((post, k) => (
+            {feed.map((post, k) => (
               <Post
                 key={k}
                 tid={post.tid}
@@ -139,6 +144,7 @@ function Feed(props) {
                 image={post.url}
                 commentNumver={post.commentNumber}
                 likeNumber={post.likeNumber}
+                sending={post.sending}
               />
             ))}
           </FlipMove>

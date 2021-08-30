@@ -34,8 +34,10 @@
   border-radius: 20px;
   padding: 5px 15px 5px 15px;
 }
-
-.TextField {
+.post__page__submit__button {
+  flex: 1;
+}
+.post__page__TextField {
   flex: 1;
 }
 .post__load {

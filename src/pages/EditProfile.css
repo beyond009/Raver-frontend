@@ -20,14 +20,23 @@
   width: fit-content;
   margin: 30px auto;
 }
+.profile__principal__box {
+  border: 1px solid var(--acolor);
+  border-radius: 30px;
+  margin: 20px 20px;
+  padding: 20px 20px;
+}
 .profile__your {
   width: max-content;
   margin: 0 auto;
+  font-size: x-large;
+  font-weight: bolder;
 }
 .profile__principal {
   width: fit-content;
   margin: 0 auto;
   margin-bottom: 20px;
+  font-weight: bolder;
 }
 .signup__form {
   position: absolute;

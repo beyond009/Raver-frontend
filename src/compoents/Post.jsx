@@ -28,6 +28,7 @@ const Post = forwardRef(
       commentNumber,
       likeNumber,
       uid,
+      sending,
     },
     ref
   ) => {
@@ -44,7 +45,7 @@ const Post = forwardRef(
         setLiked(false);
         setFave(false);
         setLNumber(lNumber - 1);
-        if (authActor) {
+        if (tid) {
           try {
             authActor.cancelLike(tid);
           } catch (e) {
@@ -52,9 +53,9 @@ const Post = forwardRef(
           }
         }
       } else {
-        setFave(true);
-        setLNumber(lNumber + 1);
-        if (authActor) {
+        if (tid) {
+          setFave(true);
+          setLNumber(lNumber + 1);
           try {
             authActor.likeTweet(tid);
           } catch (e) {
@@ -64,23 +65,25 @@ const Post = forwardRef(
       }
     };
     useEffect(async () => {
-      try {
-        let a = await authActor.getTweetCommentNumber(tid);
-        setCNumber(parseInt(a));
-      } catch (e) {
-        console.log(e);
-      }
+      if (tid)
+        try {
+          let a = await authActor.getTweetCommentNumber(tid);
+          setCNumber(parseInt(a));
+        } catch (e) {
+          console.log(e);
+        }
     }, [authActor]);
     useEffect(async () => {
-      try {
-        let a = await authActor.likeAmount(tid);
-        setLNumber(parseInt(a));
-      } catch (e) {
-        console.log(e);
-      }
+      if (tid)
+        try {
+          let a = await authActor.likeAmount(tid);
+          setLNumber(parseInt(a));
+        } catch (e) {
+          console.log(e);
+        }
     }, [authActor]);
     useEffect(async () => {
-      if (authActor) {
+      if (tid) {
         try {
           let a = await authActor.isTweetLiked(tid);
           if (a) {
@@ -99,14 +102,21 @@ const Post = forwardRef(
         <div className="post__body">
           <div className="post__header">
             <div className="post__headerText">
+              <span className="post__sending">
+                {sending ? "sending..." : null}
+              </span>
               <h3>{displayName}</h3>
+
               <span className="post__headerSpecial">@{username}</span>
             </div>
+
             <div className="post__headerDescription">{text}</div>
           </div>
+
           <div>
             {image ? <img className="post_img" src={image} alt="" /> : null}
           </div>
+
           <div className="post__footer">
             <NavLink
               to={tid ? `/post/${tid}` : location.pathname}
