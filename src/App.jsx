@@ -36,7 +36,7 @@ const App = () => {
     let principalString = principal.toText();
     const agent = new HttpAgent({
       identity: tIdentity,
-      // host: "127.0.0.1:8000",
+      host: "ic0.app",
     });
 
     // agent.fetchRootKey();
@@ -108,7 +108,6 @@ const App = () => {
         <Route exact path="/editprofile" component={EditProfile} />
         <Route exact path="/waiting" component={Waiting} />
         <Route path="/post/:tid" component={PostPage} />
-
         <Route path="/global" component={Global} />
       </Switch>
       {isLogin ? <Widgets /> : null}
