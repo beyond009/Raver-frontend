@@ -20,6 +20,7 @@ import { DelegationIdentity } from "@dfinity/identity";
 import { authActor, updateAuthActor } from "./redux/features/authActor";
 import { updateUser } from "./redux/features/user";
 import "./App.css";
+import Global from "./pages/Global";
 const App = () => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
@@ -35,7 +36,7 @@ const App = () => {
     let principalString = principal.toText();
     const agent = new HttpAgent({
       identity: tIdentity,
-      host: "ic0.app",
+      // host: "127.0.0.1:8000",
     });
 
     // agent.fetchRootKey();
@@ -107,6 +108,8 @@ const App = () => {
         <Route exact path="/editprofile" component={EditProfile} />
         <Route exact path="/waiting" component={Waiting} />
         <Route path="/post/:tid" component={PostPage} />
+
+        <Route path="/global" component={Global} />
       </Switch>
       {isLogin ? <Widgets /> : null}
     </div>
