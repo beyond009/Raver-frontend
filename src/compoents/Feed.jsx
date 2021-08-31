@@ -47,7 +47,7 @@ function Feed(props) {
   function handleOnChange(e) {
     if (e.target.value && e.target.value.length <= 300) {
       setTweetMessage(e.target.value);
-      setDisable(false);
+      if (user) setDisable(false);
     } else {
       setTweetMessage(e.target.value);
       setDisable(true);

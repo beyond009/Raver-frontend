@@ -9,6 +9,7 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
+import PublicIcon from "@material-ui/icons/Public";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { Button } from "@material-ui/core";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
@@ -33,6 +34,13 @@ function Sidebar() {
           text="Home"
         />{" "}
       </NavLink>
+      <NavLink
+        to="/global"
+        className="sidebar__link"
+        activeClassName="link__active"
+      >
+        <SidebarOption Icon={PublicIcon} text="Global" />
+      </NavLink>
       <SidebarOption Icon={AccountBalanceWalletIcon} text="Wallet">
         {" "}
       </SidebarOption>
@@ -48,7 +56,6 @@ function Sidebar() {
         />{" "}
       </NavLink>
 
-      <SidebarOption Icon={MoreHorizIcon} text="More" />
       <br />
     </div>
   );

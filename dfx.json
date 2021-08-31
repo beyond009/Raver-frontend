@@ -3,19 +3,6 @@
     "backend": {
       "main": "backend/DTwitter/main.mo",
       "type": "motoko"
-    },
-    "assets": {
-      "dependencies": [
-        "backend"
-      ],
-      "frontend": {
-        "entrypoint": "src/index.html"
-      },
-      "source": [
-        "assets/",
-        "dist/"
-      ],
-      "type": "assets"
     }
   },
   "defaults": {
