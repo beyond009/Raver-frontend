@@ -8,6 +8,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import banner from "../../assets/1500x500.jpeg";
 import history from "../History";
 import UserPosts from "../compoents/UserPosts";
+import { NavLink } from "react-router-dom";
 import "./Profile.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,11 +29,12 @@ export default function Profile(props) {
   const [auser, setAuser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFollowed, setIsFollowed] = useState(true);
+  const [followerNum, setFollowerNum] = useState(0);
+  const [followingNum, setFollowingNum] = useState(0);
   const classes = useStyles();
   useEffect(async () => {
     if (authActor) {
       try {
-        console.log(props.match.params.username);
         let t = await authActor.getShowUserProfileByUserName(
           props.match.params.username
         );
@@ -41,7 +43,27 @@ export default function Profile(props) {
         console.log(error);
       }
     }
-  }, [authActor, props.match.params.username]);
+  }, [authActor]);
+  useEffect(async () => {
+    if (authActor) {
+      try {
+        let t = await authActor.getFollowAmount(props.match.params.username);
+        setFollowingNum(t);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [authActor]);
+  useEffect(async () => {
+    if (authActor) {
+      try {
+        let t = await authActor.getFollowerAmount(props.match.params.username);
+        setFollowerNum(t);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [authActor]);
   useEffect(async () => {
     if (auser && user) {
       try {
@@ -53,6 +75,7 @@ export default function Profile(props) {
       }
     }
   }, [auser, user]);
+
   function handleClickEdit() {
     history.push({ pathname: "/editprofile" });
   }
@@ -97,7 +120,21 @@ export default function Profile(props) {
         <div className="profile__descriptionposition">
           <p className="profile__description">{auser ? auser.bio : null}</p>
         </div>
-        <br />
+        <div className="profile__follow">
+          <NavLink
+            to={`/profile/${props.match.params.username}/follower`}
+            className="profile__link__follower"
+          >
+            {" "}
+            <span>Follower {followerNum}</span>
+          </NavLink>
+          <NavLink
+            to={`/profile/${props.match.params.username}/following`}
+            className="profile__link__following"
+          >
+            <span>Following {followingNum}</span>
+          </NavLink>
+        </div>
         <br />
         <br />
         <br />

@@ -4,6 +4,10 @@
   padding: 10px;
   margin-bottom: 16.66px;
 }
+.userList__forF {
+  border-bottom: solid lightgray 1px;
+  padding: 10px;
+}
 .userList__linkAvatar {
   display: inline-block !important;
 }

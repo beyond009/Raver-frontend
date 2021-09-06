@@ -11,11 +11,14 @@ import Signup from "./pages/Signup";
 import Sidebar from "./compoents/Sidebar";
 import Widgets from "./compoents/Widgets";
 import history from "./History";
+import Follower from "./pages/Follower";
+import Following from "./pages/Following";
 import Feed from "./compoents/Feed";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { isDelegationValid } from "@dfinity/authentication";
 import { idlFactory } from "./declarations/backend/backend.did.js";
+import { LoopCircleLoading } from "react-loadingg";
 import { DelegationIdentity } from "@dfinity/identity";
 import { authActor, updateAuthActor } from "./redux/features/authActor";
 import { updateUser } from "./redux/features/user";
@@ -23,7 +26,8 @@ import "./App.css";
 import Global from "./pages/Global";
 const App = () => {
   const dispatch = useDispatch();
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { authActor } = useSelector((state) => state);
   const goToLoginPage = () =>
     history.push({
@@ -39,40 +43,37 @@ const App = () => {
       host: "ic0.app",
     });
 
-    // agent.fetchRootKey();
+    agent.fetchRootKey();
 
     let tAuthActor = Actor.createActor(idlFactory, {
       agent,
       canisterId: "jlak5-kyaaa-aaaah-qaqaa-cai",
     });
-
     dispatch(updateAuthActor(tAuthActor));
     let isSigned = await tAuthActor.isUserExist();
     if (!isSigned) {
-      await tAuthActor.addUser(principalString, "User", "");
-      let res = await tAuthActor.getShowUserProfileByPrincipal();
-      dispatch(updateUser(res));
+      // await tAuthActor.addUser(principalString, "User", "");
+      // let res = await tAuthActor.getShowUserProfileByPrincipal();
+      // dispatch(updateUser(res));
+      history.push({ pathname: "/signup" });
     } else {
       let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
+      setIsLoading(false);
     }
   }
 
   async function handleAuthenticated(authClient) {
     setIsLogin(true);
-    history.push({ pathname: "/home" });
     getActor(authClient);
   }
 
   async function checkLogin() {
-    console.log("Check login!");
     const authClient = await AuthClient.create();
     if (await authClient.isAuthenticated()) {
-      setIsLogin(true);
-      getActor(authClient);
+      handleAuthenticated(authClient);
     } else {
       setIsLogin(false);
-      goToLoginPage();
     }
   }
 
@@ -86,31 +87,34 @@ const App = () => {
       // identityProvider:
       //   "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
+        history.push({ pathname: "/home" });
         handleAuthenticated(authClient);
       },
     });
   };
 
-  return (
+  return isLogin ? (
+    isLoading ? (
+      <LoopCircleLoading color="rgb(15, 20, 25)" />
+    ) : (
+      <div className="app">
+        <Sidebar />
+        <Switch>
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/profile/:username" component={Profile} />
+          <Route exact path="/editprofile" component={EditProfile} />
+          <Route exact path="/waiting" component={Waiting} />
+          <Route path="/post/:tid" component={PostPage} />
+          <Route path="/global" component={Global} />
+          <Route path="/profile/:username/follower" component={Follower} />
+          <Route path="/profile/:username/following" component={Following} />
+        </Switch>
+        <Widgets />
+      </div>
+    )
+  ) : (
     <div className="app">
-      {isLogin ? <Sidebar /> : null}
-      <Switch>
-        <Route
-          exact
-          path="/login"
-          component={(props) => {
-            let obj = Object.assign({}, { handleLogin: handleLogin }, props);
-            return <Login {...obj} />;
-          }}
-        />
-        <Route exact path="/home" component={Home} />
-        <Route exact path="/profile/:username" component={Profile} />
-        <Route exact path="/editprofile" component={EditProfile} />
-        <Route exact path="/waiting" component={Waiting} />
-        <Route path="/post/:tid" component={PostPage} />
-        <Route path="/global" component={Global} />
-      </Switch>
-      {isLogin ? <Widgets /> : null}
+      <Login handleLogin={handleLogin} />
     </div>
   );
 };

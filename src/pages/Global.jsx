@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { useLayoutEffect } from "react";
+import ReactDOM from "react-dom";
 import GlobalPosts from "../compoents/GlobalPosts";
 import "./Global.css";
 const Global = () => {

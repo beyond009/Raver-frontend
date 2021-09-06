@@ -3,7 +3,7 @@ import LinkAvatar from "./LinkAvatar";
 import "./UserList.css";
 export default function UserList(props) {
   return (
-    <div className="userList">
+    <div className={props.forF ? "userList__forF" : "userList"}>
       <div className="userList__linkAvatar">
         <LinkAvatar
           username={props.user ? props.user.username : null}

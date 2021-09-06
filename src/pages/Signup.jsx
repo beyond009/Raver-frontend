@@ -6,48 +6,51 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import history from "../History";
 import "./Signup.css";
+const EditProfile = (props) => {
+  const { user, authActor } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const [disableb, setDisableb] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+  const [usernameMessage, setUsernameMessage] = useState();
+  function handleUsername(e) {
+    if (e.target.value.length >= 64) {
+      setUsernameError(true);
+      setUsernameMessage("Username need to be less than 65 characters");
+      setDisableb(true);
+    } else {
+      setUsernameError(false);
+      setUsernameMessage("");
+      if (!avatarimgError && !descriptionError && !displayNameError)
+        setDisableb(false);
+    }
+  }
 
-export default class Signup extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.authActor = this.props.authActor;
-  }
-  async handleSubmit() {
-    var username = document.getElementById("name").value;
-    var avatar_img = document.getElementById("avatar_img").value;
-    history.push({ pathname: "waiting" });
-    var flag = await this.props.authActor.addUser(username, avatar_img);
-  }
-  render() {
-    return (
-      <div>
-        <div className="Signup_Avatar">
-          <Avatar>
-            <PhotoCameraIcon />
-          </Avatar>
-        </div>
-        <div className="Signup_Form">
-          <form noValidate autoComplete="off">
-            <Input
-              id="avatar_img"
-              placeholder="avatar img url"
-              inputProps={{ "aria-label": "description" }}
-            />
-            <Input
-              id="name"
-              placeholder="name"
-              inputProps={{ "aria-label": "description" }}
-            />
-            {/* <Input
-              id="id"
-              placeholder="id"
-              inputProps={{ "aria-label": "description" }}
-            /> */}
-            <Button onClick={this.handleSubmit.bind(this)}>Submit</Button>
-          </form>
-        </div>
+  return (
+    <div className="signup__page">
+      <TextField
+        id="username"
+        style={{ margin: 8 }}
+        label="username"
+        error={usernameError}
+        onChange={(e) => handleUsername(e)}
+        helperText={usernameMessage}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        defaultValue={user ? user.username : null}
+      />
+      <br />
+
+      <br />
+      <br />
+      <div className="submit__button">
+        <Button onClick={handleSubmit} disabled={disableb}>
+          Submit
+        </Button>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+export default EditProfile;

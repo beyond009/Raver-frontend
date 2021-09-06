@@ -64,3 +64,18 @@
 }
 .profile__description {
 }
+
+.profile__follow {
+  position: relative;
+  left: 30px;
+  top: 30px;
+}
+.profile__link__following {
+  color: inherit;
+  font-weight: 500;
+}
+.profile__link__follower {
+  color: inherit;
+  font-weight: 500;
+  margin-right: 10px;
+}

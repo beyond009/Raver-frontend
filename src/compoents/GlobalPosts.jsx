@@ -40,6 +40,7 @@ export default function GlobalPosts(props) {
       }
     }
   }
+
   useEffect(() => {
     fetchData();
   }, [authActor, props.user]);

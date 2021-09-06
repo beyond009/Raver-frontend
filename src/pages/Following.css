@@ -1,0 +1,16 @@
+.following__page {
+  border-right: 1px solid var(--background);
+  border-left: 1px solid var(--background);
+  flex: var(--middlewidth);
+  /* min-width: fit-content; */
+  overflow-y: scroll;
+}
+
+.following__header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100;
+  border: 1px solid var(--background);
+  padding: 5px 15px 5px 15px;
+}

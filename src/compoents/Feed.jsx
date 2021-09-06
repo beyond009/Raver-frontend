@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { Principal } from "@dfinity/principal";
 import { useSelector, useDispatch } from "react-redux";
 import TweetBox from "./TweetBox";
@@ -17,30 +18,35 @@ function Feed(props) {
   const [noMore, setNoMore] = useState(false);
   const [posts, setPosts] = useState([]);
   const [disable, setDisable] = useState(true);
+  const [inDisable, setInDisable] = useState(false);
+  const [sending, setSending] = useState(false);
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState("");
   const dispatch = useDispatch();
   let flag = false;
+  // window.scroll(function () {
+  //   if ($(document).scrollTop() != 0) {
+  //     sessionStorage.setItem("offsetTop", $(window).scrollTop());
+  //   }
+  // });
+  // //onload时，取出并滚动到上次保存位置
+  // window.onload = function () {
+  //   var offset = sessionStorage.getItem("offsetTop");
+  //   $(document).scrollTop(offset);
+  // };
 
   const sendTweet = async (e) => {
     e.preventDefault();
     console.log("sending Tweet");
     setDisable(true);
-    let t = 0;
-    let a = [
-      {
-        tid: null,
-        content: tweetMessage,
-        url: tweetImage,
-        user: user,
-        sending: true,
-      },
-      ...feed,
-    ];
-    dispatch(updateFeed(a));
+    setSending(true);
+    setInDisable(true);
+    let tmp = await authActor.addTweet(tweetMessage, "time", tweetImage, 0);
+    setDisable(false);
+    setSending(false);
+    setInDisable(false);
     setTweetMessage("");
     setTweetImage("");
-    let tmp = await authActor.addTweet(tweetMessage, "time", tweetImage, 0);
     let b = await authActor.getFollowLastestAmountTweets(0, 50);
     dispatch(updateFeed(b));
   };
@@ -83,6 +89,7 @@ function Feed(props) {
       } catch (error) {}
     }
   }
+
   useEffect(() => {
     fetchData();
   }, [authActor]);
@@ -100,6 +107,7 @@ function Feed(props) {
               id="outlined-textarea"
               onChange={(e) => handleOnChange(e)}
               value={tweetMessage}
+              disabled={inDisable}
               label="What's happening?"
               multiline
               variant="outlined"
@@ -107,9 +115,10 @@ function Feed(props) {
           </div>
           <input
             value={tweetImage}
+            disabled={inDisable}
             onChange={(e) => setTweetImage(e.target.value)}
             className="tweetBox__imageInput"
-            placeholder="Optional: Enter image URL"
+            placeholder="Optional: Image URL"
             type="text"
           />
           <Button
@@ -122,7 +131,7 @@ function Feed(props) {
             }
             disabled={disable}
           >
-            Post
+            {sending ? "Sending" : "POST"}
           </Button>
         </form>
       </div>

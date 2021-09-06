@@ -13,6 +13,7 @@ function Widgets() {
 
       <div className="widgets__widgetContainer">
         <h2>Recommend</h2>
+
         <UserList />
         <UserList />
         <UserList />
