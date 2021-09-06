@@ -76,14 +76,15 @@
   font-weight: 500;
 }
 .profile__link__following:hover {
-  text-decoration: inherit !important;
+  text-decoration: var(--acolor) !important;
 }
 .profile__link__follower {
   color: inherit;
   font-weight: 500;
+  text-decoration: none;
   margin-right: 10px;
 }
 
 .profile__link__follower:hover {
-  text-decoration: inherit !important;
+  text-decoration: var(--acolor) !important;
 }
