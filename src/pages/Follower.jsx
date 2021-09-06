@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import UserList from "../utils/UserList";
 import "./Follower.css";
 
 export default function Follower(props) {

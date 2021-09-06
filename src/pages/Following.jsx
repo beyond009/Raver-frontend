@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import UserList from "../utils/UserList";
 import "./Following.css";
 export default function Following(props) {
   const { authActor } = useSelector((state) => state);

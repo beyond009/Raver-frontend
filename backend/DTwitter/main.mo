@@ -254,6 +254,7 @@ actor DTwitter{
                 case null{User.defaultType().defaultShowUser};
                 case(?showuser){showuser};
             };
+            count+=1;
         };
         Array.freeze<ShowUser>(userArray)
     };
@@ -280,6 +281,7 @@ actor DTwitter{
                 case null{User.defaultType().defaultShowUser};
                 case(?showuser){showuser};
             };
+            count+=1;
         };
         Array.freeze<ShowUser>(userArray)
     };
