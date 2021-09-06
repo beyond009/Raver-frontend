@@ -27,9 +27,13 @@ export default function Following(props) {
           's Following
         </h2>
       </div>
+
       {following.map((u) => {
-        <UserList user={u} forF={true} />;
+        console.log(u);
       })}
+      {following.map((u) => (
+        <UserList user={u} forF={true} />
+      ))}
     </div>
   );
 }
