@@ -49,7 +49,7 @@ export default function Profile(props) {
       try {
         let t = await authActor.getFollowAmount(auser.uid);
         console.log("f", t);
-        setFollowingNum(t);
+        setFollowingNum(Number(t));
       } catch (error) {
         console.log(error);
       }
@@ -60,7 +60,7 @@ export default function Profile(props) {
       try {
         let t = await authActor.getFollowerAmount(auser.uid);
         console.log("er", t);
-        setFollowerNum(t);
+        setFollowerNum(Number(t));
       } catch (error) {
         console.log(error);
       }

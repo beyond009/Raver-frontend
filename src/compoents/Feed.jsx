@@ -42,13 +42,14 @@ function Feed(props) {
     setSending(true);
     setInDisable(true);
     let tmp = await authActor.addTweet(tweetMessage, "time", tweetImage, 0);
+
+    let b = await authActor.getFollowLastestAmountTweets(0, 50);
+    dispatch(updateFeed(b));
     setDisable(false);
     setSending(false);
     setInDisable(false);
     setTweetMessage("");
     setTweetImage("");
-    let b = await authActor.getFollowLastestAmountTweets(0, 50);
-    dispatch(updateFeed(b));
   };
   function handleOnChange(e) {
     if (e.target.value && e.target.value.length <= 300) {
