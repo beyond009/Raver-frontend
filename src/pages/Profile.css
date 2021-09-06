@@ -75,9 +75,7 @@
   text-decoration: none;
   font-weight: 500;
 }
-.profile__link__following:hover {
-  text-decoration: var(--acolor) !important;
-}
+
 .profile__link__follower {
   color: inherit;
   font-weight: 500;
@@ -86,5 +84,8 @@
 }
 
 .profile__link__follower:hover {
-  text-decoration: var(--acolor) !important;
+  text-decoration: underline var(--acolor) !important;
+}
+.profile__link__following:hover {
+  text-decoration: underline var(--acolor) !important;
 }
