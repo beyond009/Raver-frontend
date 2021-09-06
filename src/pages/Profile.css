@@ -72,10 +72,18 @@
 }
 .profile__link__following {
   color: inherit;
+  text-decoration: none;
   font-weight: 500;
+}
+.profile__link__following:hover {
+  text-decoration: inherit !important;
 }
 .profile__link__follower {
   color: inherit;
   font-weight: 500;
   margin-right: 10px;
+}
+
+.profile__link__follower:hover {
+  text-decoration: inherit !important;
 }
