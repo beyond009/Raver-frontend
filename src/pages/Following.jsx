@@ -11,6 +11,7 @@ export default function Following(props) {
         props.match.params.username
       );
       let tmp = await authActor.getFollow(tu.uid);
+      console.log(tmp);
       setFollowing(tmp);
     } catch (error) {
       console.log(error);

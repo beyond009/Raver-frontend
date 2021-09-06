@@ -55,6 +55,7 @@ const App = () => {
       await tAuthActor.addUser(principalString, "User", "");
       let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
+      setIsLoading(false);
       // history.push({ pathname: "/signup" });
     } else {
       let res = await tAuthActor.getShowUserProfileByPrincipal();

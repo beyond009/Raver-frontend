@@ -48,7 +48,6 @@ export default function Profile(props) {
     if (authActor && auser) {
       try {
         let t = await authActor.getFollowAmount(auser.uid);
-        console.log("f", t);
         setFollowingNum(Number(t));
       } catch (error) {
         console.log(error);

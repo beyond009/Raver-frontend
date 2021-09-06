@@ -12,7 +12,7 @@ export default function Follower(props) {
         props.match.params.username
       );
       let tmp = await authActor.getFollower(tu.uid);
-
+      console.log(tmp);
       setFollower(tmp);
     } catch (error) {
       console.log(error);
