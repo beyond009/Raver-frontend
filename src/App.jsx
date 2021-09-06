@@ -52,10 +52,10 @@ const App = () => {
     dispatch(updateAuthActor(tAuthActor));
     let isSigned = await tAuthActor.isUserExist();
     if (!isSigned) {
-      // await tAuthActor.addUser(principalString, "User", "");
-      // let res = await tAuthActor.getShowUserProfileByPrincipal();
-      // dispatch(updateUser(res));
-      history.push({ pathname: "/signup" });
+      await tAuthActor.addUser(principalString, "User", "");
+      let res = await tAuthActor.getShowUserProfileByPrincipal();
+      dispatch(updateUser(res));
+      // history.push({ pathname: "/signup" });
     } else {
       let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
