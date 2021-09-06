@@ -28,9 +28,9 @@ export default function Follower(props) {
           's Follower
         </h2>
       </div>
-      {follower.map((u) => {
-        <UserList user={u} forF={true} />;
-      })}
+      {follower.map((u, index) => (
+        <UserList user={u} forF={true} key={index} />
+      ))}
     </div>
   );
 }

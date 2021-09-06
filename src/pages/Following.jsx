@@ -31,8 +31,8 @@ export default function Following(props) {
       {following.map((u) => {
         console.log(u);
       })}
-      {following.map((u) => (
-        <UserList user={u} forF={true} />
+      {following.map((u, index) => (
+        <UserList user={u} forF={true} key={index} />
       ))}
     </div>
   );
