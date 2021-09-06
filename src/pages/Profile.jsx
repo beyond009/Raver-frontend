@@ -43,27 +43,29 @@ export default function Profile(props) {
         console.log(error);
       }
     }
-  }, [authActor]);
+  }, [authActor, props.match.params.username]);
   useEffect(async () => {
-    if (authActor) {
+    if (authActor && auser) {
       try {
-        let t = await authActor.getFollowAmount(props.match.params.username);
+        let t = await authActor.getFollowAmount(auser.uid);
+        console.log("f", t);
         setFollowingNum(t);
       } catch (error) {
         console.log(error);
       }
     }
-  }, [authActor]);
+  }, [authActor, auser]);
   useEffect(async () => {
-    if (authActor) {
+    if (authActor && auser) {
       try {
-        let t = await authActor.getFollowerAmount(props.match.params.username);
+        let t = await authActor.getFollowerAmount(auser.uid);
+        console.log("er", t);
         setFollowerNum(t);
       } catch (error) {
         console.log(error);
       }
     }
-  }, [authActor]);
+  }, [authActor, auser]);
   useEffect(async () => {
     if (auser && user) {
       try {
