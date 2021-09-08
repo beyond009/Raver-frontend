@@ -9,3 +9,6 @@
 .user__load {
   margin-left: 42%;
 }
+.MuiLinearProgress-barColorPrimary {
+  background-color: var(--acolor) !important;
+}

@@ -56,7 +56,7 @@ export default function UserPosts(props) {
   return (
     <div className="user__posts">
       {isloading ? (
-        <div className={classes.root} style={{ color: "#0f1419" }}>
+        <div className={classes.root}>
           <LinearProgress />
         </div>
       ) : (

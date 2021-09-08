@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FlipMove from "react-flip-move";
 import { LoopCircleLoading } from "react-loadingg";
-import { makeStyles } from "@material-ui/core/styles";
+import { hexToRgb, makeStyles } from "@material-ui/core/styles";
 import { Button, LinearProgress } from "@material-ui/core";
 import Post from "./Post";
 import "./UserPosts.css";
+import { toHex } from "@dfinity/agent";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -54,9 +55,12 @@ export default function GlobalPosts(props) {
   }, [authActor, props.user]);
   return (
     <div className="user__posts">
+      <div className={classes.root} className="user__posts__load">
+        <LinearProgress />
+      </div>
       {isloading ? (
-        <div className={classes.root} style={{ color: "#0f1419" }}>
-          <LinearProgress />
+        <div className={classes.root} className="user__posts__load">
+          <LinearProgress color="inherit" />
         </div>
       ) : (
         <div>
