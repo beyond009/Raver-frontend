@@ -10,8 +10,12 @@ export default function UserList(props) {
           avatar={props.user ? props.user.avatar : null}
         />
       </div>
-      <div className="userList__displayName">ddd009</div>
-      <div className="userList__userName">@ddd009</div>
+      <div className="userList__displayName">
+        {props.user ? props.user.nickname : "ddd009"}
+      </div>
+      <div className="userList__userName">
+        {props.user ? props.user.username : "@ddd009"}
+      </div>
     </div>
   );
 }
