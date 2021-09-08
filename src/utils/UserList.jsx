@@ -11,7 +11,7 @@ export default function UserList(props) {
         />
       </div>
       <div className="userList__displayName">
-        {props.user ? `@${props.user.nickname}` : "ddd009"}
+        {props.user ? `${props.user.nickname}` : "ddd009"}
         <br />
         <div className="userList__userName">
           {props.user ? `@${props.user.username}` : "@ddd009"}
