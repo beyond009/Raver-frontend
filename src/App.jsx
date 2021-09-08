@@ -13,6 +13,7 @@ import Widgets from "./compoents/Widgets";
 import history from "./History";
 import Follower from "./pages/Follower";
 import Following from "./pages/Following";
+import Wallet from "./pages/Wallet";
 import Feed from "./compoents/Feed";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
@@ -105,6 +106,7 @@ const App = () => {
           <Route exact path="/profile/:username" component={Profile} />
           <Route exact path="/editprofile" component={EditProfile} />
           <Route exact path="/waiting" component={Waiting} />
+          <Route exact path="/wallet" component={Wallet} />
           <Route path="/post/:tid" component={PostPage} />
           <Route path="/global" component={Global} />
           <Route path="/profile/:username/follower" component={Follower} />
