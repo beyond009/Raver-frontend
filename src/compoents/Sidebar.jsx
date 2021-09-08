@@ -55,7 +55,6 @@ function Sidebar() {
           text="Profile"
         />{" "}
       </NavLink>
-
       <br />
     </div>
   );

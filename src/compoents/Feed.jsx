@@ -4,14 +4,21 @@ import { Principal } from "@dfinity/principal";
 import { useSelector, useDispatch } from "react-redux";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
-import { Button, Avatar, TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
+import { Button, Avatar, TextField, LinearProgress } from "@material-ui/core";
 import "./TweetBox.css";
 import "./Feed.css";
 import FlipMove from "react-flip-move";
 import { LoopCircleLoading } from "react-loadingg";
 import { updateFeed } from "../redux/features/feed";
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    color: "#0f1419",
+  },
+}));
 function Feed(props) {
+  const classes = useStyles();
   const { authActor, user, feed } = useSelector((state) => state);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -137,7 +144,9 @@ function Feed(props) {
         </form>
       </div>
       {isLoading ? (
-        <LoopCircleLoading color="rgb(15, 20, 25)" size="small" />
+        <div className={classes.root} className="user__posts__load">
+          <LinearProgress />
+        </div>
       ) : (
         <div className="feed">
           <FlipMove>

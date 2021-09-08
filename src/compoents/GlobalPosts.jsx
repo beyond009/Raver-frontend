@@ -55,12 +55,9 @@ export default function GlobalPosts(props) {
   }, [authActor, props.user]);
   return (
     <div className="user__posts">
-      <div className={classes.root} className="user__posts__load">
-        <LinearProgress />
-      </div>
       {isloading ? (
         <div className={classes.root} className="user__posts__load">
-          <LinearProgress color="inherit" />
+          <LinearProgress />
         </div>
       ) : (
         <div>
