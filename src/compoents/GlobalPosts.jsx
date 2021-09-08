@@ -51,33 +51,35 @@ export default function GlobalPosts(props) {
           <LoopCircleLoading color="rgb(15, 20, 25)" />
         </div>
       ) : (
-        <FlipMove>
-          {posts.map((post, k) => (
-            <Post
-              key={k}
-              tid={post.tid}
-              displayName={post.user.nickname}
-              avatar={post.user.avatarimg}
-              verified={true}
-              username={post.user.username}
-              text={post.content}
-              image={post.url}
-              commentNumber={post.commentNumber}
-              likeNumber={post.likeNumber}
-              uid={post.user.uid}
-            />
-          ))}
-        </FlipMove>
+        <div>
+          <FlipMove>
+            {posts.map((post, k) => (
+              <Post
+                key={k}
+                tid={post.tid}
+                displayName={post.user.nickname}
+                avatar={post.user.avatarimg}
+                verified={true}
+                username={post.user.username}
+                text={post.content}
+                image={post.url}
+                commentNumber={post.commentNumber}
+                likeNumber={post.likeNumber}
+                uid={post.user.uid}
+              />
+            ))}
+          </FlipMove>
+          <div className="user__load">
+            <Button
+              className="user__load__button"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore || noMore}
+            >
+              {noMore ? "no more" : isLoadingMore ? "loading" : "load more"}
+            </Button>
+          </div>
+        </div>
       )}
-      <div className="user__load">
-        <Button
-          className="user__load__button"
-          onClick={handleLoadMore}
-          disabled={isLoadingMore || noMore}
-        >
-          {noMore ? "no more" : isLoadingMore ? "loading" : "load more"}
-        </Button>
-      </div>
     </div>
   );
 }

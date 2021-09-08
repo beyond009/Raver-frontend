@@ -41,14 +41,16 @@ const App = () => {
     let principalString = principal.toText();
     const agent = new HttpAgent({
       identity: tIdentity,
-      host: "ic0.app",
+      //host: "ic0.app",
+      host: "127.0.0.1:8000",
     });
 
     agent.fetchRootKey();
 
     let tAuthActor = Actor.createActor(idlFactory, {
       agent,
-      canisterId: "jlak5-kyaaa-aaaah-qaqaa-cai",
+      // canisterId: "jlak5-kyaaa-aaaah-qaqaa-cai",
+      canisterId: "r7inp-6aaaa-aaaaa-aaabq-cai",
     });
     dispatch(updateAuthActor(tAuthActor));
     let isSigned = await tAuthActor.isUserExist();
@@ -86,8 +88,8 @@ const App = () => {
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({
-      // identityProvider:
-      //   "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
+      identityProvider:
+        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
         history.push({ pathname: "/home" });
         handleAuthenticated(authClient);
