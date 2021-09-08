@@ -14,13 +14,10 @@
 .userList__displayName {
   display: inline-block !important;
   position: relative;
-  bottom: 19px;
+
   left: 10px;
 }
 
 .userList__userName {
-  display: inline-block !important;
-  position: relative;
   font-weight: lighter;
-  left: 10px;
 }

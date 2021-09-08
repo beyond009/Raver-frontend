@@ -12,9 +12,10 @@ export default function UserList(props) {
       </div>
       <div className="userList__displayName">
         {props.user ? `@${props.user.nickname}` : "ddd009"}
-      </div>
-      <div className="userList__userName">
-        {props.user ? `@${props.user.username}` : "@ddd009"}
+        <br />
+        <div className="userList__userName">
+          {props.user ? `@${props.user.username}` : "@ddd009"}
+        </div>
       </div>
     </div>
   );
