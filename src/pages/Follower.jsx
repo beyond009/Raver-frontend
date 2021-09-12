@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import UserList from "../utils/UserList";
+import { LinearProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import "./Follower.css";
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    color: "#0f1419",
+  },
+}));
 export default function Follower(props) {
+  const classes = useStyles();
   const { authActor } = useSelector((state) => state);
   const [follower, setFollower] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(async () => {
     try {
       let tu = await authActor.getShowUserProfileByUserName(
         props.match.params.username
       );
       let tmp = await authActor.getFollower(tu.uid);
-      console.log(tmp);
+      setIsLoading(false);
       setFollower(tmp);
     } catch (error) {
       console.log(error);
@@ -28,9 +37,17 @@ export default function Follower(props) {
           's Follower
         </h2>
       </div>
-      {follower.map((u, index) => (
-        <UserList user={u} forF={true} key={index} />
-      ))}
+      {isLoading ? (
+        <div className={classes.root}>
+          <LinearProgress />
+        </div>
+      ) : (
+        <div>
+          {follower.map((u, index) => (
+            <UserList user={u} forF={true} key={index} />
+          ))}{" "}
+        </div>
+      )}
     </div>
   );
 }

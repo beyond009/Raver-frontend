@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FlipMove from "react-flip-move";
-import { LoopCircleLoading } from "react-loadingg";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, LinearProgress } from "@material-ui/core";
 import Post from "./Post";

@@ -72,7 +72,7 @@ const Post = forwardRef(
         } catch (e) {
           console.log(e);
         }
-    }, [authActor]);
+    }, [authActor, tid]);
     useEffect(async () => {
       if (tid)
         try {
@@ -81,7 +81,7 @@ const Post = forwardRef(
         } catch (e) {
           console.log(e);
         }
-    }, [authActor]);
+    }, [authActor, tid]);
     useEffect(async () => {
       if (tid) {
         try {
@@ -89,10 +89,13 @@ const Post = forwardRef(
           if (a) {
             setLiked(true);
             setFave(true);
+          } else {
+            setLiked(false);
+            setFave(false);
           }
         } catch (error) {}
       }
-    }, [authActor]);
+    }, [authActor, tid]);
     return (
       <div className="post" ref={ref}>
         <div className="post__avatar">
