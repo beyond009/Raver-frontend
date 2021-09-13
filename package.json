@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "webpack",
-    "dev" :"vite",
+    "dev": "vite",
     "start": "webpack serve --mode development --env development",
     "prestart": "npm run copy:types",
     "copy:types": "rsync -avr .dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --delete src/declarations"
@@ -40,6 +40,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-flip-move": "^3.0.4",
+    "react-linkify": "^1.0.0-alpha",
     "react-loadingg": "^1.7.2",
     "react-query": "^3.19.0",
     "react-redux": "^7.2.4",

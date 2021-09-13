@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Principal } from "@dfinity/principal";
 import { useSelector, useDispatch } from "react-redux";
+import ReactHtmlParser, {
+  processNodes,
+  convertNodeToElement,
+  htmlparser2,
+} from "react-html-parser";
+
 import TweetBox from "./TweetBox";
 import Post from "./Post";
 import { makeStyles } from "@material-ui/core";
@@ -48,8 +54,35 @@ function Feed(props) {
     setDisable(true);
     setSending(true);
     setInDisable(true);
-    let tmp = await authActor.addTweet(tweetMessage, "time", tweetImage, 0);
-
+    let re = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/g;
+    let re1 = /http(s)?:\/\//;
+    let tt = tweetMessage.replace(re, (website) => {
+      return (
+        "<a href='" +
+        website +
+        "' target='_blank'>" +
+        `${
+          website.replace(re1, "").length < 35
+            ? website.replace(re1, "")
+            : website.replace(re1, "").slice(0, 35)
+        }...` +
+        "</a>"
+      );
+    });
+    // .replace(/@(.*) /g, (username) => {
+    //   return (
+    //     "<a href='http://localhost:3000/profile/" +
+    //     username.slice(1) +
+    //     "'>" +
+    //     username.substring(0, username.length - 1) +
+    //     "</a>" +
+    //     " "
+    //   );
+    // });
+    // console.log(tt);
+    // .replace(/@(.+)\s/g, "我是ddd");
+    // let tt = ttt.replace(/@(.+)\s/g, "我是ddd");
+    let tmp = await authActor.addTweet(tt, "time", tweetImage, 0);
     let b = await authActor.getFollowLastestAmountTweets(0, 50);
     dispatch(updateFeed(b));
     setDisable(false);

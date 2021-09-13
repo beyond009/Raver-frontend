@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import LinkAvatar from "../utils/LinkAvatar";
+import Linkify from "react-linkify";
 import history from "../History";
 import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
@@ -113,7 +114,14 @@ const Post = forwardRef(
               <span className="post__headerSpecial">@{username}</span>
             </div>
 
-            <div className="post__headerDescription">{text}</div>
+            <div className="post__headerDescription">
+              {/* <Linkify>{text}</Linkify> */}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: text,
+                }}
+              />
+            </div>
           </div>
 
           <div>
