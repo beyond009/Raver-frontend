@@ -50,6 +50,7 @@ function Feed(props) {
     setInDisable(true);
     let re = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/g;
     let re1 = /http(s)?:\/\//;
+
     let tt = tweetMessage.replace(re, (website) => {
       return (
         "<a href='" +
