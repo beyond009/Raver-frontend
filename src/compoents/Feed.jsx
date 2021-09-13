@@ -2,12 +2,6 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Principal } from "@dfinity/principal";
 import { useSelector, useDispatch } from "react-redux";
-import ReactHtmlParser, {
-  processNodes,
-  convertNodeToElement,
-  htmlparser2,
-} from "react-html-parser";
-
 import TweetBox from "./TweetBox";
 import Post from "./Post";
 import { makeStyles } from "@material-ui/core";
