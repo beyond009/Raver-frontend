@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import LinkAvatar from "../utils/LinkAvatar";
-import Linkify from "react-linkify";
+import Linkify from "linkifyjs/react";
 import history from "../History";
 import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
@@ -41,6 +41,32 @@ const Post = forwardRef(
     const [fave, setFave] = useState(false);
     const [liked, setLiked] = useState(false);
     const location = useLocation();
+    const linkifyOptions = {
+      format: function (value, type) {
+        if (type === "url" && value.length > 50) {
+          value = value.slice(0, 50) + "…";
+        }
+        if (type === "mention" && value.length > 10) {
+          value = value.slice(0, 20) + "…";
+        }
+        return value;
+      },
+      tagName: {
+        mention: () => Link,
+      },
+      attributes: (href, type) => {
+        if (type === "mention") {
+          return {
+            to: "/profile/" + href,
+          };
+        }
+        return {};
+      },
+      target: {
+        url: "_blank",
+        mention: "_self",
+      },
+    };
     const handleClickLike = () => {
       if (fave) {
         setLiked(false);
@@ -115,12 +141,12 @@ const Post = forwardRef(
             </div>
 
             <div className="post__headerDescription">
-              {/* <Linkify>{text}</Linkify> */}
-              <div
+              <Linkify options={linkifyOptions}>{text}</Linkify>
+              {/* <div
                 dangerouslySetInnerHTML={{
                   __html: text,
                 }}
-              />
+              /> */}
             </div>
           </div>
 

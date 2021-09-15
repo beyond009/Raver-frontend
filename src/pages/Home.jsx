@@ -7,12 +7,10 @@ export default class Home extends Component {
   componentDidMount() {
     const dHome = document.getElementsByClassName("home")[0];
     const scrollTop = sessionStorage.getItem("scrollTopHome") || 0;
-    console.log(scrollTop);
     ReactDOM.findDOMNode(dHome).scrollTo(0, scrollTop);
   }
   componentWillUnmount() {
     const dHome = document.getElementsByClassName("home")[0];
-    console.log(dHome, dHome.scrollTop);
     sessionStorage.setItem("scrollTopHome", dHome.scrollTop);
   }
   render() {

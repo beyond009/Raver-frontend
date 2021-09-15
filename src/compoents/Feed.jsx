@@ -48,36 +48,37 @@ function Feed(props) {
     setDisable(true);
     setSending(true);
     setInDisable(true);
-    let re = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/g;
-    let re1 = /http(s)?:\/\//;
+    // let re = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/g;
+    // let re1 = /http(s)?:\/\//;
 
-    let tt = tweetMessage.replace(re, (website) => {
-      return (
-        "<a href='" +
-        website +
-        "' target='_blank'>" +
-        `${
-          website.replace(re1, "").length < 35
-            ? website.replace(re1, "")
-            : website.replace(re1, "").slice(0, 35)
-        }...` +
-        "</a>"
-      );
-    });
-    // .replace(/@(.*) /g, (username) => {
-    //   return (
-    //     "<a href='http://localhost:3000/profile/" +
-    //     username.slice(1) +
-    //     "'>" +
-    //     username.substring(0, username.length - 1) +
-    //     "</a>" +
-    //     " "
-    //   );
-    // });
+    // let tt = tweetMessage
+    //   .replace(re, (website) => {
+    //     return (
+    //       "<a href='" +
+    //       website +
+    //       "' target='_blank'>" +
+    //       `${
+    //         website.replace(re1, "").length < 35
+    //           ? website.replace(re1, "")
+    //           : website.replace(re1, "").slice(0, 35)
+    //       }...` +
+    //       "</a>"
+    //     );
+    //   })
+    //   .replace(/@(.*) /g, (username) => {
+    //     return (
+    //       "<Link to='profile/" +
+    //       username.slice(1) +
+    //       "'>" +
+    //       username.substring(0, username.length - 1) +
+    //       "</Link>" +
+    //       " "
+    //     );
+    //   });
     // console.log(tt);
     // .replace(/@(.+)\s/g, "我是ddd");
     // let tt = ttt.replace(/@(.+)\s/g, "我是ddd");
-    let tmp = await authActor.addTweet(tt, "time", tweetImage, 0);
+    let tmp = await authActor.addTweet(tweetMessage, "time", tweetImage, 0);
     let b = await authActor.getFollowLastestAmountTweets(0, 50);
     dispatch(updateFeed(b));
     setDisable(false);
