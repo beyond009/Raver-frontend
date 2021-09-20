@@ -1,8 +1,9 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import LinkAvatar from "../utils/LinkAvatar";
-import Linkify from "linkifyjs/react";
+import Linkify from "linkify-react";
+import mention from "linkifyjs/plugins/mention";
 import history from "../History";
 import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
@@ -43,8 +44,11 @@ const Post = forwardRef(
     const location = useLocation();
     const linkifyOptions = {
       format: function (value, type) {
-        if (type === "url" && value.length > 50) {
-          value = value.slice(0, 50) + "…";
+        if (type === "url") {
+          let re1 = /http(s)?:\/\//;
+          value = value.replace(re1, "");
+
+          if (value.length > 50) value = value.slice(0, 50) + "…";
         }
         if (type === "mention" && value.length > 10) {
           value = value.slice(0, 20) + "…";
@@ -54,17 +58,25 @@ const Post = forwardRef(
       tagName: {
         mention: () => Link,
       },
+      formatHref: {
+        mention: (href) => {},
+      },
       attributes: (href, type) => {
         if (type === "mention") {
           return {
-            to: "/profile/" + href,
+            to: "/profile" + href,
           };
         }
         return {};
       },
+      // formatHref: {
+      //   mention: (href) => "https://github.com" + href,
+      //   ticket: (href) =>
+      //     "https://github.com/Hypercontext/linkifyjs/issues/" +
+      //     href.substring(1),
+      // },
       target: {
         url: "_blank",
-        mention: "_self",
       },
     };
     const handleClickLike = () => {
