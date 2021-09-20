@@ -1,8 +1,9 @@
 .login {
-  background-image: url(../../assets/avatar-1.png) !important;
+  /* background-image: url(../../assets/avatar-1.png),
+    url(../../assets/avatar-6.png) !important; */
   background-size: 100% 50% !important;
   background-repeat: no-repeat !important;
-  background-position: 0% 100% !important;
+  background-position: 0% 100%, 0% 0% !important;
   background-attachment: fixed !important;
   width: 100%;
   height: 100%;
