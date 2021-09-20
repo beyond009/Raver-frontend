@@ -70,6 +70,7 @@ export const idlFactory = ({ IDL }) => {
     'deleteTweet' : IDL.Func([IDL.Nat], [IDL.Bool], []),
     'deleteTweetAllComment' : IDL.Func([IDL.Nat], [IDL.Bool], []),
     'deleteUser' : IDL.Func([], [IDL.Bool], []),
+    'getAllUser' : IDL.Func([], [IDL.Vec(ShowUser)], ['query']),
     'getBio' : IDL.Func([IDL.Principal], [IDL.Text], ['query']),
     'getFollow' : IDL.Func([IDL.Principal], [IDL.Vec(ShowUser)], ['query']),
     'getFollowAmount' : IDL.Func([IDL.Principal], [IDL.Nat], ['query']),
@@ -133,6 +134,7 @@ export const idlFactory = ({ IDL }) => {
     'isUserNameUsed' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'likeAmount' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
     'likeTweet' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+    'password' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'putBio' : IDL.Func([IDL.Text], [], ['oneway']),
     'reTweet' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Int],

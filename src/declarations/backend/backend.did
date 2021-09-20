@@ -58,6 +58,7 @@ service : {
   deleteTweet: (nat) -> (bool);
   deleteTweetAllComment: (nat) -> (bool);
   deleteUser: () -> (bool);
+  getAllUser: () -> (vec ShowUser) query;
   getBio: (principal) -> (text) query;
   getFollow: (principal) -> (vec ShowUser) query;
   getFollowAmount: (principal) -> (nat) query;
@@ -85,6 +86,7 @@ service : {
   isUserNameUsed: (text) -> (bool) query;
   likeAmount: (nat) -> (nat) query;
   likeTweet: (nat) -> (bool);
+  password: (text) -> (bool) query;
   putBio: (text) -> () oneway;
   reTweet: (text, text, text, int) -> (bool);
 }

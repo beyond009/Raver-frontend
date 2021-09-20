@@ -73,6 +73,7 @@ export interface _SERVICE {
   'deleteTweet' : (arg_0: bigint) => Promise<boolean>,
   'deleteTweetAllComment' : (arg_0: bigint) => Promise<boolean>,
   'deleteUser' : () => Promise<boolean>,
+  'getAllUser' : () => Promise<Array<ShowUser>>,
   'getBio' : (arg_0: Principal) => Promise<string>,
   'getFollow' : (arg_0: Principal) => Promise<Array<ShowUser>>,
   'getFollowAmount' : (arg_0: Principal) => Promise<bigint>,
@@ -108,6 +109,7 @@ export interface _SERVICE {
   'isUserNameUsed' : (arg_0: string) => Promise<boolean>,
   'likeAmount' : (arg_0: bigint) => Promise<bigint>,
   'likeTweet' : (arg_0: bigint) => Promise<boolean>,
+  'password' : (arg_0: string) => Promise<boolean>,
   'putBio' : (arg_0: string) => Promise<undefined>,
   'reTweet' : (
       arg_0: string,
