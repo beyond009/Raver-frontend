@@ -41,7 +41,7 @@ const App = () => {
     let principalString = principal.toText();
     const agent = new HttpAgent({
       identity: tIdentity,
-      host: "ic0.app",
+      // host: "ic0.app",
       // host: "127.0.0.1:8000",
     });
 
