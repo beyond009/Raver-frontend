@@ -1,6 +1,14 @@
 import React, { Component, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Route, Switch, Link, Router } from "react-router-dom";
+import {
+  Redirect,
+  BrowserRouter,
+  Route,
+  Switch,
+  Link,
+  Router,
+} from "react-router-dom";
+
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -15,6 +23,7 @@ import Follower from "./pages/Follower";
 import Following from "./pages/Following";
 import Wallet from "./pages/Wallet";
 import Feed from "./compoents/Feed";
+import Main from "./pages/Main";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import { isDelegationValid } from "@dfinity/authentication";
@@ -30,10 +39,6 @@ const App = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const { authActor } = useSelector((state) => state);
-  const goToLoginPage = () =>
-    history.push({
-      pathname: "/login",
-    });
 
   async function getActor(authClient) {
     let tIdentity = await authClient.getIdentity();
@@ -91,7 +96,6 @@ const App = () => {
       // identityProvider:
       //   "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
-        history.push({ pathname: "/home" });
         handleAuthenticated(authClient);
       },
     });
@@ -102,19 +106,24 @@ const App = () => {
       <LoopCircleLoading color="rgb(15, 20, 25)" />
     ) : (
       <div className="app">
-        <Sidebar />
+        <Route path="/dao" component={Sidebar} />
         <Switch>
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/profile/:username" component={Profile} />
-          <Route exact path="/editprofile" component={EditProfile} />
-          <Route exact path="/waiting" component={Waiting} />
-          <Route exact path="/wallet" component={Wallet} />
-          <Route path="/post/:tid" component={PostPage} />
-          <Route path="/global" component={Global} />
-          <Route path="/profile/:username/follower" component={Follower} />
-          <Route path="/profile/:username/following" component={Following} />
+          <Route exact path="/dao/home" component={Home} />
+          <Route exact path="/dao/profile/:username" component={Profile} />
+          <Route exact path="/dao/editprofile" component={EditProfile} />
+          <Route exact path="/dao/waiting" component={Waiting} />
+          <Route exact path="/dao/wallet" component={Wallet} />
+          <Route path="/dao/post/:tid" component={PostPage} />
+          <Route path="/dao/global" component={Global} />
+          <Route path="/dao/profile/:username/follower" component={Follower} />
+          <Route
+            path="/dao/profile/:username/following"
+            component={Following}
+          />
+
+          <Route component={Main} />
         </Switch>
-        <Widgets />
+        <Route path="/dao" component={Widgets} />
       </div>
     )
   ) : (

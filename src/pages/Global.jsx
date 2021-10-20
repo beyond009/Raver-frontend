@@ -1,4 +1,5 @@
 import React, { useLayoutEffect } from "react";
+import Sidebar from "../compoents/Sidebar";
 import ReactDOM from "react-dom";
 import GlobalPosts from "../compoents/GlobalPosts";
 import "./Global.css";

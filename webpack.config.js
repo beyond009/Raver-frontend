@@ -105,6 +105,7 @@ module.exports = {
   ],
   // proxy /api to port 8000 during development
   devServer: {
+    historyApiFallback: true,
     proxy: {
       "/api": {
         target: "https://snjck-naaaa-aaaah-qbqia-cai.ic0.app",
@@ -115,6 +116,7 @@ module.exports = {
       },
     },
     hot: true,
+    publicPath: "/",
     contentBase: path.resolve(__dirname, "./src"),
     watchContentBase: true,
   },

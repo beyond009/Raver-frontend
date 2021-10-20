@@ -24,7 +24,7 @@ function Sidebar() {
       <br />
       <br />
       <NavLink
-        to="/home"
+        to="/main"
         className="sidebar__link"
         activeClassName="link__active"
       >

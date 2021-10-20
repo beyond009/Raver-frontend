@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Feed from "../compoents/Feed";
+import Sidebar from "../compoents/Sidebar";
 import TweetBox from "../compoents/TweetBox";
 import "./Home.css";
 export default class Home extends Component {
