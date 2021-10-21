@@ -8,7 +8,6 @@ import {
   Link,
   Router,
 } from "react-router-dom";
-
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -47,14 +46,14 @@ const App = () => {
     const agent = new HttpAgent({
       identity: tIdentity,
       // host: "ic0.app",
-      // host: "127.0.0.1:8000",
+      host: "127.0.0.1:8000",
     });
 
     agent.fetchRootKey();
 
     let tAuthActor = Actor.createActor(idlFactory, {
       agent,
-      canisterId: "jlak5-kyaaa-aaaah-qaqaa-cai",
+      canisterId: "rno2w-sqaaa-aaaaa-aaacq-cai",
       // canisterId: "r7inp-6aaaa-aaaaa-aaabq-cai",
     });
     dispatch(updateAuthActor(tAuthActor));
@@ -64,7 +63,6 @@ const App = () => {
       let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
       setIsLoading(false);
-      // history.push({ pathname: "/signup" });
     } else {
       let res = await tAuthActor.getShowUserProfileByPrincipal();
       dispatch(updateUser(res));
@@ -93,16 +91,16 @@ const App = () => {
   const handleLogin = async (lors) => {
     const authClient = await AuthClient.create();
     await authClient.login({
-      // identityProvider:
-      //   "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
+      identityProvider:
+        "http://localhost:8000/?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai",
       onSuccess: async () => {
         handleAuthenticated(authClient);
       },
     });
   };
 
-  return isLogin ? (
-    isLoading ? (
+  return 1 ? (
+    0 ? (
       <LoopCircleLoading color="rgb(15, 20, 25)" />
     ) : (
       <div className="app">

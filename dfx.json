@@ -1,12 +1,12 @@
 {
   "canisters": {
-    "backend": {
-      "main": "backend/DTwitter/main.mo",
+    "raver": {
+      "main": "Backend/backend/Canister/DAOCanister.mo",
       "type": "motoko"
     },
     "assets": {
       "dependencies": [
-        "backend"
+        "raver"
       ],
       "frontend": {
         "entrypoint": "dist/index.html"
