@@ -1,11 +1,5 @@
 .main__sidebar {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  /* flex: 1; */
-  left: 0;
-  right: 0;
-  margin-right: 30px;
-  /* padding-right: 50px; */
+  float: left;
 }
 .main__sidebar__button {
-  margin-bottom: 30px;
 }

@@ -11,7 +11,7 @@ import { Column, Row, Item } from "@mui-treasury/components/flex";
 import { Info, InfoSubtitle, InfoTitle } from "@mui-treasury/components/info";
 import { useApexInfoStyles } from "@mui-treasury/styles/info/apex";
 import { useGraphicBtnStyles } from "@mui-treasury/styles/button/graphic";
-
+import "./DCard.css";
 const useStyles = makeStyles(() => ({
   root: {
     height: "100%",
@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: "0 6px 20px 0 #dbdbe8",
     backgroundColor: "#fff",
     transition: "0.4s",
-    height: "50%",
+    height: "100%",
   },
   logo: {
     width: 48,
@@ -114,8 +114,9 @@ const CustomCard = ({
               variant={"contained"}
               color={"primary"}
               disableRipple
+              onClick={""}
             >
-              {joined ? "Leave group" : "Join group"}
+              {joined ? "Leave DAO" : "Join DAO"}
             </Button>
           </Item>
         </Row>
@@ -127,6 +128,7 @@ const CustomCard = ({
 export const DCard = React.memo(function DCard() {
   return (
     <>
+      <div className="dcard__header">NFT</div>
       <NoSsr>
         <GoogleFontLoader fonts={[{ font: "Ubuntu", weights: [400, 700] }]} />
       </NoSsr>
@@ -134,13 +136,13 @@ export const DCard = React.memo(function DCard() {
         <Grid item xs={12} md={6} lg={4}>
           <CustomCard
             thumbnail={
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQHCBAj8nRJkEwjWg5TpNuSZZG9iscsf43V1mfx0LZHNDYW3S_&usqp=CAU"
+              "https://lh3.googleusercontent.com/BdxvLseXcfl57BiuQcQYdJ64v-aI8din7WPk0Pgo3qQFhAUH-B6i-dCqqc_mCkRIzULmwzwecnohLhrcH8A9mpWIZqA7ygc52Sr81hE=s130"
             }
-            title={"APEX Legends: Assemble!"}
-            subtitle={"Created by siriwatknp"}
+            title={"CryptoPunks"}
+            subtitle={"Created by ddd009"}
             description={
               <>
-                <b>Shining Alpaca</b> and 3 others are already members group.
+                <b>ddd009</b> and 3 others are already members group.
               </>
             }
           />
@@ -149,23 +151,93 @@ export const DCard = React.memo(function DCard() {
           <CustomCard
             joined
             thumbnail={
-              "https://cm1.narvii.com/7153/05204b8d8dcbb652dd1a8ceaafde997bc1909468_00.jpg"
+              "https://lh3.googleusercontent.com/7B0qai02OdHA8P_EOVK672qUliyjQdQDGNrACxs7WnTgZAkJa_wWURnIFKeOh5VTf8cfTqW3wQpozGedaC9mteKphEOtztls02RlWQ=s130"
             }
-            title={"League of Legends Official"}
-            subtitle={"Created by LoL"}
+            title={"Doodles"}
+            subtitle={"Created by ddd009"}
+            description={"You are already a member of this group "}
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <CustomCard
+            thumbnail={
+              "https://lh3.googleusercontent.com/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB=s130"
+            }
+            title={"Bored Ape"}
+            subtitle={"Created by Bliz"}
             description={
-              "You are already a member of this group since April 5th 2019."
+              <>
+                <b>RainBOW</b> and 3 others are already members of this group.
+              </>
             }
           />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <CustomCard
-            thumbnail={"https://avatarfiles.alphacoders.com/537/53765.jpg"}
-            title={"Overwatch official"}
+            thumbnail={
+              "https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?cc=0&type=thumbnail&tokenid=kqh5u-aqkor-uwiaa-aaaaa-b4aaq-maqca-aacul-a"
+            }
+            title={"Cronic"}
             subtitle={"Created by Bliz"}
             description={
               <>
                 <b>RainBOW</b> and 3 others are already members of this group.
+              </>
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <CustomCard
+            thumbnail={
+              "https://lh3.googleusercontent.com/6CS0frnjPEpvJ8hE3OG6_TbJFEC5YYThnZMdLTTmW-Z91lyYAJkPA7-ou2uE-b_J-cBUBeqWkI4HYKHEiu2PAyCT6wkYKzoeCyuy=s130"
+            }
+            title={"MekaVerse"}
+            subtitle={"Created by Bliz"}
+            description={
+              <>
+                <b>ddd009</b> and 3 others are already members of this group.
+              </>
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <CustomCard
+            thumbnail={
+              "https://nbg4r-saaaa-aaaah-qap7a-cai.raw.ic0.app/?cc=0&type=thumbnail&tokenid=5ihzm-gykor-uwiaa-aaaaa-b4ad7-yaqca-aabij-q"
+            }
+            title={"Starverse"}
+            subtitle={"Created by Bliz"}
+            description={
+              <>
+                <b>killer</b> and 10 others are already members of this group.
+              </>
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <CustomCard
+            thumbnail={
+              "https://lh3.googleusercontent.com/3_gd4Qw8gDdgFpzJWK9x2kYkbZMlihGNfCBqazHUnhcODsFd05gfH4LEc22eFjVNNZJtahj1zabFYMTESjNyKgEEbj4rQni2xUv0=s130"
+            }
+            title={"Loot"}
+            subtitle={"Created by Bliz"}
+            description={
+              <>
+                <b>RainBOW</b> and 3 others are already members of this group.
+              </>
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <CustomCard
+            thumbnail={
+              "https://lh3.googleusercontent.com/C272ZRW1RGGef9vKMePFSCeKc1Lw6U40wl9ofNVxzUxFdj84hH9xJRQNf-7wgs7W8qw8RWe-1ybKp-VKuU5D-tg=s130"
+            }
+            title={"CryptoKitties"}
+            subtitle={"Created by ddd009"}
+            description={
+              <>
+                <b>ddd009</b> and 3 others are already members of this group.
               </>
             }
           />
