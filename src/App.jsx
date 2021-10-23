@@ -99,7 +99,7 @@ const App = () => {
     });
   };
 
-  return 1 ? (
+  return isLogin ? (
     0 ? (
       <LoopCircleLoading color="rgb(15, 20, 25)" />
     ) : (
@@ -118,7 +118,6 @@ const App = () => {
             path="/dao/profile/:username/following"
             component={Following}
           />
-
           <Route component={Main} />
         </Switch>
         <Route path="/dao" component={Widgets} />

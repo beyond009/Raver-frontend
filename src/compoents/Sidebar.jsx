@@ -24,33 +24,37 @@ function Sidebar() {
       <br />
       <br />
       <NavLink
-        to="/main"
+        to="/dao/home"
         className="sidebar__link"
         activeClassName="link__active"
       >
         <SidebarOption
-          active={location.pathname === "/home"}
+          active={location.pathname === "/dao/home"}
           Icon={HomeIcon}
           text="Home"
         />{" "}
       </NavLink>
       <NavLink
-        to="/global"
+        to="/dao/global"
         className="sidebar__link"
         activeClassName="link__active"
       >
-        <SidebarOption Icon={PublicIcon} text="Global" />
+        <SidebarOption
+          Icon={PublicIcon}
+          text="Global"
+          active={location.pathname === "/dao/global"}
+        />
       </NavLink>
       <SidebarOption Icon={AccountBalanceWalletIcon} text="Wallet">
         {" "}
       </SidebarOption>
       <NavLink
-        to={`/profile/${user ? user.username : null}`}
+        to={`/dao/profile/${user ? user.username : null}`}
         className="sidebar__link"
         activeClassName="link__active"
       >
         <SidebarOption
-          active={location.pathname.substr(0, 8) === "/profile"}
+          active={location.pathname.substr(0, 12) === "/dao/profile"}
           Icon={PermIdentityIcon}
           text="Profile"
         />{" "}

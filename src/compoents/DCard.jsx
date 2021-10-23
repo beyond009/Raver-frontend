@@ -11,6 +11,7 @@ import { Column, Row, Item } from "@mui-treasury/components/flex";
 import { Info, InfoSubtitle, InfoTitle } from "@mui-treasury/components/info";
 import { useApexInfoStyles } from "@mui-treasury/styles/info/apex";
 import { useGraphicBtnStyles } from "@mui-treasury/styles/button/graphic";
+import history from "../History";
 import "./DCard.css";
 const useStyles = makeStyles(() => ({
   root: {
@@ -75,6 +76,9 @@ const CustomCard = ({
 }) => {
   const styles = useStyles();
   const btnStyles = useGraphicBtnStyles();
+  function handleClick() {
+    history.push({ pathname: "/dao/home" });
+  }
   return (
     <div className={styles.root}>
       <Column className={styles.card}>
@@ -114,7 +118,7 @@ const CustomCard = ({
               variant={"contained"}
               color={"primary"}
               disableRipple
-              onClick={""}
+              onClick={handleClick}
             >
               {joined ? "Leave DAO" : "Join DAO"}
             </Button>
