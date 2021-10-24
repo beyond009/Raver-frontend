@@ -1,0 +1,104 @@
+type VoteType = 
+ variant {
+   approve;
+   disapprove;
+ };
+type UID__1 = 
+ record {
+   canister_id: principal;
+   key: record {p: principal;};
+ };
+type UID = 
+ record {
+   canister_id: principal;
+   key: record {p: principal;};
+ };
+type Result_4 = 
+ variant {
+   err: text;
+   ok: vec Proposal;
+ };
+type Result_3 = 
+ variant {
+   err: text;
+   ok: vec UID;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: vec Post;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Proposal = 
+ record {
+   approve: nat;
+   canister_id: principal;
+   disapprove: nat;
+   metadata: PMD;
+ };
+type PostMD = 
+ record {
+   content: text;
+   parentPost: opt PID;
+   time: text;
+   uid: UID__1;
+ };
+type Post = 
+ record {
+   commentNumber: nat;
+   content: text;
+   likeNumber: nat;
+   parentPost: opt PID;
+   pid: PID;
+   time: text;
+   user: UID__1;
+ };
+type PMD = 
+ record {
+   content: text;
+   end_time: text;
+   initiator: UID__1;
+   name: text;
+   start_time: text;
+ };
+type PID__1 = 
+ record {
+   canister_id: principal;
+   key: nat;
+ };
+type PID = 
+ record {
+   canister_id: principal;
+   key: nat;
+ };
+type DAOCanister = 
+ service {
+   addUser: (UID) -> (Result);
+   cancelLike: (UID, nat) -> (Result);
+   deletePost: (UID, nat) -> (Result);
+   deleteUser: (UID) -> (Result);
+   getAllProposal: () -> (Result_4) query;
+   getPidOfPost: (nat) -> (opt PID__1) query;
+   getTweetLikeUsers: (nat) -> (Result_3) query;
+   getUserAllPost: (UID) -> (Result_1) query;
+   isTweetLiked: (nat, UID) -> (Result) query;
+   likeAmount: (nat) -> (Result_2) query;
+   likePost: (UID, nat) -> (Result);
+   postProposal: (PMD) -> (Result);
+   putPost: (UID, PostMD) -> (Result);
+   queryAllPost: () -> (Result_1) query;
+   userAddFollow: (UID, UID) -> (Result);
+   userCancelFollow: (UID, UID) -> (Result);
+   vote: (nat, VoteType) -> (Result);
+   wallet_receive: () -> (nat);
+ };
+service : () -> DAOCanister

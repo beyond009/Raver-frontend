@@ -1,0 +1,44 @@
+type Result_1 = 
+ variant {
+   err: text;
+   ok: principal;
+ };
+type Result = 
+ variant {
+   err: record {
+          text;
+          vec DAO_Segment;
+        };
+   ok: record {
+         principal;
+         vec DAO_Segment;
+       };
+ };
+type Raver = 
+ service {
+   createDao: (text) -> (Result_1);
+   getAvalMemory: () -> (nat) query;
+   getBalance: () -> (nat) query;
+   getMemory: () -> (nat) query;
+   register: (MetaData) -> (Result_1);
+   start: () -> (Result) query;
+   wallet_receive: () -> (nat);
+ };
+type MetaData = 
+ record {
+   dao: vec DAO_Key;
+   img: vec blob;
+   "text": text;
+   uname: text;
+ };
+type DAO_Segment = 
+ record {
+   canisters: vec principal;
+   name: text;
+ };
+type DAO_Key = 
+ record {
+   canisters: vec principal;
+   name: text;
+ };
+service : () -> Raver

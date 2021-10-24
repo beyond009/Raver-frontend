@@ -1,0 +1,90 @@
+type UserBucket = 
+ service {
+   add: (MetaData) -> (Result_1);
+   available: (nat) -> (bool) query;
+   del: () -> (Result_1);
+   get: () -> (Result) query;
+   getBalance: () -> (nat) query;
+   getMemory: () -> (text) query;
+   wallet_receive: () -> (nat);
+ };
+type Trie = 
+ variant {
+   branch: Branch;
+   "empty";
+   leaf: Leaf;
+ };
+type Set = 
+ variant {
+   branch: Branch;
+   "empty";
+   leaf: Leaf;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: Profile;
+ };
+type Profile = 
+ record {
+   dao: Set;
+   img: vec blob;
+   "text": text;
+   uname: text;
+ };
+type MetaData = 
+ record {
+   dao: vec DAO;
+   img: vec blob;
+   "text": text;
+   uname: text;
+ };
+type List = 
+ opt record {
+       record {
+         Key;
+         null;
+       };
+       List;
+     };
+type Leaf = 
+ record {
+   keyvals: AssocList;
+   size: nat;
+ };
+type Key = 
+ record {
+   hash: Hash;
+   key: DAO_Key;
+ };
+type Hash = nat32;
+type DAO_Key = 
+ record {
+   canisters: vec principal;
+   name: text;
+ };
+type DAO = 
+ record {
+   canisters: vec principal;
+   name: text;
+ };
+type Branch = 
+ record {
+   left: Trie;
+   right: Trie;
+   size: nat;
+ };
+type AssocList = 
+ opt record {
+       record {
+         Key;
+         null;
+       };
+       List;
+     };
+service : () -> UserBucket

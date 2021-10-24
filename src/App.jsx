@@ -105,9 +105,10 @@ const App = () => {
     ) : (
       <div className="app">
         <Route path="/dao" component={Sidebar} />
+        {/* <Sidebar /> */}
         <Switch>
           <Route exact path="/dao/home" component={Home} />
-          <Route exact path="/dao/profile/:username" component={Profile} />
+          ent={Profile} />
           <Route exact path="/dao/editprofile" component={EditProfile} />
           <Route exact path="/dao/waiting" component={Waiting} />
           <Route exact path="/dao/wallet" component={Wallet} />
