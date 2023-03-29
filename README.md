@@ -1,4 +1,3 @@
-#### to do list
+#### Decentralized Twitter on Dfinity 
 
-- post 页面
-- 图片懒加载
+
